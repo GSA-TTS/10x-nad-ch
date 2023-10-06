@@ -1,8 +1,10 @@
-from .use_cases import get_greeting
+from .controllers.cli import cli
+from .application_context import create_app_context
 
 
 def main():
-    print(get_greeting())
+    context = create_app_context()
+    cli(obj=context)
 
 
 if __name__ == '__main__':
