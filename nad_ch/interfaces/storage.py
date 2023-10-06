@@ -1,6 +1,7 @@
 from typing import Protocol
 from ..entities import File, FileMetadata
 
+
 class StorageGateway(Protocol):
     def save(self, file: File) -> None:
         ...

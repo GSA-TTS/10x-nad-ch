@@ -1,6 +1,7 @@
 from ..entities import File, FileMetadata
 from ..interfaces.storage import StorageGateway
 
+
 class StorageGatewayMock(StorageGateway):
     def __init__(self):
         self.files = []

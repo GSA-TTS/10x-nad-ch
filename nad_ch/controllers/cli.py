@@ -2,10 +2,12 @@ import click
 from ..entities import File
 from ..use_cases import upload_file, list_files, get_file_metadata
 
+
 @click.group()
 @click.pass_context
 def cli(ctx):
     pass
+
 
 @cli.command()
 @click.pass_context
@@ -17,6 +19,7 @@ def upload(ctx, filename, content):
     upload_file(context, file)
     click.echo(f"Uploaded {filename}")
 
+
 @cli.command()
 @click.pass_context
 def listall(ctx):
@@ -24,6 +27,7 @@ def listall(ctx):
     files = list_files(context)
     for file in files:
         click.echo(file.name)
+
 
 @cli.command()
 @click.pass_context
