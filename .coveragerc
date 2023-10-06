@@ -1,0 +1,6 @@
+[run]
+source = nad_ch/
+
+[report]
+omit =
+    */__init__.py
