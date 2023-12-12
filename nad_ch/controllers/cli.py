@@ -10,8 +10,9 @@ def cli(ctx):
 
 @cli.command()
 @click.pass_context
-@click.argument('file_path')
-def ingest(ctx, file_path):
+@click.argument('filepath')
+@click.argument('provider')
+def ingest(ctx, file_path, provider):
     context = ctx.obj
-    ingest_data_submission(context, file_path)
-    click.echo(f"Ingest complete")
+    ingest_data_submission(context, file_path, provider)
+    click.echo("Ingest complete")
