@@ -1,5 +1,5 @@
 import click
-from use_cases import add_data_provider, list_data_providers, ingest_data_submission
+from nad_ch.use_cases import add_data_provider, list_data_providers, ingest_data_submission
 
 
 @click.group()

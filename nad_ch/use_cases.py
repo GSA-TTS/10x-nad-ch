@@ -1,5 +1,5 @@
-from application_context import ApplicationContext
-from entities import DataProvider
+from nad_ch.application_context import ApplicationContext
+from nad_ch.entities import DataProvider
 
 
 def add_data_provider(
