@@ -16,7 +16,7 @@ def test_add_data_provider(app_context):
 
     provider = app_context.providers.get_by_name(name)
     assert provider.name == name
-    assert isinstance(provider, DataProvider) == True
+    assert isinstance(provider, DataProvider) is True
 
 
 # def test_ingest_data_submission(app_context):

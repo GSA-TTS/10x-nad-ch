@@ -1,6 +1,7 @@
 from .application_context import ApplicationContext
 from .entities import DataProvider
 
+
 def add_data_provider(
       ctx: ApplicationContext, provider_name: str
 ) -> None:
