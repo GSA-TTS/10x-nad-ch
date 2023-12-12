@@ -1,5 +1,5 @@
-from .application_context import ApplicationContext
-from .entities import DataProvider
+from application_context import ApplicationContext
+from entities import DataProvider
 
 
 def add_data_provider(
@@ -7,6 +7,13 @@ def add_data_provider(
 ) -> None:
     provider = DataProvider(provider_name)
     ctx.providers.add(provider)
+
+
+def list_data_providers(
+    ctx: ApplicationContext
+):
+    list = ctx.providers.get_all()
+    return list
 
 
 def ingest_data_submission(

@@ -11,3 +11,6 @@ class MockDataProviderRepository(DataProviderRepository):
 
     def get_by_name(self, name: str) -> DataProvider:
         return next(p for p in self._providers if p.name == name)
+
+    def get_all(self):
+        return list(self._providers)

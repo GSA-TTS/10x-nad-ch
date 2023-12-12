@@ -1,5 +1,5 @@
-from .controllers.cli import cli
-from .application_context import create_app_context
+from controllers.cli import cli
+from application_context import create_app_context
 
 
 def main():

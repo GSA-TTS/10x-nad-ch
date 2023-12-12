@@ -1,5 +1,5 @@
-from typing import Protocol
-from .entities import DataProvider
+from typing import List, Protocol
+from entities import DataProvider
 
 
 class DataProviderRepository(Protocol):
@@ -7,4 +7,7 @@ class DataProviderRepository(Protocol):
         ...
 
     def get_by_name(self, name: str) -> DataProvider:
+        ...
+
+    def get_all(self) -> List[DataProvider]:
         ...

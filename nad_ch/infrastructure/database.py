@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 import contextlib
-from ..config import DATABASE_URL
-from ..entities import DataProvider
-from ..repositories import DataProviderRepository
+from config import DATABASE_URL
+from entities import DataProvider
+from repositories import DataProviderRepository
 
 
 engine = create_engine(DATABASE_URL)
@@ -59,3 +59,9 @@ class SqlAlchemyDataProviderRepository(DataProviderRepository):
                 .first()
             )
             return provider_model.to_entity()
+
+    def get_all(self):
+        with self.session_factory() as session:
+            provider_models = session.query(DataProviderModel).all()
+            providers_entities = [provider.to_entity() for provider in provider_models]
+            return providers_entities
