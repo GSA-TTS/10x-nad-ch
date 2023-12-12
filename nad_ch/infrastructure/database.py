@@ -1,7 +1,26 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
+import contextlib
+from ..config import DATABASE_URL
 from ..entities import DataProvider
 from ..repositories import DataProviderRepository
+
+
+engine = create_engine(DATABASE_URL)
+Session = sessionmaker(bind=engine)
+
+
+@contextlib.contextmanager
+def session_scope():
+    session = Session()
+    try:
+        yield session
+        session.commit()
+    except Exception:
+        session.rollback()
+        raise
+    finally:
+        session.close()
 
 
 ModelBase = declarative_base()
@@ -21,20 +40,22 @@ class DataProviderModel(ModelBase):
         return DataProvider(name=self.name)
 
 
-class SqlAlchemyDataProviderRepostiory(DataProviderRepository):
-    def __init__(self, session):
-        self.session = session
+class SqlAlchemyDataProviderRepository(DataProviderRepository):
+    def __init__(self, session_factory):
+        self.session_factory = session_factory
 
     def add(self, provider: DataProvider):
-        provider_model = DataProviderModel.from_entity(provider)
-        self.session.add(provider_model)
-        self.session.commit()
-        return provider_model.to_entity()
+        with self.session_factory() as session:
+            provider_model = DataProviderModel.from_entity(provider)
+            session.add(provider_model)
+            # session.commit()
+            return provider_model.to_entity()
 
     def get_by_name(self, name: str) -> DataProvider:
-        provider_model = (
-            self.session.query(DataProviderModel)
-            .filter(DataProviderModel.name == name)
-            .first()
-        )
-        return provider_model.to_entity()
+        with self.session_factory() as session:
+            provider_model = (
+                session.query(DataProviderModel)
+                .filter(DataProviderModel.name == name)
+                .first()
+            )
+            return provider_model.to_entity()

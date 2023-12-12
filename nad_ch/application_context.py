@@ -1,11 +1,11 @@
 import os
-from .infrastructure.database import SqlAlchemyDataProviderRepostiory
+from .infrastructure.database import session_scope, SqlAlchemyDataProviderRepository
 from tests.mocks import MockDataProviderRepository
 
 
 class ApplicationContext:
     def __init__(self):
-        self._providers = SqlAlchemyDataProviderRepostiory()
+        self._providers = SqlAlchemyDataProviderRepository(session_scope)
 
     @property
     def providers(self):
