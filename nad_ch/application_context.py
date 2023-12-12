@@ -1,19 +1,20 @@
 import os
-from .gateways.storage_mock import StorageGatewayMock
+from .infrastructure.database import SqlAlchemyDataProviderRepostiory
+from tests.mocks import MockDataProviderRepository
 
 
 class ApplicationContext:
     def __init__(self):
-        self._storage = StorageGatewayMock()
+        self._providers = SqlAlchemyDataProviderRepostiory()
 
     @property
-    def storage(self):
-        return self._storage
+    def providers(self):
+        return self._providers
 
 
 class TestApplicationContext(ApplicationContext):
     def __init__(self):
-        self._storage = StorageGatewayMock()
+        self._providers = MockDataProviderRepository()
 
 
 def create_app_context():

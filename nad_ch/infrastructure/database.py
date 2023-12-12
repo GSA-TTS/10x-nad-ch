@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from ..entities import DataProvider
 from ..repositories import DataProviderRepository
 
@@ -29,4 +29,12 @@ class SqlAlchemyDataProviderRepostiory(DataProviderRepository):
         provider_model = DataProviderModel.from_entity(provider)
         self.session.add(provider_model)
         self.session.commit()
+        return provider_model.to_entity()
+
+    def get_by_name(self, name: str) -> DataProvider:
+        provider_model = (
+            self.session.query(DataProviderModel)
+            .filter(DataProviderModel.name == name)
+            .first()
+        )
         return provider_model.to_entity()
