@@ -1,6 +1,5 @@
 import click
-from ..entities import File
-from ..use_cases import upload_file, list_files, get_file_metadata
+from ..use_cases import ingest_data_submission
 
 
 @click.group()
@@ -11,28 +10,8 @@ def cli(ctx):
 
 @cli.command()
 @click.pass_context
-@click.argument('filename')
-@click.argument('content')
-def upload(ctx, filename, content):
+@click.argument('file_path')
+def ingest(ctx, file_path):
     context = ctx.obj
-    file = File(name=filename, content=content)
-    upload_file(context, file)
-    click.echo(f"Uploaded {filename}")
-
-
-@cli.command()
-@click.pass_context
-def listall(ctx):
-    context = ctx.obj
-    files = list_files(context)
-    for file in files:
-        click.echo(file.name)
-
-
-@cli.command()
-@click.pass_context
-@click.argument('filename')
-def metadata(ctx, filename):
-    context = ctx.obj
-    metadata = get_file_metadata(context, filename)
-    click.echo(f"File: {metadata.name}, Size: {metadata.size} bytes")
+    ingest_data_submission(context, file_path)
+    click.echo(f"Ingest complete")
