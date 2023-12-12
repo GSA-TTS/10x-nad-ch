@@ -1,3 +1,4 @@
+from typing import List
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 import contextlib
@@ -60,7 +61,7 @@ class SqlAlchemyDataProviderRepository(DataProviderRepository):
             )
             return provider_model.to_entity()
 
-    def get_all(self):
+    def get_all(self) -> List[DataProvider]:
         with self.session_factory() as session:
             provider_models = session.query(DataProviderModel).all()
             providers_entities = [provider.to_entity() for provider in provider_models]

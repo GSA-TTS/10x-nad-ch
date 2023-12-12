@@ -1,6 +1,6 @@
 import os
 from sqlalchemy import create_engine
-from nad_ch.infrastructure.database import ModelBase, DataProviderModel
+from nad_ch.infrastructure.database import ModelBase
 from nad_ch.config import DATABASE_URL
 
 
