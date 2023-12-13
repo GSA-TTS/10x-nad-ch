@@ -4,7 +4,6 @@ from nad_ch.entities import DataProvider
 from nad_ch.use_cases import (
     add_data_provider,
     list_data_providers,
-    ingest_data_submission,
     InvalidProviderNameException
 )
 
@@ -37,17 +36,3 @@ def test_list_data_providers(app_context):
 
     assert len(providers) == 1
     assert providers[0].name == name
-
-
-# def test_ingest_data_submission(app_context):
-#     # Arrange
-#     provider = DataProvider('State X')
-#     app_context.providers.add(provider)
-
-#     # Act
-#     ingest_data_submission(app_context, 'some_file_path', provider.name)
-
-#     # Assert
-#     submission = app_context.submissions.get_by_file_path('some_file_path')
-#     assert submission.file_path == 'some_file_path'
-#     assert submission.provider.name == provider.name

@@ -49,7 +49,6 @@ class SqlAlchemyDataProviderRepository(DataProviderRepository):
         with self.session_factory() as session:
             provider_model = DataProviderModel.from_entity(provider)
             session.add(provider_model)
-            # session.commit()
             return provider_model.to_entity()
 
     def get_by_name(self, name: str) -> DataProvider:
