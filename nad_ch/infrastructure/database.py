@@ -35,10 +35,10 @@ class DataProviderModel(ModelBase):
 
     @staticmethod
     def from_entity(provider):
-        return DataProviderModel(name=provider.name)
+        return DataProviderModel(id=provider.id, name=provider.name)
 
     def to_entity(self):
-        return DataProvider(name=self.name)
+        return DataProvider(id=self.id, name=self.name)
 
 
 class SqlAlchemyDataProviderRepository(DataProviderRepository):

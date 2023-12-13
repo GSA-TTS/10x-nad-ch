@@ -28,7 +28,7 @@ def test_add_data_provider_throws_error_if_no_provider_name_given(app_context):
         add_data_provider(app_context, '')
 
 
-def test_list_data_providers(app_context):
+def test_list_a_single_data_provider(app_context):
     name = 'State X'
     add_data_provider(app_context, name)
 
@@ -36,3 +36,16 @@ def test_list_data_providers(app_context):
 
     assert len(providers) == 1
     assert providers[0].name == name
+
+
+def test_list_multiple_data_providers(app_context):
+    first_name = 'State X'
+    add_data_provider(app_context, first_name)
+
+    second_name = 'State Y'
+    add_data_provider(app_context, second_name)
+
+    providers = list_data_providers(app_context)
+    assert len(providers) == 2
+    assert providers[0].name == first_name
+    assert providers[1].name == second_name

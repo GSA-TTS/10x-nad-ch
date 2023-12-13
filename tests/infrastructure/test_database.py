@@ -40,5 +40,6 @@ def test_add_data_provider_to_repository_and_get_by_name(providers):
     providers.add(new_provider)
 
     retreived_provider = providers.get_by_name(provider_name)
+    assert retreived_provider.id == 1
     assert retreived_provider.name == provider_name
     assert isinstance(retreived_provider, DataProvider) is True
