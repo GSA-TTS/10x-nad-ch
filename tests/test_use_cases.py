@@ -1,7 +1,7 @@
 import pytest
 from nad_ch.application_context import create_app_context
 from nad_ch.entities import DataProvider
-from nad_ch.use_cases import add_data_provider, list_data_providers, ingest_data_submission
+from nad_ch.use_cases import add_data_provider, list_data_providers, ingest_data_submission, InvalidProviderNameException
 
 
 @pytest.fixture(scope='function')
@@ -17,6 +17,11 @@ def test_add_data_provider(app_context):
     provider = app_context.providers.get_by_name(name)
     assert provider.name == name
     assert isinstance(provider, DataProvider) is True
+
+
+def test_add_data_provider_throws_error_if_no_provider_name_given(app_context):
+    with pytest.raises(InvalidProviderNameException):
+        add_data_provider(app_context, '')
 
 
 def test_list_data_providers(app_context):

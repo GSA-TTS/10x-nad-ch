@@ -1,5 +1,5 @@
 import click
-from nad_ch.use_cases import add_data_provider, list_data_providers, ingest_data_submission
+from nad_ch.use_cases import add_data_provider, list_data_providers, ingest_data_submission, InvalidProviderNameException
 
 
 @click.group()
@@ -13,7 +13,12 @@ def cli(ctx):
 @click.argument('provider_name')
 def add_provider(ctx, provider_name):
     context = ctx.obj
-    add_data_provider(context, provider_name)
+    try:
+        add_data_provider(context, provider_name)
+    except InvalidProviderNameException as e:
+        click.echo(f"Error: {e.message}")
+        return
+
     click.echo('Provider added')
 
 
