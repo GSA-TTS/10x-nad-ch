@@ -21,6 +21,7 @@ coverage = "^7.3.2"
 python-dotenv = "^1.0.0"
 
 [tool.poetry.scripts]
+init-db="scripts.init_db:main"
 lint = "flake8.main.cli:main"
 start = "nad_ch.main:main"
 test = "pytest:main"

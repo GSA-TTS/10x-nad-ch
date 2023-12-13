@@ -4,7 +4,7 @@ from nad_ch.infrastructure.database import ModelBase
 from nad_ch.config import DATABASE_URL
 
 
-def init_db():
+def main():
     engine = create_engine(DATABASE_URL)
 
     # Check if the database file already exists
@@ -17,4 +17,4 @@ def init_db():
 
 
 if __name__ == '__main__':
-    init_db()
+    main()
