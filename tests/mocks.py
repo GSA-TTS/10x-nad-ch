@@ -1,5 +1,5 @@
-from nad_ch.entities import DataProvider
-from nad_ch.repositories import DataProviderRepository
+from nad_ch.domain.entities import DataProvider
+from nad_ch.domain.repositories import DataProviderRepository
 
 
 class MockDataProviderRepository(DataProviderRepository):

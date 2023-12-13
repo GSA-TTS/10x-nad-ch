@@ -3,8 +3,8 @@ from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 import contextlib
 from nad_ch.config import DATABASE_URL
-from nad_ch.entities import DataProvider
-from nad_ch.repositories import DataProviderRepository
+from nad_ch.domain.entities import DataProvider
+from nad_ch.domain.repositories import DataProviderRepository
 
 
 engine = create_engine(DATABASE_URL)

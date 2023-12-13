@@ -3,7 +3,7 @@ import contextlib
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from nad_ch.config import DATABASE_URL
-from nad_ch.entities import DataProvider
+from nad_ch.domain.entities import DataProvider
 from nad_ch.infrastructure.database import ModelBase, SqlAlchemyDataProviderRepository
 
 

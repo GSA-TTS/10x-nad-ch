@@ -1,5 +1,5 @@
 from typing import List, Protocol
-from nad_ch.entities import DataProvider
+from nad_ch.domain.entities import DataProvider
 
 
 class DataProviderRepository(Protocol):
