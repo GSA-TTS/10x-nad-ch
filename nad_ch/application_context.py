@@ -1,5 +1,8 @@
 import os
-from nad_ch.infrastructure.database import session_scope, SqlAlchemyDataProviderRepository
+from nad_ch.infrastructure.database import (
+    session_scope,
+    SqlAlchemyDataProviderRepository
+)
 from tests.mocks import MockDataProviderRepository
 
 

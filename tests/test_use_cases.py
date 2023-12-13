@@ -1,7 +1,12 @@
 import pytest
 from nad_ch.application_context import create_app_context
 from nad_ch.entities import DataProvider
-from nad_ch.use_cases import add_data_provider, list_data_providers, ingest_data_submission, InvalidProviderNameException
+from nad_ch.use_cases import (
+    add_data_provider,
+    list_data_providers,
+    ingest_data_submission,
+    InvalidProviderNameException
+)
 
 
 @pytest.fixture(scope='function')

@@ -1,5 +1,10 @@
 import click
-from nad_ch.use_cases import add_data_provider, list_data_providers, ingest_data_submission, InvalidProviderNameException
+from nad_ch.use_cases import (
+    add_data_provider,
+    list_data_providers,
+    ingest_data_submission,
+    InvalidProviderNameException
+)
 
 
 @click.group()
