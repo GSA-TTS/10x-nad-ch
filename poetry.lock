@@ -188,6 +188,16 @@ files = [
 ]
 
 [[package]]
+name = "logging"
+version = "0.4.9.6"
+description = "A logging module for Python"
+optional = false
+python-versions = "*"
+files = [
+    {file = "logging-0.4.9.6.tar.gz", hash = "sha256:26f6b50773f085042d301085bd1bf5d9f3735704db9f37c1ce6d8b85c38f2417"},
+]
+
+[[package]]
 name = "mccabe"
 version = "0.7.0"
 description = "McCabe checker, plugin for flake8"
@@ -398,4 +408,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "25f51c569e7fc868fa1b8d90964aee5ee4a27f52b164fd1a614f92bdfa699a96"
+content-hash = "5454dd80f8dc2fbbd6d628df561a6a018ef5cd5e44cbc3b979fe56f21ee46353"

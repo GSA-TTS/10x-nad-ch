@@ -5,18 +5,26 @@ from nad_ch.domain.entities import DataProvider
 def add_data_provider(
       ctx: ApplicationContext, provider_name: str
 ) -> None:
-    if not provider_name:
-        raise InvalidProviderNameException()
+    try:
+        if not provider_name:
+            raise InvalidProviderNameException()
 
-    provider = DataProvider(provider_name)
-    ctx.providers.add(provider)
+        provider = DataProvider(provider_name)
+        ctx.providers.add(provider)
+        ctx.logger.info('Provider added')
+
+    except InvalidProviderNameException as e:
+        ctx.logger.error(f'Failed to add data provider: {e}')
+        raise
 
 
-def list_data_providers(
-    ctx: ApplicationContext
-):
-    list = ctx.providers.get_all()
-    return list
+def list_data_providers(ctx: ApplicationContext):
+    providers = ctx.providers.get_all()
+    ctx.logger.info('Data Provider Names:')
+    for p in providers:
+        ctx.logger.info(p.name)
+
+    return providers
 
 
 def ingest_data_submission(
