@@ -4,7 +4,6 @@ from nad_ch.domain.entities import DataProvider
 from nad_ch.use_cases import (
     add_data_provider,
     list_data_providers,
-    InvalidProviderNameException
 )
 
 
@@ -23,9 +22,10 @@ def test_add_data_provider(app_context):
     assert isinstance(provider, DataProvider) is True
 
 
-def test_add_data_provider_throws_error_if_no_provider_name_given(app_context):
-    with pytest.raises(InvalidProviderNameException):
-        add_data_provider(app_context, '')
+def test_add_data_provider_throws_error_if_no_provider_name_given(mocker):
+    mock_context = mocker.patch('nad_ch.application_context.create_app_context')
+    add_data_provider(mock_context, '')
+    mock_context.logger.error.assert_called_once_with('Provider name required')
 
 
 def test_list_a_single_data_provider(app_context):
