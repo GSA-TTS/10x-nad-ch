@@ -1,4 +1,5 @@
 import os
+import logging
 from nad_ch.infrastructure.database import (
     session_scope,
     SqlAlchemyDataProviderRepository
@@ -24,7 +25,7 @@ class ApplicationContext:
 class TestApplicationContext(ApplicationContext):
     def __init__(self):
         self._providers = MockDataProviderRepository()
-        self._logger = Logger(__name__)
+        self._logger = Logger(__name__, logging.DEBUG)
 
     @property
     def providers(self):

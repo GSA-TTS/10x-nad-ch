@@ -1,14 +1,10 @@
 import logging
-from nad_ch.config import APP_ENV
 
 
 class Logger:
-    def __init__(self, name=__name__):
+    def __init__(self, name=__name__, logger_level=logging.INFO):
         self.logger = logging.getLogger(name)
-        if APP_ENV == 'test':
-            self.logger.setLevel(logging.DEBUG)
-        else:
-            self.logger.setLevel(logging.INFO)
+        self.logger.setLevel(logger_level)
         handler = logging.StreamHandler()
         formatter = logging.Formatter(
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
