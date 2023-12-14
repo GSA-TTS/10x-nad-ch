@@ -1,3 +1,4 @@
+from typing import Optional
 from nad_ch.domain.entities import DataProvider
 from nad_ch.domain.repositories import DataProviderRepository
 
@@ -12,8 +13,8 @@ class MockDataProviderRepository(DataProviderRepository):
         self._providers.add(provider)
         self._next_id += 1
 
-    def get_by_name(self, name: str) -> DataProvider:
-        return next(p for p in self._providers if p.name == name)
+    def get_by_name(self, name: str) -> Optional[DataProvider]:
+        return next((p for p in self._providers if p.name == name), None)
 
     def get_all(self):
         return sorted(list(self._providers), key=lambda provider: provider.id)

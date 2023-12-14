@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 import contextlib
@@ -51,14 +51,14 @@ class SqlAlchemyDataProviderRepository(DataProviderRepository):
             session.add(provider_model)
             return provider_model.to_entity()
 
-    def get_by_name(self, name: str) -> DataProvider:
+    def get_by_name(self, name: str) -> Optional[DataProvider]:
         with self.session_factory() as session:
             provider_model = (
                 session.query(DataProviderModel)
                 .filter(DataProviderModel.name == name)
                 .first()
             )
-            return provider_model.to_entity()
+            return provider_model.to_entity() if provider_model else None
 
     def get_all(self) -> List[DataProvider]:
         with self.session_factory() as session:
