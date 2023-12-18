@@ -1,6 +1,9 @@
 import click
-from ..entities import File
-from ..use_cases import upload_file, list_files, get_file_metadata
+from nad_ch.use_cases import (
+    add_data_provider,
+    list_data_providers,
+    ingest_data_submission,
+)
 
 
 @click.group()
@@ -11,28 +14,23 @@ def cli(ctx):
 
 @cli.command()
 @click.pass_context
-@click.argument('filename')
-@click.argument('content')
-def upload(ctx, filename, content):
+@click.argument('provider_name')
+def add_provider(ctx, provider_name):
     context = ctx.obj
-    file = File(name=filename, content=content)
-    upload_file(context, file)
-    click.echo(f"Uploaded {filename}")
+    add_data_provider(context, provider_name)
 
 
 @cli.command()
 @click.pass_context
-def listall(ctx):
+def list_providers(ctx):
     context = ctx.obj
-    files = list_files(context)
-    for file in files:
-        click.echo(file.name)
+    list_data_providers(context)
 
 
 @cli.command()
 @click.pass_context
-@click.argument('filename')
-def metadata(ctx, filename):
+@click.argument('filepath')
+@click.argument('provider')
+def ingest(ctx, file_path, provider):
     context = ctx.obj
-    metadata = get_file_metadata(context, filename)
-    click.echo(f"File: {metadata.name}, Size: {metadata.size} bytes")
+    ingest_data_submission(context, file_path, provider)

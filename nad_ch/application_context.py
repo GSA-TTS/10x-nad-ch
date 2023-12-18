@@ -1,19 +1,39 @@
 import os
-from .gateways.storage_mock import StorageGatewayMock
+import logging
+from nad_ch.infrastructure.database import (
+    session_scope,
+    SqlAlchemyDataProviderRepository
+)
+from nad_ch.infrastructure.logger import Logger
+from tests.mocks import MockDataProviderRepository
 
 
 class ApplicationContext:
     def __init__(self):
-        self._storage = StorageGatewayMock()
+        self._providers = SqlAlchemyDataProviderRepository(session_scope)
+        self._logger = Logger(__name__)
 
     @property
-    def storage(self):
-        return self._storage
+    def providers(self):
+        return self._providers
+
+    @property
+    def logger(self):
+        return self._logger
 
 
 class TestApplicationContext(ApplicationContext):
     def __init__(self):
-        self._storage = StorageGatewayMock()
+        self._providers = MockDataProviderRepository()
+        self._logger = Logger(__name__, logging.DEBUG)
+
+    @property
+    def providers(self):
+        return self._providers
+
+    @property
+    def logger(self):
+        return self._logger
 
 
 def create_app_context():
