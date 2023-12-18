@@ -59,7 +59,7 @@ def test_add_data_provider_and_then_data_submission(providers, submissions):
     new_provider = DataProvider(provider_name)
     saved_provider = providers.add(new_provider)
     new_submission = DataSubmission(
-        'some-file-name', saved_provider, None, 'some-url')
+        'some-file-name', 'some-url', saved_provider)
 
     result = submissions.add(new_submission)
 
@@ -74,10 +74,10 @@ def test_retrieve_a_list_of_submissions_by_provider(providers, submissions):
     new_provider = DataProvider(provider_name)
     saved_provider = providers.add(new_provider)
     new_submission = DataSubmission(
-        'some-file-name', saved_provider, None, 'some-url')
+        'some-file-name', 'some-url', saved_provider)
     submissions.add(new_submission)
     another_new_submission = DataSubmission(
-        'some-other-file-name', saved_provider, None, 'some-other-url')
+        'some-other-file-name', 'some-other-url', saved_provider)
     submissions.add(another_new_submission)
 
     submissions = submissions.get_by_provider(saved_provider)

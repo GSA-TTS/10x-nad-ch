@@ -30,6 +30,6 @@ def list_data_providers(ctx: ApplicationContext) -> List[DataProvider]:
 
 
 def ingest_data_submission(
-        ctx: ApplicationContext, file_path: str, provider_name: str
+        ctx: ApplicationContext, file_name: str, provider_name: str
 ) -> None:
     pass
