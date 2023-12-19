@@ -123,7 +123,7 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
         with self.session_factory() as session:
             submission_model = (
                 session.query(DataSubmissionModel)
-                .filter(DataSubmissionModel.name == file_name)
+                .filter(DataSubmissionModel.file_name == file_name)
                 .first()
             )
             provider_model = (
