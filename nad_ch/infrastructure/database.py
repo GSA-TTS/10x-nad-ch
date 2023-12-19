@@ -119,6 +119,20 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
             )
             return submission_model.to_entity(provider_model.to_entity())
 
+    def get_by_name(self, file_name: str) -> Optional[DataSubmission]:
+        with self.session_factory() as session:
+            submission_model = (
+                session.query(DataSubmissionModel)
+                .filter(DataSubmissionModel.name == file_name)
+                .first()
+            )
+            provider_model = (
+                session.query(DataProviderModel)
+                .filter(DataProviderModel.id == submission_model.data_provider_id)
+                .first()
+            )
+            return submission_model.to_entity(provider_model.to_entity())
+
     def get_by_provider(self, provider: DataProvider) -> List[DataSubmission]:
         with self.session_factory() as session:
             submission_models = (

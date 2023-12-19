@@ -8,7 +8,11 @@ from nad_ch.infrastructure.database import (
 )
 from nad_ch.infrastructure.logger import Logger
 from nad_ch.infrastructure.storage import LocalStorage
-from tests.mocks import MockDataProviderRepository, MockDataSubmissionRepository
+from tests.fakes import (
+    FakeDataProviderRepository,
+    FakeDataSubmissionRepository,
+    FakeStorage
+)
 
 
 class ApplicationContext:
@@ -37,10 +41,10 @@ class ApplicationContext:
 
 class TestApplicationContext(ApplicationContext):
     def __init__(self):
-        self._providers = MockDataProviderRepository()
-        self._submissions = MockDataSubmissionRepository()
+        self._providers = FakeDataProviderRepository()
+        self._submissions = FakeDataSubmissionRepository()
         self._logger = Logger(__name__, logging.DEBUG)
-        self._storage = LocalStorage(STORAGE_PATH)
+        self._storage = FakeStorage()
 
     @property
     def providers(self):

@@ -3,7 +3,7 @@ from nad_ch.domain.entities import DataProvider, DataSubmission
 from nad_ch.domain.repositories import DataProviderRepository, DataSubmissionRepository
 
 
-class MockDataProviderRepository(DataProviderRepository):
+class FakeDataProviderRepository(DataProviderRepository):
     def __init__(self) -> None:
         self._providers = set()
         self._next_id = 1
@@ -21,7 +21,7 @@ class MockDataProviderRepository(DataProviderRepository):
         return sorted(list(self._providers), key=lambda provider: provider.id)
 
 
-class MockDataSubmissionRepository(DataSubmissionRepository):
+class FakeDataSubmissionRepository(DataSubmissionRepository):
     def __init__(self) -> None:
         self._submissions = set()
         self._next_id = 1
@@ -32,7 +32,21 @@ class MockDataSubmissionRepository(DataSubmissionRepository):
         self._next_id += 1
         return submission
 
-    def get_by_provider(self, provider: DataProvider) -> Optional[DataSubmission]:
+    def get_by_name(self, file_name: str) -> Optional[DataSubmission]:
         return next(
-            (s for s in self._submissions if s.provider.name == provider.name), None
+            (s for s in self._submissions if s.file_name == file_name), None
         )
+
+    def get_by_provider(self, provider: DataProvider) -> Optional[DataSubmission]:
+        return [s for s in self._submissions if s.provider.name == provider.name]
+
+
+class FakeStorage():
+    def __init__(self):
+        self._files = set()
+
+    def upload(self, source: str, destination: str) -> None:
+        self._files.add(destination)
+
+    def get_file_url(self, file_name: str) -> str:
+        return file_name
