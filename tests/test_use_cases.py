@@ -81,5 +81,4 @@ def test_list_data_submissions_by_provider(app_context):
 
     provider = app_context.providers.get_by_name(provider_name)
     submissions = app_context.submissions.get_by_provider(provider)
-    print(submissions)
     assert len(submissions) == 1

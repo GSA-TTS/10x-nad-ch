@@ -1,6 +1,7 @@
 from typing import List, Optional
-from sqlalchemy import Column, Integer, String, create_engine, ForeignKey
+from sqlalchemy import Column, Integer, String, create_engine, ForeignKey, DateTime
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+from sqlalchemy.sql import func
 import contextlib
 from nad_ch.config import DATABASE_URL
 from nad_ch.domain.entities import DataProvider, DataSubmission
@@ -27,10 +28,17 @@ def session_scope():
 ModelBase = declarative_base()
 
 
-class DataProviderModel(ModelBase):
-    __tablename__ = 'data_providers'
+class CommonBase(ModelBase):
+    __abstract__ = True
 
     id = Column(Integer, primary_key=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+
+class DataProviderModel(CommonBase):
+    __tablename__ = 'data_providers'
+
     name = Column(String)
 
     data_submissions = relationship(
@@ -40,16 +48,24 @@ class DataProviderModel(ModelBase):
 
     @staticmethod
     def from_entity(provider):
-        return DataProviderModel(id=provider.id, name=provider.name)
+        model = DataProviderModel(id=provider.id, name=provider.name)
+        return model
 
     def to_entity(self):
-        return DataProvider(id=self.id, name=self.name)
+        entity = DataProvider(id=self.id, name=self.name)
+
+        if self.created_at is not None:
+            entity.set_created_at(self.created_at)
+
+        if self.updated_at is not None:
+            entity.set_updated_at(self.updated_at)
+
+        return entity
 
 
-class DataSubmissionModel(ModelBase):
+class DataSubmissionModel(CommonBase):
     __tablename__ = 'data_submissions'
 
-    id = Column(Integer, primary_key=True)
     file_name = Column(String)
     url = Column(String)
     data_provider_id = Column(Integer, ForeignKey('data_providers.id'))
@@ -58,20 +74,29 @@ class DataSubmissionModel(ModelBase):
 
     @staticmethod
     def from_entity(submission):
-        return DataSubmissionModel(
+        model = DataSubmissionModel(
             id=submission.id,
             file_name=submission.file_name,
             url=submission.url,
             data_provider_id=submission.provider.id
         )
+        return model
 
     def to_entity(self, provider: DataProvider):
-        return DataSubmission(
+        entity = DataSubmission(
             id=self.id,
             file_name=self.file_name,
             url=self.url,
             provider=provider
         )
+
+        if self.created_at is not None:
+            entity.set_created_at(self.created_at)
+
+        if self.updated_at is not None:
+            entity.set_updated_at(self.updated_at)
+
+        return entity
 
 
 class SqlAlchemyDataProviderRepository(DataProviderRepository):
