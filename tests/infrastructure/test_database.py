@@ -51,6 +51,7 @@ def test_add_data_provider_to_repository_and_get_by_name(providers):
     retrieved_provider = providers.get_by_name(provider_name)
     assert retrieved_provider.id == 1
     assert retrieved_provider.created_at is not None
+    assert retrieved_provider.updated_at is not None
     assert retrieved_provider.name == provider_name
     assert isinstance(retrieved_provider, DataProvider) is True
 
@@ -66,6 +67,7 @@ def test_add_data_provider_and_then_data_submission(providers, submissions):
 
     assert result.id == 1
     assert result.created_at is not None
+    assert result.updated_at is not None
     assert result.provider.id == saved_provider.id
     assert result.file_name == 'some-file-name'
     assert result.url == 'some-url'
