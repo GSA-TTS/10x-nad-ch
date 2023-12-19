@@ -161,3 +161,6 @@ cython_debug/
 
 # Development databases
 *.sqlite3
+
+# Development storage
+storage/
