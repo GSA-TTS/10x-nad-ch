@@ -121,17 +121,21 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
 
     def get_by_name(self, file_name: str) -> Optional[DataSubmission]:
         with self.session_factory() as session:
-            submission_model = (
-                session.query(DataSubmissionModel)
+            result = (
+                session.query(DataSubmissionModel, DataProviderModel)
+                .join(
+                    DataProviderModel, DataProviderModel.id ==
+                    DataSubmissionModel.data_provider_id
+                )
                 .filter(DataSubmissionModel.file_name == file_name)
                 .first()
             )
-            provider_model = (
-                session.query(DataProviderModel)
-                .filter(DataProviderModel.id == submission_model.data_provider_id)
-                .first()
-            )
-            return submission_model.to_entity(provider_model.to_entity())
+
+            if result:
+                submission_model, provider_model = result
+                return submission_model.to_entity(provider_model.to_entity())
+            else:
+                return None
 
     def get_by_provider(self, provider: DataProvider) -> List[DataSubmission]:
         with self.session_factory() as session:
