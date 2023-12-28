@@ -39,13 +39,12 @@ class CommonBase(ModelBase):
 
 
 class DataProviderModel(CommonBase):
-    __tablename__ = 'data_providers'
+    __tablename__ = "data_providers"
 
     name = Column(String)
 
     data_submissions = relationship(
-        'DataSubmissionModel',
-        back_populates='data_provider'
+        "DataSubmissionModel", back_populates="data_provider"
     )
 
     @staticmethod
@@ -66,13 +65,13 @@ class DataProviderModel(CommonBase):
 
 
 class DataSubmissionModel(CommonBase):
-    __tablename__ = 'data_submissions'
+    __tablename__ = "data_submissions"
 
     file_name = Column(String)
     url = Column(String)
-    data_provider_id = Column(Integer, ForeignKey('data_providers.id'))
+    data_provider_id = Column(Integer, ForeignKey("data_providers.id"))
 
-    data_provider = relationship('DataProviderModel', back_populates='data_submissions')
+    data_provider = relationship("DataProviderModel", back_populates="data_submissions")
 
     @staticmethod
     def from_entity(submission):
@@ -80,16 +79,13 @@ class DataSubmissionModel(CommonBase):
             id=submission.id,
             file_name=submission.file_name,
             url=submission.url,
-            data_provider_id=submission.provider.id
+            data_provider_id=submission.provider.id,
         )
         return model
 
     def to_entity(self, provider: DataProvider):
         entity = DataSubmission(
-            id=self.id,
-            file_name=self.file_name,
-            url=self.url,
-            provider=provider
+            id=self.id, file_name=self.file_name, url=self.url, provider=provider
         )
 
         if self.created_at is not None:
@@ -151,8 +147,8 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
             result = (
                 session.query(DataSubmissionModel, DataProviderModel)
                 .join(
-                    DataProviderModel, DataProviderModel.id ==
-                    DataSubmissionModel.data_provider_id
+                    DataProviderModel,
+                    DataProviderModel.id == DataSubmissionModel.data_provider_id,
                 )
                 .filter(DataSubmissionModel.file_name == file_name)
                 .first()
@@ -171,7 +167,7 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
                 .filter(DataSubmissionModel.data_provider_id == provider.id)
                 .all()
             )
-            submission_entities = (
-                [submission.to_entity(provider) for submission in submission_models]
-            )
+            submission_entities = [
+                submission.to_entity(provider) for submission in submission_models
+            ]
             return submission_entities

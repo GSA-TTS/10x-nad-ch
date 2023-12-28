@@ -17,8 +17,8 @@ class DataProvider(Entity):
         self.name = name
 
     def __repr__(self):
-        return f'DataProvider {self.id}, {self.name} \
-            (created: {self.created_at}; updated: {self.updated_at})'
+        return f"DataProvider {self.id}, {self.name} \
+            (created: {self.created_at}; updated: {self.updated_at})"
 
 
 class DataSubmission(Entity):
@@ -35,6 +35,6 @@ class DataSubmission(Entity):
         self.provider = provider
 
     def __repr__(self):
-        return f'DataSubmission \
+        return f"DataSubmission \
             {self.id}, {self.file_name}, {self.url}, {self.provider} \
-                (created: {self.created_at}; updated: {self.updated_at})'
+                (created: {self.created_at}; updated: {self.updated_at})"
