@@ -30,10 +30,10 @@ def list_data_providers(ctx: ApplicationContext) -> List[DataProvider]:
 
 
 def ingest_data_submission(
-        ctx: ApplicationContext, file_name: str, provider_name: str
+        ctx: ApplicationContext, file_path: str, provider_name: str
 ) -> None:
-    if not file_name:
-        ctx.logger.error('File name required')
+    if not file_path:
+        ctx.logger.error('File path required')
         return
 
     provider = ctx.providers.get_by_name(provider_name)
@@ -41,10 +41,10 @@ def ingest_data_submission(
         ctx.logger.error('Provider with that name does not exist')
         return
 
-    ctx.storage.upload(file_name, f'{provider.name}_{file_name}')
-    url = ctx.storage.get_file_url(file_name)
+    ctx.storage.upload(file_path, f'{provider.name}_{file_path}')
+    url = ctx.storage.get_file_url(file_path)
 
-    submission = DataSubmission(file_name, url, provider)
+    submission = DataSubmission(file_path, url, provider)
     ctx.submissions.add(submission)
     ctx.logger.info('Submission added')
 
