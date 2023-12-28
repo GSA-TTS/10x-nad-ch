@@ -12,5 +12,10 @@ class LocalStorage:
     def upload(self, source: str, destination: str) -> None:
         shutil.copy(source, self._full_path(destination))
 
+    def delete(self, file_path: str) -> None:
+        full_file_path = self._full_path(file_path)
+        if os.path.exists(full_file_path):
+            os.remove(full_file_path)
+
     def get_file_url(self, file_name: str) -> str:
         return file_name

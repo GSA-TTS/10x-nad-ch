@@ -41,12 +41,16 @@ def ingest_data_submission(
         ctx.logger.error('Provider with that name does not exist')
         return
 
-    ctx.storage.upload(file_path, f'{provider.name}_{file_path}')
-    url = ctx.storage.get_file_url(file_path)
+    try:
+        ctx.storage.upload(file_path, f'{provider.name}_{file_path}')
+        url = ctx.storage.get_file_url(file_path)
 
-    submission = DataSubmission(file_path, url, provider)
-    ctx.submissions.add(submission)
-    ctx.logger.info('Submission added')
+        submission = DataSubmission(file_path, url, provider)
+        ctx.submissions.add(submission)
+        ctx.logger.info('Submission added')
+    except Exception as e:
+        ctx.storage.delete(file_path)
+        ctx.logger.error(f'Failed to process submission: {e}')
 
 
 def list_data_submissions_by_provider(
