@@ -1,9 +1,10 @@
 import pytest
 from nad_ch.application_context import create_app_context
-from nad_ch.domain.entities import DataProvider
+from nad_ch.domain.entities import DataProvider, DataSubmission
 from nad_ch.use_cases import (
     add_data_provider,
     list_data_providers,
+    ingest_data_submission
 )
 
 
@@ -57,3 +58,27 @@ def test_list_multiple_data_providers(app_context):
     assert len(providers) == 2
     assert providers[0].name == first_name
     assert providers[1].name == second_name
+
+
+def test_ingest_data_submission(app_context):
+    provider_name = 'State X'
+    add_data_provider(app_context, provider_name)
+
+    file_name = 'my_cool_file.txt'
+    ingest_data_submission(app_context, file_name, provider_name)
+
+    submission = app_context.submissions.get_by_name(file_name)
+    assert submission.file_name == file_name
+    assert isinstance(submission, DataSubmission) is True
+
+
+def test_list_data_submissions_by_provider(app_context):
+    provider_name = 'State X'
+    add_data_provider(app_context, provider_name)
+
+    file_name = 'my_cool_file.txt'
+    ingest_data_submission(app_context, file_name, provider_name)
+
+    provider = app_context.providers.get_by_name(provider_name)
+    submissions = app_context.submissions.get_by_provider(provider)
+    assert len(submissions) == 1
