@@ -21,9 +21,11 @@ flake8 = "^6.1.0"
 coverage = "^7.3.2"
 python-dotenv = "^1.0.0"
 pytest-mock = "^3.12.0"
+black = "^23.12.1"
 
 [tool.poetry.scripts]
 init-db="scripts.init_db:main"
+format = "scripts.format:main"
 lint = "flake8.main.cli:main"
 start = "nad_ch.main:main"
 test = "pytest:main"
@@ -33,3 +35,25 @@ env = [
     "APP_ENV=test",
     "DATABASE_URL=sqlite:///:memory:"
 ]
+
+[tool.flake8]
+max-line-length = 88
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+

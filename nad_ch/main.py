@@ -7,5 +7,5 @@ def main():
     cli(obj=context)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -7,11 +7,11 @@ from nad_ch.domain.entities import DataProvider, DataSubmission
 from nad_ch.infrastructure.database import (
     ModelBase,
     SqlAlchemyDataProviderRepository,
-    SqlAlchemyDataSubmissionRepository
+    SqlAlchemyDataSubmissionRepository,
 )
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def test_session():
     engine = create_engine(DATABASE_URL)
     ModelBase.metadata.create_all(engine)
@@ -32,18 +32,18 @@ def test_session():
     return test_session_scope
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def providers(test_session):
     return SqlAlchemyDataProviderRepository(test_session)
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def submissions(test_session):
     return SqlAlchemyDataSubmissionRepository(test_session)
 
 
 def test_add_data_provider_to_repository_and_get_by_name(providers):
-    provider_name = 'State X'
+    provider_name = "State X"
     new_provider = DataProvider(provider_name)
 
     providers.add(new_provider)
@@ -57,11 +57,10 @@ def test_add_data_provider_to_repository_and_get_by_name(providers):
 
 
 def test_add_data_provider_and_then_data_submission(providers, submissions):
-    provider_name = 'State X'
+    provider_name = "State X"
     new_provider = DataProvider(provider_name)
     saved_provider = providers.add(new_provider)
-    new_submission = DataSubmission(
-        'some-file-name', 'some-url', saved_provider)
+    new_submission = DataSubmission("some-file-name", "some-url", saved_provider)
 
     result = submissions.add(new_submission)
 
@@ -69,19 +68,19 @@ def test_add_data_provider_and_then_data_submission(providers, submissions):
     assert result.created_at is not None
     assert result.updated_at is not None
     assert result.provider.id == saved_provider.id
-    assert result.file_name == 'some-file-name'
-    assert result.url == 'some-url'
+    assert result.file_name == "some-file-name"
+    assert result.url == "some-url"
 
 
 def test_retrieve_a_list_of_submissions_by_provider(providers, submissions):
-    provider_name = 'State X'
+    provider_name = "State X"
     new_provider = DataProvider(provider_name)
     saved_provider = providers.add(new_provider)
-    new_submission = DataSubmission(
-        'some-file-name', 'some-url', saved_provider)
+    new_submission = DataSubmission("some-file-name", "some-url", saved_provider)
     submissions.add(new_submission)
     another_new_submission = DataSubmission(
-        'some-other-file-name', 'some-other-url', saved_provider)
+        "some-other-file-name", "some-other-url", saved_provider
+    )
     submissions.add(another_new_submission)
 
     submissions = submissions.get_by_provider(saved_provider)

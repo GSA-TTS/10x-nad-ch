@@ -4,14 +4,14 @@ from nad_ch.config import STORAGE_PATH
 from nad_ch.infrastructure.database import (
     session_scope,
     SqlAlchemyDataProviderRepository,
-    SqlAlchemyDataSubmissionRepository
+    SqlAlchemyDataSubmissionRepository,
 )
 from nad_ch.infrastructure.logger import Logger
 from nad_ch.infrastructure.storage import LocalStorage
 from tests.fakes import (
     FakeDataProviderRepository,
     FakeDataSubmissionRepository,
-    FakeStorage
+    FakeStorage,
 )
 
 
@@ -64,6 +64,6 @@ class TestApplicationContext(ApplicationContext):
 
 
 def create_app_context():
-    if os.environ.get('APP_ENV') == 'test':
+    if os.environ.get("APP_ENV") == "test":
         return TestApplicationContext()
     return ApplicationContext()

@@ -33,15 +33,13 @@ class FakeDataSubmissionRepository(DataSubmissionRepository):
         return submission
 
     def get_by_name(self, file_name: str) -> Optional[DataSubmission]:
-        return next(
-            (s for s in self._submissions if s.file_name == file_name), None
-        )
+        return next((s for s in self._submissions if s.file_name == file_name), None)
 
     def get_by_provider(self, provider: DataProvider) -> Optional[DataSubmission]:
         return [s for s in self._submissions if s.provider.name == provider.name]
 
 
-class FakeStorage():
+class FakeStorage:
     def __init__(self):
         self._files = set()
 
