@@ -1,4 +1,4 @@
-# 2. Use SQLAlchemy as ORM
+# 3. Use SQLAlchemy as ORM
 
 Date: 2023-12-13
 
