@@ -32,8 +32,8 @@ class FakeDataSubmissionRepository(DataSubmissionRepository):
         self._next_id += 1
         return submission
 
-    def get_by_name(self, file_name: str) -> Optional[DataSubmission]:
-        return next((s for s in self._submissions if s.file_name == file_name), None)
+    def get_by_id(self, id: int) -> Optional[DataSubmission]:
+        return next((s for s in self._submissions if s.id == id), None)
 
     def get_by_provider(self, provider: DataProvider) -> Optional[DataSubmission]:
         return [s for s in self._submissions if s.provider.name == provider.name]
@@ -46,5 +46,5 @@ class FakeStorage:
     def upload(self, source: str, destination: str) -> None:
         self._files.add(destination)
 
-    def get_file_url(self, file_name: str) -> str:
-        return file_name
+    def get_file_url(self, filename: str) -> str:
+        return filename

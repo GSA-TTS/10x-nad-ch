@@ -17,5 +17,5 @@ class LocalStorage:
         if os.path.exists(full_file_path):
             os.remove(full_file_path)
 
-    def get_file_url(self, file_name: str) -> str:
-        return file_name
+    def get_file_url(self, filename: str) -> str:
+        return filename

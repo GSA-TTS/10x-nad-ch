@@ -24,17 +24,15 @@ class DataProvider(Entity):
 class DataSubmission(Entity):
     def __init__(
         self,
-        file_name: str,
-        url: str,
+        filename: str,
         provider: DataProvider,
         id: int = None,
     ):
         super().__init__(id)
-        self.file_name = file_name
-        self.url = url
+        self.filename = filename
         self.provider = provider
 
     def __repr__(self):
         return f"DataSubmission \
-            {self.id}, {self.file_name}, {self.url}, {self.provider} \
+            {self.id}, {self.filename}, {self.provider} \
                 (created: {self.created_at}; updated: {self.updated_at})"

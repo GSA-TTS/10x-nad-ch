@@ -1,3 +1,5 @@
+import datetime
+import os
 from typing import List
 from nad_ch.application_context import ApplicationContext
 from nad_ch.domain.entities import DataProvider, DataSubmission
@@ -34,16 +36,23 @@ def ingest_data_submission(
         ctx.logger.error("File path required")
         return
 
+    _, file_extension = os.path.splitext(file_path)
+    if file_extension.lower() not in ['.zip', '.csv']:
+        ctx.logger.error("Invalid file format. Only ZIP or CSV files are accepted.")
+        return
+
     provider = ctx.providers.get_by_name(provider_name)
     if not provider:
         ctx.logger.error("Provider with that name does not exist")
         return
 
-    try:
-        ctx.storage.upload(file_path, f"{provider.name}_{file_path}")
-        url = ctx.storage.get_file_url(file_path)
+    datetime_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        submission = DataSubmission(file_path, url, provider)
+    try:
+        filename = f"{provider.name}_{datetime_str}.zip"
+        ctx.storage.upload(file_path, filename)
+
+        submission = DataSubmission(filename, provider)
         ctx.submissions.add(submission)
         ctx.logger.info("Submission added")
     except Exception as e:
@@ -62,6 +71,6 @@ def list_data_submissions_by_provider(
     submissions = ctx.submissions.get_by_provider(provider)
     ctx.logger.info(f"Data submissions for {provider.name}")
     for s in submissions:
-        ctx.logger.info(f"{s.provider.name}: {s.file_name}")
+        ctx.logger.info(f"{s.provider.name}: {s.filename}")
 
     return submissions
