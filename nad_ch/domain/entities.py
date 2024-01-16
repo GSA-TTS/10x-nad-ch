@@ -1,3 +1,6 @@
+import datetime
+
+
 class Entity:
     def __init__(self, id: int = None):
         self.id = id
@@ -36,3 +39,9 @@ class DataSubmission(Entity):
         return f"DataSubmission \
             {self.id}, {self.filename}, {self.provider} \
                 (created: {self.created_at}; updated: {self.updated_at})"
+
+    @staticmethod
+    def generate_filename(provider: DataProvider) -> str:
+        datetime_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{provider.name}_{datetime_str}.zip"
+        return filename

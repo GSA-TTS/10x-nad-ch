@@ -1,4 +1,3 @@
-import datetime
 import os
 from typing import List
 from nad_ch.application_context import ApplicationContext
@@ -46,10 +45,8 @@ def ingest_data_submission(
         ctx.logger.error("Provider with that name does not exist")
         return
 
-    datetime_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-
     try:
-        filename = f"{provider.name}_{datetime_str}.zip"
+        filename = DataSubmission.generate_filename(provider)
         ctx.storage.upload(file_path, filename)
 
         submission = DataSubmission(filename, provider)
