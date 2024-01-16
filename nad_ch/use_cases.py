@@ -46,7 +46,7 @@ def ingest_data_submission(
         return
 
     try:
-        filename = DataSubmission.generate_filename(provider)
+        filename = DataSubmission.generate_filename(file_path, provider)
         ctx.storage.upload(file_path, filename)
 
         submission = DataSubmission(filename, provider)
