@@ -67,8 +67,7 @@ class DataProviderModel(CommonBase):
 class DataSubmissionModel(CommonBase):
     __tablename__ = "data_submissions"
 
-    file_name = Column(String)
-    url = Column(String)
+    filename = Column(String)
     data_provider_id = Column(Integer, ForeignKey("data_providers.id"))
 
     data_provider = relationship("DataProviderModel", back_populates="data_submissions")
@@ -77,15 +76,14 @@ class DataSubmissionModel(CommonBase):
     def from_entity(submission):
         model = DataSubmissionModel(
             id=submission.id,
-            file_name=submission.file_name,
-            url=submission.url,
+            filename=submission.filename,
             data_provider_id=submission.provider.id,
         )
         return model
 
     def to_entity(self, provider: DataProvider):
         entity = DataSubmission(
-            id=self.id, file_name=self.file_name, url=self.url, provider=provider
+            id=self.id, filename=self.filename, provider=provider
         )
 
         if self.created_at is not None:
@@ -142,7 +140,7 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
             )
             return submission_model.to_entity(provider_model.to_entity())
 
-    def get_by_name(self, file_name: str) -> Optional[DataSubmission]:
+    def get_by_id(self, id: int) -> Optional[DataSubmission]:
         with self.session_factory() as session:
             result = (
                 session.query(DataSubmissionModel, DataProviderModel)
@@ -150,7 +148,7 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
                     DataProviderModel,
                     DataProviderModel.id == DataSubmissionModel.data_provider_id,
                 )
-                .filter(DataSubmissionModel.file_name == file_name)
+                .filter(DataSubmissionModel.id == id)
                 .first()
             )
 

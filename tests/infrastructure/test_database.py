@@ -60,7 +60,7 @@ def test_add_data_provider_and_then_data_submission(providers, submissions):
     provider_name = "State X"
     new_provider = DataProvider(provider_name)
     saved_provider = providers.add(new_provider)
-    new_submission = DataSubmission("some-file-name", "some-url", saved_provider)
+    new_submission = DataSubmission("some-file-name", saved_provider)
 
     result = submissions.add(new_submission)
 
@@ -68,18 +68,17 @@ def test_add_data_provider_and_then_data_submission(providers, submissions):
     assert result.created_at is not None
     assert result.updated_at is not None
     assert result.provider.id == saved_provider.id
-    assert result.file_name == "some-file-name"
-    assert result.url == "some-url"
+    assert result.filename == "some-file-name"
 
 
 def test_retrieve_a_list_of_submissions_by_provider(providers, submissions):
     provider_name = "State X"
     new_provider = DataProvider(provider_name)
     saved_provider = providers.add(new_provider)
-    new_submission = DataSubmission("some-file-name", "some-url", saved_provider)
+    new_submission = DataSubmission("some-file-name", saved_provider)
     submissions.add(new_submission)
     another_new_submission = DataSubmission(
-        "some-other-file-name", "some-other-url", saved_provider
+        "some-other-file-name", saved_provider
     )
     submissions.add(another_new_submission)
 
