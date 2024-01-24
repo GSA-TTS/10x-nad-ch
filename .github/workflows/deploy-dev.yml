@@ -29,5 +29,4 @@ jobs:
           cf_password: ${{ secrets.CF_PASSWORD }}
           cf_org: ${{ secrets.CF_ORG }}
           cf_space: ${{ secrets.CF_SPACE }}
-          app_directory: ./app
           push_arguments: "push -f manifest-dev.yml"
