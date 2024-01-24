@@ -4,8 +4,9 @@ import shutil
 
 
 class S3Storage:
-    def __init__(self, access_key_id: str, secret_access_key: str, region: str,
-                 bucket: str):
+    def __init__(
+        self, access_key_id: str, secret_access_key: str, region: str, bucket: str
+    ):
         self.s3client = boto3.client(
             "s3",
             aws_access_key_id=access_key_id,

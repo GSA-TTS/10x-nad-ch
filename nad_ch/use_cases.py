@@ -36,7 +36,7 @@ def ingest_data_submission(
         return
 
     _, file_extension = os.path.splitext(file_path)
-    if file_extension.lower() not in ['.zip', '.csv']:
+    if file_extension.lower() not in [".zip", ".csv"]:
         ctx.logger.error("Invalid file format. Only ZIP or CSV files are accepted.")
         return
 

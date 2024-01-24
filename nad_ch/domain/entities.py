@@ -44,10 +44,10 @@ class DataSubmission(Entity):
 
     @staticmethod
     def generate_filename(file_path: str, provider: DataProvider) -> str:
-        s = re.sub(r'\W+', '_', provider.name)
+        s = re.sub(r"\W+", "_", provider.name)
         s = s.lower()
-        s = s.strip('_')
-        formatted_provider_name = re.sub(r'_+', '_', s)
+        s = s.strip("_")
+        formatted_provider_name = re.sub(r"_+", "_", s)
         datetime_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         _, file_extension = os.path.splitext(file_path)
         filename = f"{formatted_provider_name}_{datetime_str}{file_extension}"

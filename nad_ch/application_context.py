@@ -25,22 +25,29 @@ class ApplicationContext:
 
     def create_provider_repository(self):
         return SqlAlchemyDataProviderRepository(
-            create_session_factory(config.DATABASE_URL))
+            create_session_factory(config.DATABASE_URL)
+        )
 
     def create_submission_repository(self):
         return SqlAlchemyDataSubmissionRepository(
-            create_session_factory(config.DATABASE_URL))
+            create_session_factory(config.DATABASE_URL)
+        )
 
     def create_logger(self):
         return Logger(__name__)
 
     def create_storage(self):
-        return S3Storage(config.S3_ACCESS_KEY, config.S3_SECRET_ACCESS_KEY,
-                         config.S3_REGION, config.S3_BUCKET_NAME)
+        return S3Storage(
+            config.S3_ACCESS_KEY,
+            config.S3_SECRET_ACCESS_KEY,
+            config.S3_REGION,
+            config.S3_BUCKET_NAME,
+        )
 
     def create_task_queue(self):
-        return RedisTaskQueue("task-queue", config.QUEUE_PASSWORD,
-                              config.QUEUE_HOST, config.QUEUE_PORT)
+        return RedisTaskQueue(
+            "task-queue", config.QUEUE_PASSWORD, config.QUEUE_HOST, config.QUEUE_PORT
+        )
 
     @property
     def providers(self):
