@@ -1,5 +1,5 @@
 from flask import Flask
-from nad_ch.config import WEB_PORT
+from nad_ch.config import PORT
 
 
 app = Flask(__name__)
@@ -11,7 +11,7 @@ def home():
 
 
 def main():
-    app.run(host='0.0.0.0', port=int(WEB_PORT))
+    app.run(host='0.0.0.0', port=int(PORT))
 
 
 if __name__ == '__main__':

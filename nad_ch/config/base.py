@@ -6,4 +6,4 @@ load_dotenv()
 
 
 APP_ENV = os.getenv("APP_ENV")
-WEB_PORT = os.getenv("WEB_PORT", 3000)
+PORT = os.getenv("PORT", 5000)
