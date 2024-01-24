@@ -22,6 +22,7 @@ class RedisTaskQueue:
 class LocalTaskQueue:
     def __init__(self, name, base_path, backend_url):
         broker_base_path = os.path.join(base_path, "celery_broker")
+        os.makedirs(broker_base_path, exist_ok=True)
         broker_url = f"filesystem://{broker_base_path}"
 
         self.app = Celery(name, broker=broker_url, backend=backend_url)
