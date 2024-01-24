@@ -39,7 +39,9 @@ test = "pytest:main"
 [tool.pytest.ini_options]
 env = [
     "APP_ENV=test",
-    "DATABASE_URL=sqlite:///:memory:"
+    "DATABASE_URL=sqlite:///:memory:",
+    "QUEUE_BROKER_URL=nad_ch/infrastructure/celery_broker",
+    "QUEUE_BACKEND_URL=sqlite:///:memory:"
 ]
 
 [tool.flake8]
