@@ -1,5 +1,4 @@
 import pytest
-import contextlib
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from nad_ch.config import DATABASE_URL
@@ -12,34 +11,22 @@ from nad_ch.infrastructure.database import (
 
 
 @pytest.fixture(scope="function")
-def test_session():
-    engine = create_engine(DATABASE_URL)
+def test_database():
+    engine = create_engine(DATABASE_URL, echo=True)
     ModelBase.metadata.create_all(engine)
-    Session = sessionmaker(bind=engine)
-
-    @contextlib.contextmanager
-    def test_session_scope():
-        session = Session()
-        try:
-            yield session
-            session.commit()
-        except Exception:
-            session.rollback()
-            raise
-        finally:
-            session.close()
-
-    return test_session_scope
+    return engine
 
 
 @pytest.fixture(scope="function")
-def providers(test_session):
-    return SqlAlchemyDataProviderRepository(test_session)
+def providers(test_database):
+    Session = sessionmaker(bind=test_database)
+    return SqlAlchemyDataProviderRepository(Session)
 
 
 @pytest.fixture(scope="function")
-def submissions(test_session):
-    return SqlAlchemyDataSubmissionRepository(test_session)
+def submissions(test_database):
+    Session = sessionmaker(bind=test_database)
+    return SqlAlchemyDataSubmissionRepository(Session)
 
 
 def test_add_data_provider_to_repository_and_get_by_name(providers):
@@ -77,9 +64,7 @@ def test_retrieve_a_list_of_submissions_by_provider(providers, submissions):
     saved_provider = providers.add(new_provider)
     new_submission = DataSubmission("some-file-name", saved_provider)
     submissions.add(new_submission)
-    another_new_submission = DataSubmission(
-        "some-other-file-name", saved_provider
-    )
+    another_new_submission = DataSubmission("some-other-file-name", saved_provider)
     submissions.add(another_new_submission)
 
     submissions = submissions.get_by_provider(saved_provider)

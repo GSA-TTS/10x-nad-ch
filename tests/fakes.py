@@ -43,8 +43,6 @@ class FakeStorage:
     def __init__(self):
         self._files = set()
 
-    def upload(self, source: str, destination: str) -> None:
+    def upload(self, source: str, destination: str) -> bool:
         self._files.add(destination)
-
-    def get_file_url(self, filename: str) -> str:
-        return filename
+        return True
