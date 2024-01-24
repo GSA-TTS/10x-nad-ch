@@ -12,4 +12,4 @@ applications:
     stack: cflinuxfs4
     command: poetry run start web
     env:
-      APP_ENV: development_remote
+      APP_ENV: dev_remote

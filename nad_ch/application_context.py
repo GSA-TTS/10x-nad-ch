@@ -108,7 +108,7 @@ class TestApplicationContext(ApplicationContext):
 def create_app_context():
     if config.APP_ENV == "test":
         return TestApplicationContext()
-    elif config.APP_ENV == "development_local":
+    elif config.APP_ENV == "dev_local":
         return DevLocalApplicationContext()
     else:
         return ApplicationContext()
