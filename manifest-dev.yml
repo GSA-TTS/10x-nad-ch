@@ -1,0 +1,13 @@
+---
+applications:
+  - name: nad-ch-dev
+    buildpacks:
+      - https://github.com/cloudfoundry/python-buildpack
+    services:
+      - nad-ch-dev-postgres
+      - nad-ch-dev-redis
+      - nad-ch-dev-s3
+    random-route: true
+    memory: 256M
+    stack: cflinuxfs4
+    command: poetry run start web

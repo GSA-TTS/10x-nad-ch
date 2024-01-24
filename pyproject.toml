@@ -12,28 +12,34 @@ authors = []
 python = "^3.11"
 click = "^8.1.7"
 sqlalchemy = "^2.0.23"
-pytest-env = "^1.1.3"
 logging = "^0.4.9.6"
+python-dotenv = "^1.0.0"
+flask = "^3.0.1"
+boto3 = "^1.34.25"
+psycopg2-binary = "^2.9.9"
+celery = "^5.3.6"
+redis = "^5.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.2"
 flake8 = "^6.1.0"
 coverage = "^7.3.2"
-python-dotenv = "^1.0.0"
 pytest-mock = "^3.12.0"
 black = "^23.12.1"
+pytest-env = "^1.1.3"
 
 [tool.poetry.scripts]
-init-db="scripts.init_db:main"
+init-dev-db="scripts.init_dev_db:main"
 format = "scripts.format:main"
 lint = "flake8.main.cli:main"
-start = "nad_ch.main:main"
+start-cli = "cli:main"
+start-web = "web:main"
 test = "pytest:main"
 
 [tool.pytest.ini_options]
 env = [
     "APP_ENV=test",
-    "DATABASE_URL=sqlite:///:memory:"
+    "DATABASE_URL_LOCAL=sqlite:///:memory:"
 ]
 
 [tool.flake8]
@@ -56,4 +62,3 @@ exclude = '''
   | dist
 )/
 '''
-

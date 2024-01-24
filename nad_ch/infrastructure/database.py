@@ -1,20 +1,20 @@
 from typing import List, Optional
 from sqlalchemy import Column, Integer, String, create_engine, ForeignKey, DateTime
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+from sqlalchemy.orm import sessionmaker, declarative_base, relationship, Session
 from sqlalchemy.sql import func
 import contextlib
-from nad_ch.config import DATABASE_URL
 from nad_ch.domain.entities import DataProvider, DataSubmission
 from nad_ch.domain.repositories import DataProviderRepository, DataSubmissionRepository
 
 
-engine = create_engine(DATABASE_URL)
-Session = sessionmaker(bind=engine)
+def create_session_factory(connection_string: str):
+    engine = create_engine(connection_string)
+    return sessionmaker(bind=engine)
 
 
 @contextlib.contextmanager
-def session_scope():
-    session = Session()
+def session_scope(session_factory):
+    session = session_factory
     try:
         yield session
         session.commit()
@@ -82,9 +82,7 @@ class DataSubmissionModel(CommonBase):
         return model
 
     def to_entity(self, provider: DataProvider):
-        entity = DataSubmission(
-            id=self.id, filename=self.filename, provider=provider
-        )
+        entity = DataSubmission(id=self.id, filename=self.filename, provider=provider)
 
         if self.created_at is not None:
             entity.set_created_at(self.created_at)
@@ -96,8 +94,8 @@ class DataSubmissionModel(CommonBase):
 
 
 class SqlAlchemyDataProviderRepository(DataProviderRepository):
-    def __init__(self, session_factory):
-        self.session_factory = session_factory
+    def __init__(self, session: Session):
+        self.session_factory = session
 
     def add(self, provider: DataProvider) -> DataProvider:
         with self.session_factory() as session:
@@ -124,8 +122,8 @@ class SqlAlchemyDataProviderRepository(DataProviderRepository):
 
 
 class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
-    def __init__(self, session_factory):
-        self.session_factory = session_factory
+    def __init__(self, session: Session):
+        self.session_factory = session
 
     def add(self, submission: DataSubmission) -> DataSubmission:
         with self.session_factory() as session:

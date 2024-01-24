@@ -1,14 +1,14 @@
 import os
 from sqlalchemy import create_engine
 from nad_ch.infrastructure.database import ModelBase
-from nad_ch.config import DATABASE_URL
+from nad_ch.config import DATABASE_URL_LOCAL
 
 
 def main():
-    engine = create_engine(DATABASE_URL)
+    engine = create_engine(DATABASE_URL_LOCAL)
 
     # Check if the database file already exists
-    if os.path.exists(DATABASE_URL.split("///")[1]):
+    if os.path.exists(DATABASE_URL_LOCAL.split("///")[1]):
         print("Database already exists.")
     else:
         # Create all tables
