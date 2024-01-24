@@ -10,8 +10,6 @@ on:
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
-    env:
-      APP_ENV: "test"
 
     steps:
       - name: Check out repository
