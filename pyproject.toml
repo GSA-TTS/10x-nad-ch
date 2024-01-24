@@ -39,7 +39,7 @@ test = "pytest:main"
 [tool.pytest.ini_options]
 env = [
     "APP_ENV=test",
-    "DATABASE_URL_LOCAL=sqlite:///:memory:"
+    "DATABASE_URL=sqlite:///:memory:"
 ]
 
 [tool.flake8]

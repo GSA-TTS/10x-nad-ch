@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from nad_ch.config import DATABASE_URL_LOCAL
+from nad_ch.config import DATABASE_URL
 from nad_ch.domain.entities import DataProvider, DataSubmission
 from nad_ch.infrastructure.database import (
     ModelBase,
@@ -12,7 +12,7 @@ from nad_ch.infrastructure.database import (
 
 @pytest.fixture(scope="function")
 def test_database():
-    engine = create_engine(DATABASE_URL_LOCAL, echo=True)
+    engine = create_engine(DATABASE_URL, echo=True)
     ModelBase.metadata.create_all(engine)
     return engine
 

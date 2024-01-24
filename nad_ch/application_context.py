@@ -1,19 +1,5 @@
-import os
 import logging
-from nad_ch.config import (
-    STORAGE_PATH,
-    DATABASE_URL_LOCAL,
-    QUEUE_BROKER_URL_LOCAL,
-    QUEUE_BACKEND_URL_LOCAL,
-    DATABASE_URL,
-    QUEUE_PASSWORD,
-    QUEUE_HOST,
-    QUEUE_PORT,
-    S3_ACCESS_KEY,
-    S3_SECRET_ACCESS_KEY,
-    S3_REGION,
-    S3_BUCKET_NAME
-)
+import nad_ch.config as config
 from nad_ch.infrastructure.database import (
     create_session_factory,
     SqlAlchemyDataProviderRepository,
@@ -38,19 +24,23 @@ class ApplicationContext:
         self._task_queue = self.create_task_queue()
 
     def create_provider_repository(self):
-        return SqlAlchemyDataProviderRepository(create_session_factory(DATABASE_URL))
+        return SqlAlchemyDataProviderRepository(
+            create_session_factory(config.DATABASE_URL))
 
     def create_submission_repository(self):
-        return SqlAlchemyDataSubmissionRepository(create_session_factory(DATABASE_URL))
+        return SqlAlchemyDataSubmissionRepository(
+            create_session_factory(config.DATABASE_URL))
 
     def create_logger(self):
         return Logger(__name__)
 
     def create_storage(self):
-        return S3Storage(S3_ACCESS_KEY, S3_SECRET_ACCESS_KEY, S3_REGION, S3_BUCKET_NAME)
+        return S3Storage(config.S3_ACCESS_KEY, config.S3_SECRET_ACCESS_KEY,
+                         config.S3_REGION, config.S3_BUCKET_NAME)
 
     def create_task_queue(self):
-        return RedisTaskQueue("task-queue", QUEUE_PASSWORD, QUEUE_HOST, QUEUE_PORT)
+        return RedisTaskQueue("task-queue", config.QUEUE_PASSWORD,
+                              config.QUEUE_HOST, config.QUEUE_PORT)
 
     @property
     def providers(self):
@@ -76,23 +66,23 @@ class ApplicationContext:
 class DevLocalApplicationContext(ApplicationContext):
     def create_provider_repository(self):
         return SqlAlchemyDataProviderRepository(
-            create_session_factory(DATABASE_URL_LOCAL)
+            create_session_factory(config.DATABASE_URL)
         )
 
     def create_submission_repository(self):
         return SqlAlchemyDataSubmissionRepository(
-            create_session_factory(DATABASE_URL_LOCAL)
+            create_session_factory(config.DATABASE_URL)
         )
 
     def create_logger(self):
         return Logger(__name__, logging.DEBUG)
 
     def create_storage(self):
-        return LocalStorage(STORAGE_PATH)
+        return LocalStorage(config.STORAGE_PATH)
 
     def create_task_queue(self):
         return LocalTaskQueue(
-            "local-task-queue", QUEUE_BROKER_URL_LOCAL, QUEUE_BACKEND_URL_LOCAL
+            "local-task-queue", config.QUEUE_BROKER_URL, config.QUEUE_BACKEND_URL
         )
 
 
@@ -109,10 +99,16 @@ class TestApplicationContext(ApplicationContext):
     def create_storage(self):
         return FakeStorage()
 
+    def create_task_queue(self):
+        return LocalTaskQueue(
+            "test-task-queue", config.QUEUE_BROKER_URL, config.QUEUE_BACKEND_URL
+        )
+
 
 def create_app_context():
-    if os.environ.get("APP_ENV") == "test":
+    if config.APP_ENV == "test":
         return TestApplicationContext()
-    if os.environ.get("APP_ENV") == "development-local":
+    elif config.APP_ENV == "development-local":
         return DevLocalApplicationContext()
-    return ApplicationContext()
+    else:
+        return ApplicationContext()

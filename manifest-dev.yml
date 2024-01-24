@@ -11,3 +11,5 @@ applications:
     memory: 256M
     stack: cflinuxfs4
     command: poetry run start web
+    env:
+      APP_ENV: development-remote
