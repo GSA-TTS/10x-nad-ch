@@ -1,0 +1,25 @@
+# commonly generated files
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache/
+.git
+.svn
+node_modules/
+dist/
+build/
+
+# IDE and editor configuration
+.idea/
+.vscode/
+.project
+.settings/
+
+# dependency management files
+Pipfile*
+
+# documentation
+documentation/
+
+# artifacts
+*.zip

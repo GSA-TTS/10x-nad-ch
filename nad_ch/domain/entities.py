@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timezone, UTC
 import os
 import re
 
@@ -22,8 +22,7 @@ class DataProvider(Entity):
         self.name = name
 
     def __repr__(self):
-        return f"DataProvider {self.id}, {self.name} \
-            (created: {self.created_at}; updated: {self.updated_at})"
+        return f"DataProvider {self.id}, {self.name})"
 
 
 class DataSubmission(Entity):
@@ -39,8 +38,7 @@ class DataSubmission(Entity):
 
     def __repr__(self):
         return f"DataSubmission \
-            {self.id}, {self.filename}, {self.provider} \
-                (created: {self.created_at}; updated: {self.updated_at})"
+            {self.id}, {self.filename}, {self.provider}"
 
     @staticmethod
     def generate_filename(file_path: str, provider: DataProvider) -> str:
@@ -48,7 +46,12 @@ class DataSubmission(Entity):
         s = s.lower()
         s = s.strip("_")
         formatted_provider_name = re.sub(r"_+", "_", s)
-        datetime_str = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        current_time_utc = datetime.now(timezone.utc)
+        timestamp = current_time_utc.timestamp()
+        datetime_obj = datetime.fromtimestamp(timestamp, UTC)
+        datetime_str = datetime_obj.strftime("%Y%m%d_%H%M%S")
+
         _, file_extension = os.path.splitext(file_path)
         filename = f"{formatted_provider_name}_{datetime_str}{file_extension}"
         return filename

@@ -1,9 +1,10 @@
 import click
-from nad_ch.use_cases import (
+from nad_ch.application.use_cases import (
     add_data_provider,
     list_data_providers,
     ingest_data_submission,
     list_data_submissions_by_provider,
+    validate_data_submission,
 )
 
 
@@ -43,3 +44,11 @@ def ingest(ctx, file_path, provider):
 def list_submissions_by_provider(ctx, provider):
     context = ctx.obj
     list_data_submissions_by_provider(context, provider)
+
+
+@cli.command()
+@click.pass_context
+@click.argument("filename")
+def validate_submission(ctx, filename):
+    context = ctx.obj
+    validate_data_submission(context, filename)
