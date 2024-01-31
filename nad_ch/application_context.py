@@ -27,10 +27,10 @@ class ApplicationContext:
         self._task_queue = self.create_task_queue()
 
     def create_provider_repository(self):
-        return SqlAlchemyDataProviderRepository(self.session)
+        return SqlAlchemyDataProviderRepository(self._session)
 
     def create_submission_repository(self):
-        return SqlAlchemyDataSubmissionRepository(self.session)
+        return SqlAlchemyDataSubmissionRepository(self._session)
 
     def create_logger(self):
         return BasicLogger(__name__)
