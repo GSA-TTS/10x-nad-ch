@@ -16,11 +16,10 @@ from tests.fakes_and_mocks import (
     FakeStorage,
 )
 
-session = create_session_factory(config.DATABASE_URL)
-
 
 class ApplicationContext:
     def __init__(self):
+        self._session = create_session_factory(config.DATABASE_URL)
         self._providers = self.create_provider_repository()
         self._submissions = self.create_submission_repository()
         self._logger = self.create_logger()
@@ -28,10 +27,10 @@ class ApplicationContext:
         self._task_queue = self.create_task_queue()
 
     def create_provider_repository(self):
-        return SqlAlchemyDataProviderRepository(session)
+        return SqlAlchemyDataProviderRepository(self.session)
 
     def create_submission_repository(self):
-        return SqlAlchemyDataSubmissionRepository(session)
+        return SqlAlchemyDataSubmissionRepository(self.session)
 
     def create_logger(self):
         return BasicLogger(__name__)
@@ -82,6 +81,14 @@ class DevLocalApplicationContext(ApplicationContext):
 
 
 class TestApplicationContext(ApplicationContext):
+    def __init__(self):
+        self._session = None
+        self._providers = self.create_provider_repository()
+        self._submissions = self.create_submission_repository()
+        self._logger = self.create_logger()
+        self._storage = self.create_storage()
+        self._task_queue = self.create_task_queue()
+
     def create_provider_repository(self):
         return FakeDataProviderRepository()
 
