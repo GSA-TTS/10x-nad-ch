@@ -168,5 +168,5 @@ storage/
 # Test task queue
 control/
 
-# Zipped artifaces
+# Zipped artifacts
 *.zip
