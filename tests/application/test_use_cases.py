@@ -1,11 +1,14 @@
 import pytest
+import re
 from nad_ch.application_context import create_app_context
 from nad_ch.domain.entities import DataProvider, DataSubmission
-from nad_ch.use_cases import (
+from nad_ch.application.use_cases import (
     add_data_provider,
     list_data_providers,
     ingest_data_submission,
+    validate_data_submission,
 )
+from tests.fakes_and_mocks import MockCeleryTask
 
 
 @pytest.fixture(scope="function")
@@ -81,3 +84,21 @@ def test_list_data_submissions_by_provider(app_context):
     provider = app_context.providers.get_by_name(provider_name)
     submissions = app_context.submissions.get_by_provider(provider)
     assert len(submissions) == 1
+
+
+def test_validate_data_submission(app_context, caplog):
+    provider_name = "State X"
+    add_data_provider(app_context, provider_name)
+
+    filename = "my_cool_file.zip"
+    ingest_data_submission(app_context, filename, provider_name)
+    submission = app_context.submissions.get_by_id(1)
+
+    class CustomMockTestTaskQueue:
+        def run_load_and_validate(self, path: str):
+            return MockCeleryTask(1)
+
+    app_context._task_queue = CustomMockTestTaskQueue()
+
+    validate_data_submission(app_context, submission.filename)
+    assert re.search(r"Total number of features: 1", caplog.text)

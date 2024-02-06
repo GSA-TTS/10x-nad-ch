@@ -1,5 +1,6 @@
 import os
 from typing import List
+from nad_ch.application.dtos import DownloadResult
 from nad_ch.application_context import ApplicationContext
 from nad_ch.domain.entities import DataProvider, DataSubmission
 
@@ -51,9 +52,9 @@ def ingest_data_submission(
 
         submission = DataSubmission(filename, provider)
         ctx.submissions.add(submission)
-        ctx.logger.info("Submission added")
+        ctx.logger.info(f"Submission added: {submission.filename}")
     except Exception as e:
-        ctx.storage.delete(file_path)
+        ctx.storage.delete(filename)
         ctx.logger.error(f"Failed to process submission: {e}")
 
 
@@ -71,3 +72,21 @@ def list_data_submissions_by_provider(
         ctx.logger.info(f"{s.provider.name}: {s.filename}")
 
     return submissions
+
+
+def validate_data_submission(ctx: ApplicationContext, filename: str):
+    submission = ctx.submissions.get_by_filename(filename)
+    if not submission:
+        ctx.logger.error("Data submission with that filename does not exist")
+        return
+
+    download_result: DownloadResult = ctx.storage.download_temp(filename)
+    if not download_result:
+        ctx.logger.error("Data extration error")
+        return
+
+    result = ctx.task_queue.run_load_and_validate(download_result.extracted_dir)
+
+    ctx.logger.info(f"Total number of features: {result.get()}")
+
+    ctx.storage.cleanup_temp_dir(download_result.temp_dir)

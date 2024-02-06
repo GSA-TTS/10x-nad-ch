@@ -1,0 +1,47 @@
+---
+version: "3.8"
+services:
+  web:
+    container_name: nad-ch-dev-local
+    image: nad-ch-dev-local
+    ports:
+      - "8080:5000"
+    depends_on:
+      - postgres
+      - redis
+      - storage
+    build: .
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+
+  postgres:
+    container_name: postgres
+    image: postgres:13
+    ports:
+      - "5432:5432"
+    volumes:
+      - /var/lib/postgresql/data
+    env_file:
+      - .env
+
+  redis:
+    container_name: redis
+    image: redis:5
+    ports:
+      - "6379:6379"
+    env_file:
+      - .env
+
+  storage:
+    container_name: minio
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./storage/:/storage
+    env_file:
+      - .env
+    command: server /storage --console-address :9001

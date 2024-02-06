@@ -1,7 +1,8 @@
 import logging
+from nad_ch.application.interfaces import Logger
 
 
-class Logger:
+class BasicLogger(Logger):
     def __init__(self, name=__name__, logger_level=logging.INFO):
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logger_level)

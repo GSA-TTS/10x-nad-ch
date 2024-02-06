@@ -1,4 +1,5 @@
 from typing import Optional
+from nad_ch.application.dtos import DownloadResult
 from nad_ch.domain.entities import DataProvider, DataSubmission
 from nad_ch.domain.repositories import DataProviderRepository, DataSubmissionRepository
 
@@ -38,6 +39,9 @@ class FakeDataSubmissionRepository(DataSubmissionRepository):
     def get_by_provider(self, provider: DataProvider) -> Optional[DataSubmission]:
         return [s for s in self._submissions if s.provider.name == provider.name]
 
+    def get_by_filename(self, filename: str) -> Optional[DataSubmission]:
+        return [s for s in self._submissions if s.filename == filename]
+
 
 class FakeStorage:
     def __init__(self):
@@ -46,3 +50,24 @@ class FakeStorage:
     def upload(self, source: str, destination: str) -> bool:
         self._files.add(destination)
         return True
+
+    def download_temp(self, filename: str) -> Optional[DownloadResult]:
+        return DownloadResult(temp_dir=filename, extracted_dir=f"{filename}.gdb")
+
+    def cleanup_temp_dir(self, temp_dir: str):
+        pass
+
+
+class MockCeleryTask:
+    def __init__(self, result=None):
+        self.result = result
+        self.called = False
+
+    def delay(self, *args, **kwargs):
+        self.called = True
+        return self
+
+    def get(self, timeout=None, propagate=True, **kwargs):
+        if self.result is None:
+            raise Exception("No result has been set for the mock task")
+        return self.result

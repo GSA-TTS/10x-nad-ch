@@ -1,50 +1,35 @@
-import os
 from celery import Celery
+import geopandas as gpd
+from nad_ch.application.interfaces import TaskQueue
+from nad_ch.application.validation import get_feature_count
+from nad_ch.config import QUEUE_BROKER_URL, QUEUE_BACKEND_URL
 
 
-class RedisTaskQueue:
-    def __init__(self, name: str, password: str, host: str, port: str):
-        redis_url = f"redis://:{password}@{host}:{port}/0"
-
-        self.app = Celery(name, broker=redis_url, backend=redis_url)
-
-        self.app.conf.update(
-            task_serializer="json", result_serializer="json", accept_content=["json"]
-        )
-
-    def define_task(self, func):
-        return self.app.task(func)
-
-    def start_worker(self):
-        self.app.worker_main(argv=["worker", "--loglevel=info"])
+celery_app = Celery(
+    "redis-task-queue", broker=QUEUE_BROKER_URL, backend=QUEUE_BACKEND_URL
+)
 
 
-class LocalTaskQueue:
-    def __init__(self, name, base_path, backend_url):
-        broker_base_path = os.path.join(base_path, "celery_broker")
-        os.makedirs(broker_base_path, exist_ok=True)
-        broker_url = f"filesystem://{broker_base_path}"
+celery_app.conf.update(
+    store_processed=True,
+    result_persistent=True,
+    task_serializer="json",
+    result_serializer="json",
+    accept_content=["json"],
+)
 
-        self.app = Celery(name, broker=broker_url, backend=backend_url)
 
-        self.app.conf.update(
-            broker_transport_options={
-                "data_folder_in": os.path.join(broker_base_path, "in"),
-                "data_folder_out": os.path.join(broker_base_path, "out"),
-                "data_folder_processed": os.path.join(broker_base_path, "processed"),
-            },
-            result_persistent=True,
-            task_serializer="json",
-            result_serializer="json",
-            accept_content=["json"],
-        )
+@celery_app.task
+def load_and_validate(gdb_file_path: str) -> int:
+    gdf = gpd.read_file(gdb_file_path)
+    feature_count = get_feature_count(gdf)
+    return feature_count
 
-        os.makedirs(os.path.join(broker_base_path, "in"), exist_ok=True)
-        os.makedirs(os.path.join(broker_base_path, "out"), exist_ok=True)
-        os.makedirs(os.path.join(broker_base_path, "processed"), exist_ok=True)
 
-    def define_task(self, func):
-        return self.app.task(func)
+class CeleryTaskQueue(TaskQueue):
+    def __init__(self, app):
+        self.app = app
 
-    def start_worker(self):
-        self.app.worker_main(argv=["worker", "--loglevel=info"])
+    def run_load_and_validate(self, path: str):
+        task_result = load_and_validate.apply_async(args=[path])
+        return task_result

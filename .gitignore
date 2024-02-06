@@ -165,5 +165,8 @@ cython_debug/
 # Development storage
 storage/
 
-# Development task queue
-celery_broker/
+# Test task queue
+control/
+
+# Zipped artifacts
+*.zip

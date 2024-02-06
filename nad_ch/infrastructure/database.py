@@ -8,7 +8,9 @@ from nad_ch.domain.repositories import DataProviderRepository, DataSubmissionRep
 
 
 def create_session_factory(connection_string: str):
-    engine = create_engine(connection_string)
+    engine = create_engine(
+        connection_string, connect_args={"options": "-c timezone=UTC"}
+    )
     return sessionmaker(bind=engine)
 
 
@@ -32,9 +34,14 @@ class CommonBase(ModelBase):
     __abstract__ = True
 
     id = Column(Integer, primary_key=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    created_at = Column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
     updated_at = Column(
-        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
     )
 
 
@@ -167,3 +174,21 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
                 submission.to_entity(provider) for submission in submission_models
             ]
             return submission_entities
+
+    def get_by_filename(self, filename: str) -> Optional[DataSubmission]:
+        with self.session_factory() as session:
+            result = (
+                session.query(DataSubmissionModel, DataProviderModel)
+                .join(
+                    DataProviderModel,
+                    DataProviderModel.id == DataSubmissionModel.data_provider_id,
+                )
+                .filter(DataSubmissionModel.filename == filename)
+                .first()
+            )
+
+            if result:
+                submission_model, provider_model = result
+                return submission_model.to_entity(provider_model.to_entity())
+            else:
+                return None
