@@ -198,9 +198,13 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
             else:
                 return None
 
-    def update_report(self, id: int, report) -> DataSubmission:
+    def update_report(self, id: int, report) -> None:
         with session_scope(self.session_factory) as session:
-            model_instance = session.query(DataSubmissionModel).filter(DataSubmissionModel.id == id).first()
+            model_instance = (
+                session.query(DataSubmissionModel)
+                .filter(DataSubmissionModel.id == id)
+                .first()
+            )
 
             if model_instance:
                 model_instance.report = report

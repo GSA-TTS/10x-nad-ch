@@ -40,7 +40,10 @@ class FakeDataSubmissionRepository(DataSubmissionRepository):
         return [s for s in self._submissions if s.provider.name == provider.name]
 
     def get_by_filename(self, filename: str) -> Optional[DataSubmission]:
-        return [s for s in self._submissions if s.filename == filename]
+        return next((s for s in self._submissions if s.filename == filename), None)
+
+    def update_report(self, submission_id: int, report) -> None:
+        return None
 
 
 class FakeStorage:
