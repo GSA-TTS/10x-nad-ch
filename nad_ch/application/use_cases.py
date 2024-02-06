@@ -58,9 +58,7 @@ def ingest_data_submission(
         ctx.logger.error(f"Failed to process submission: {e}")
 
 
-def list_data_submissions_by_provider(
-    ctx: ApplicationContext, provider_name: str
-) -> List[DataSubmission]:
+def list_data_submissions_by_provider(ctx: ApplicationContext, provider_name: str):
     provider = ctx.providers.get_by_name(provider_name)
     if not provider:
         ctx.logger.error("Provider with that name does not exist")

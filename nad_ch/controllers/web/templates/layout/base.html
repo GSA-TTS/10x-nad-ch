@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include "layout/head.html" with context %}
+    <title>{% block title %}{% endblock %} - NAD Collaboration Hub</title>
+  </head>
+  <body>
+    <div class="body-wrapper">
+      <div class="grid-row minh-viewport">
+        <div class="grid-col-2">{% include "layout/sidebar.html" %}</div>
+        <div class="grid-col-10">
+          <main class="main" id="main-content">
+            <section class="grid-container usa-section">
+              {% block content %}{% endblock %}
+            </section>
+          </main>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

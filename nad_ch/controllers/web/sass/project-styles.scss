@@ -1,0 +1,23 @@
+.sidebar {
+  padding: 1em 1em 1em 3em;
+  height: 100%;
+  background-color: #162e51;
+}
+
+.sidebar-logo {
+  color: white;
+}
+
+.usa-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.usa-sidenav {
+  border-bottom: none;
+}
+
+.usa-sidenav__item {
+  border-top: none;
+}

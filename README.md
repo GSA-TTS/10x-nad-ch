@@ -23,7 +23,16 @@ cp sample.env .env
 
 Update all settings defaulted to `<add_a_key_here>`.
 
-Run the following command to build the app and start up its services:
+Install frontend dependencies and run in development mode:
+
+```bash
+cd nad_ch/controllers/web
+npm install
+npm run dev
+```
+
+Return to the project's root directory and run the following command to build
+the app and start up its services:
 
 ```bash
 docker compose up --build
