@@ -14,6 +14,7 @@ def before_request():
 def home():
     return render_template("index.html")
 
+
 @home_bp.route("/reports")
 def reports():
     submissions = list_data_submissions_by_provider(g.ctx, "NJ")

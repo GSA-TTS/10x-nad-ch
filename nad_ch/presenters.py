@@ -12,7 +12,9 @@ class DataSubmissionViewModel:
     url: str
 
 
-def present_data_submissions(submissions: Iterable[DataSubmission]) -> Iterable[DataSubmissionViewModel]:
+def present_data_submissions(
+    submissions: Iterable[DataSubmission],
+) -> Iterable[DataSubmissionViewModel]:
     view_models = []
 
     for submission in submissions:
@@ -20,13 +22,17 @@ def present_data_submissions(submissions: Iterable[DataSubmission]) -> Iterable[
         date_match = re.search(date_pattern, submission.filename)
         if date_match:
             date_str = date_match.group(0)
-            date_created = datetime.strptime(date_str, "%Y%m%d_%H%M%S").strftime("%B %d, %Y")
+            date_created = datetime.strptime(date_str, "%Y%m%d_%H%M%S").strftime(
+                "%B %d, %Y"
+            )
         else:
             date_created = "Unknown"
 
         url = f"http://example.com/submissions/{submission.filename}"
 
-        vm = DataSubmissionViewModel(name=submission.filename, date_created=date_created, url=url)
+        vm = DataSubmissionViewModel(
+            name=submission.filename, date_created=date_created, url=url
+        )
         view_models.append(vm)
 
     return view_models
