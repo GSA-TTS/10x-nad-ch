@@ -3,7 +3,6 @@ from typing import List
 from nad_ch.application.dtos import DownloadResult
 from nad_ch.application.interfaces import ApplicationContext
 from nad_ch.domain.entities import DataProvider, DataSubmission
-from nad_ch.presenters import present_data_submissions
 
 
 def add_data_provider(ctx: ApplicationContext, provider_name: str) -> None:
@@ -70,7 +69,7 @@ def list_data_submissions_by_provider(ctx: ApplicationContext, provider_name: st
     for s in submissions:
         ctx.logger.info(f"{s.provider.name}: {s.filename}")
 
-    return present_data_submissions(submissions)
+    return submissions
 
 
 def validate_data_submission(ctx: ApplicationContext, filename: str):

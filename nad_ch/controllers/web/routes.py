@@ -17,5 +17,4 @@ def home():
 
 @home_bp.route("/reports")
 def reports():
-    submissions = list_data_submissions_by_provider(g.ctx, "NJ")
-    return render_template("reports.html", submissions=submissions)
+    return render_template("reports.html")

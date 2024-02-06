@@ -1,0 +1,16 @@
+.github/
+.pytest_cache
+control/
+documentation/
+node_modules/
+storage/
+
+.cfignore
+.coverage
+.coveragerc
+.dockerignore
+.env
+.flake8
+.gitignore
+sample.env
+start_local.sh
