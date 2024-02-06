@@ -2,6 +2,7 @@ from typing import List, Optional
 from sqlalchemy import Column, Integer, String, create_engine, ForeignKey, DateTime
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship, Session
 from sqlalchemy.sql import func
+from sqlalchemy.types import JSON
 import contextlib
 from nad_ch.domain.entities import DataProvider, DataSubmission
 from nad_ch.domain.repositories import DataProviderRepository, DataSubmissionRepository
@@ -76,6 +77,7 @@ class DataSubmissionModel(CommonBase):
 
     filename = Column(String)
     data_provider_id = Column(Integer, ForeignKey("data_providers.id"))
+    report = Column(JSON)
 
     data_provider = relationship("DataProviderModel", back_populates="data_submissions")
 
@@ -84,12 +86,15 @@ class DataSubmissionModel(CommonBase):
         model = DataSubmissionModel(
             id=submission.id,
             filename=submission.filename,
+            report=submission.report,
             data_provider_id=submission.provider.id,
         )
         return model
 
     def to_entity(self, provider: DataProvider):
-        entity = DataSubmission(id=self.id, filename=self.filename, provider=provider)
+        entity = DataSubmission(
+            id=self.id, filename=self.filename, report=self.report, provider=provider
+        )
 
         if self.created_at is not None:
             entity.set_created_at(self.created_at)

@@ -9,12 +9,12 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.types import JSON
 
 
 # revision identifiers, used by Alembic.
-revision: str = '851709d3a162'
-down_revision: Union[str, None] = 'c5596492c87b'
+revision: str = "851709d3a162"
+down_revision: Union[str, None] = "c5596492c87b"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -22,7 +22,7 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade():
     op.add_column(
         "data_submissions",
-        sa.Column("report", JSONB),
+        sa.Column("report", JSON, nullable=True),
     )
 
 

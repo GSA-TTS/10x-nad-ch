@@ -30,11 +30,13 @@ class DataSubmission(Entity):
         self,
         filename: str,
         provider: DataProvider,
+        report=None,
         id: int = None,
     ):
         super().__init__(id)
         self.filename = filename
         self.provider = provider
+        self.report = report
 
     def __repr__(self):
         return f"DataSubmission \
@@ -55,3 +57,6 @@ class DataSubmission(Entity):
         _, file_extension = os.path.splitext(file_path)
         filename = f"{formatted_provider_name}_{datetime_str}{file_extension}"
         return filename
+
+    def has_report(self) -> bool:
+        return False if self.report is None or not self.report else True
