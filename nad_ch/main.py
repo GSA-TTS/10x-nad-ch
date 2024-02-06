@@ -1,4 +1,4 @@
-from nad_ch.application_context import create_app_context
+from nad_ch.config import create_app_context
 from nad_ch.config import PORT
 from nad_ch.controllers.cli import cli
 from nad_ch.controllers.web.flask import create_flask_application
