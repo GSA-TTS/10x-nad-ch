@@ -1,5 +1,6 @@
 from typing import Optional, Protocol
 from nad_ch.application.dtos import DownloadResult
+from nad_ch.domain.repositories import DataProviderRepository, DataSubmissionRepository
 
 
 class Logger(Protocol):
@@ -30,3 +31,25 @@ class Storage(Protocol):
 class TaskQueue(Protocol):
     def run_load_and_validate(self, path: str):
         ...
+
+
+class ApplicationContext:
+    @property
+    def providers(self) -> DataProviderRepository:
+        return self._providers
+
+    @property
+    def submissions(self) -> DataSubmissionRepository:
+        return self._submissions
+
+    @property
+    def logger(self) -> Logger:
+        return self._logger
+
+    @property
+    def storage(self) -> Storage:
+        return self._storage
+
+    @property
+    def task_queue(self) -> TaskQueue:
+        return self._task_queue

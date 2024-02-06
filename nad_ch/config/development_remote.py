@@ -1,6 +1,15 @@
 import json
 import os
 from .base import *
+from nad_ch.application.interfaces import ApplicationContext
+from nad_ch.infrastructure.database import (
+    create_session_factory,
+    SqlAlchemyDataProviderRepository,
+    SqlAlchemyDataSubmissionRepository,
+)
+from nad_ch.infrastructure.logger import BasicLogger
+from nad_ch.infrastructure.storage import S3Storage
+from nad_ch.infrastructure.task_queue import celery_app, CeleryTaskQueue
 
 
 def get_credentials(service_name, default={}):
@@ -28,3 +37,37 @@ S3_SECRET_ACCESS_KEY = s3_credentials.get(
     "secret_access_key", os.getenv("S3_SECRET_ACCESS_KEY")
 )
 S3_REGION = s3_credentials.get("region", os.getenv("S3_REGION"))
+
+
+class DevRemoteApplicationContext(ApplicationContext):
+    def __init__(self):
+        self._session = create_session_factory(DATABASE_URL)
+        self._providers = self.create_provider_repository()
+        self._submissions = self.create_submission_repository()
+        self._logger = self.create_logger()
+        self._storage = self.create_storage()
+        self._task_queue = self.create_task_queue()
+
+    def create_provider_repository(self):
+        return SqlAlchemyDataProviderRepository(self._session)
+
+    def create_submission_repository(self):
+        return SqlAlchemyDataSubmissionRepository(self._session)
+
+    def create_logger(self):
+        return BasicLogger(__name__)
+
+    def create_storage(self):
+        return S3Storage(
+            S3_ACCESS_KEY,
+            S3_SECRET_ACCESS_KEY,
+            S3_REGION,
+            S3_BUCKET_NAME,
+        )
+
+    def create_task_queue(self):
+        return CeleryTaskQueue(celery_app)
+
+
+def create_app_context():
+    return DevRemoteApplicationContext()

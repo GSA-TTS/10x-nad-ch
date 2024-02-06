@@ -1,7 +1,7 @@
 import os
 from typing import List
 from nad_ch.application.dtos import DownloadResult
-from nad_ch.application_context import ApplicationContext
+from nad_ch.application.interfaces import ApplicationContext
 from nad_ch.domain.entities import DataProvider, DataSubmission
 
 
