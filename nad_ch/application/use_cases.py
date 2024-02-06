@@ -3,7 +3,7 @@ from typing import List
 from nad_ch.application.dtos import DownloadResult
 from nad_ch.application.interfaces import ApplicationContext
 from nad_ch.domain.entities import DataProvider, DataSubmission
-
+from nad_ch.presenters import present_data_submissions
 
 def add_data_provider(ctx: ApplicationContext, provider_name: str) -> None:
     if not provider_name:
@@ -60,7 +60,7 @@ def ingest_data_submission(
 
 def list_data_submissions_by_provider(
     ctx: ApplicationContext, provider_name: str
-) -> List[DataSubmission]:
+):
     provider = ctx.providers.get_by_name(provider_name)
     if not provider:
         ctx.logger.error("Provider with that name does not exist")
@@ -71,7 +71,7 @@ def list_data_submissions_by_provider(
     for s in submissions:
         ctx.logger.info(f"{s.provider.name}: {s.filename}")
 
-    return submissions
+    return present_data_submissions(submissions)
 
 
 def validate_data_submission(ctx: ApplicationContext, filename: str):

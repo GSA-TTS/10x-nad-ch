@@ -1,0 +1,27 @@
+{% extends "layout/base.html" %} {% block title %}Home Page{% endblock %}
+{%block content %}
+<h1>Reports</h1>
+
+<table class="usa-table usa-table--borderless">
+  <!-- <caption>
+    Borderless table: A borderless table can be useful when you want the
+    information to feel more a part of the text it accompanies and extends.
+  </caption> -->
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Date Created</th>
+      <th scope="col">View</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for sub in submissions %}
+    <tr>
+      <th scope="row">{{sub.name}}</th>
+      <td>{{ sub.date_created}}</td>
+      <td><a href="#">View</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

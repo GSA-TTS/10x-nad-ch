@@ -1,0 +1,19 @@
+{% block sidebar %}
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <h4>National Address Database</h4>
+    <h2>Collaboration Hub</h2>
+  </div>
+  <nav aria-label="Side navigation,">
+    <ul class="usa-sidenav">
+      <li class="usa-sidenav__item">
+        {% if request.endpoint == 'home.reports' %}
+        <a href="{{ url_for('home.reports') }}" class="usa-current">Reports</a>
+        {% else %}
+        <a href="{{ url_for('home.reports') }}">Reports</a>
+        {% endif %}
+      </li>
+    </ul>
+  </nav>
+</div>
+{% endblock %}

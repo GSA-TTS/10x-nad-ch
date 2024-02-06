@@ -170,3 +170,6 @@ control/
 
 # Zipped artifacts
 *.zip
+
+# frontend dependencies
+node_modules/
