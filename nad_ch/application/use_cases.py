@@ -83,8 +83,10 @@ def validate_data_submission(ctx: ApplicationContext, filename: str):
         ctx.logger.error("Data extration error")
         return
 
-    result = ctx.task_queue.run_load_and_validate(download_result.extracted_dir)
+    report = ctx.task_queue.run_load_and_validate(
+        ctx.submissions, submission.id, download_result.extracted_dir
+    )
 
-    ctx.logger.info(f"Total number of features: {result.get()}")
+    ctx.logger.info(f"Total number of features: {report.feature_count}")
 
     ctx.storage.cleanup_temp_dir(download_result.temp_dir)

@@ -26,3 +26,6 @@ class DataSubmissionRepository(Protocol):
 
     def get_by_filename() -> Optional[DataSubmission]:
         ...
+
+    def update(self, submission: DataSubmission) -> DataSubmission:
+        ...

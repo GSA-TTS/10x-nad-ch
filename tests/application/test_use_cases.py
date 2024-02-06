@@ -2,6 +2,7 @@ import pytest
 import re
 from nad_ch.config import create_app_context
 from nad_ch.domain.entities import DataProvider, DataSubmission
+from nad_ch.domain.repositories import DataSubmissionRepository
 from nad_ch.application.use_cases import (
     add_data_provider,
     list_data_providers,
@@ -93,9 +94,12 @@ def test_validate_data_submission(app_context, caplog):
     filename = "my_cool_file.zip"
     ingest_data_submission(app_context, filename, provider_name)
     submission = app_context.submissions.get_by_id(1)
+    submissions = app_context.submissions
 
     class CustomMockTestTaskQueue:
-        def run_load_and_validate(self, path: str):
+        def run_load_and_validate(
+            self, submissions: DataSubmissionRepository, submission_id: int, path: str
+        ):
             return MockCeleryTask(1)
 
     app_context._task_queue = CustomMockTestTaskQueue()

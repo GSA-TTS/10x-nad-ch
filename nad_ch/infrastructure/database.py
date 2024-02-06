@@ -17,7 +17,7 @@ def create_session_factory(connection_string: str):
 
 @contextlib.contextmanager
 def session_scope(session_factory):
-    session = session_factory
+    session = session_factory()
     try:
         yield session
         session.commit()
@@ -106,11 +106,11 @@ class DataSubmissionModel(CommonBase):
 
 
 class SqlAlchemyDataProviderRepository(DataProviderRepository):
-    def __init__(self, session: Session):
-        self.session_factory = session
+    def __init__(self, session_factory):
+        self.session_factory = session_factory
 
     def add(self, provider: DataProvider) -> DataProvider:
-        with self.session_factory() as session:
+        with session_scope(self.session_factory) as session:
             provider_model = DataProviderModel.from_entity(provider)
             session.add(provider_model)
             session.commit()
@@ -118,7 +118,7 @@ class SqlAlchemyDataProviderRepository(DataProviderRepository):
             return provider_model.to_entity()
 
     def get_by_name(self, name: str) -> Optional[DataProvider]:
-        with self.session_factory() as session:
+        with session_scope(self.session_factory) as session:
             provider_model = (
                 session.query(DataProviderModel)
                 .filter(DataProviderModel.name == name)
@@ -127,18 +127,18 @@ class SqlAlchemyDataProviderRepository(DataProviderRepository):
             return provider_model.to_entity() if provider_model else None
 
     def get_all(self) -> List[DataProvider]:
-        with self.session_factory() as session:
+        with session_scope(self.session_factory) as session:
             provider_models = session.query(DataProviderModel).all()
             providers_entities = [provider.to_entity() for provider in provider_models]
             return providers_entities
 
 
 class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
-    def __init__(self, session: Session):
-        self.session_factory = session
+    def __init__(self, session_factory):
+        self.session_factory = session_factory
 
     def add(self, submission: DataSubmission) -> DataSubmission:
-        with self.session_factory() as session:
+        with session_scope(self.session_factory) as session:
             submission_model = DataSubmissionModel.from_entity(submission)
             session.add(submission_model)
             session.commit()
@@ -151,7 +151,7 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
             return submission_model.to_entity(provider_model.to_entity())
 
     def get_by_id(self, id: int) -> Optional[DataSubmission]:
-        with self.session_factory() as session:
+        with session_scope(self.session_factory) as session:
             result = (
                 session.query(DataSubmissionModel, DataProviderModel)
                 .join(
@@ -169,7 +169,7 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
                 return None
 
     def get_by_provider(self, provider: DataProvider) -> List[DataSubmission]:
-        with self.session_factory() as session:
+        with session_scope(self.session_factory) as session:
             submission_models = (
                 session.query(DataSubmissionModel)
                 .filter(DataSubmissionModel.data_provider_id == provider.id)
@@ -181,7 +181,7 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
             return submission_entities
 
     def get_by_filename(self, filename: str) -> Optional[DataSubmission]:
-        with self.session_factory() as session:
+        with session_scope(self.session_factory) as session:
             result = (
                 session.query(DataSubmissionModel, DataProviderModel)
                 .join(
@@ -197,3 +197,10 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
                 return submission_model.to_entity(provider_model.to_entity())
             else:
                 return None
+
+    def update_report(self, id: int, report) -> DataSubmission:
+        with session_scope(self.session_factory) as session:
+            model_instance = session.query(DataSubmissionModel).filter(DataSubmissionModel.id == id).first()
+
+            if model_instance:
+                model_instance.report = report

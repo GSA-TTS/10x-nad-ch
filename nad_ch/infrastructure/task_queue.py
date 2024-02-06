@@ -1,9 +1,10 @@
-import os
 from celery import Celery
 import geopandas as gpd
+from nad_ch.application.dtos import DataSubmissionReport
 from nad_ch.application.interfaces import TaskQueue
 from nad_ch.application.validation import get_feature_count
 from nad_ch.config import QUEUE_BROKER_URL, QUEUE_BACKEND_URL
+from nad_ch.domain.repositories import DataSubmissionRepository
 
 
 celery_app = Celery(
@@ -21,16 +22,21 @@ celery_app.conf.update(
 
 
 @celery_app.task
-def load_and_validate(gdb_file_path: str) -> int:
+def load_and_validate(gdb_file_path: str) -> dict:
     gdf = gpd.read_file(gdb_file_path)
     feature_count = get_feature_count(gdf)
-    return feature_count
+    report = DataSubmissionReport(feature_count)
+    return report.to_dict()
 
 
 class CeleryTaskQueue(TaskQueue):
     def __init__(self, app):
         self.app = app
 
-    def run_load_and_validate(self, path: str):
+    def run_load_and_validate(
+        self, submissions: DataSubmissionRepository, submission_id: int, path: str
+    ):
         task_result = load_and_validate.apply_async(args=[path])
-        return task_result
+        report_dict = task_result.get()
+        submissions.update_report(submission_id, report_dict)
+        return DataSubmissionReport(**report_dict)
