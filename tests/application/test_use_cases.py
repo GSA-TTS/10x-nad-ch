@@ -1,6 +1,6 @@
 import pytest
 import re
-from nad_ch.application_context import create_app_context
+from nad_ch.config import create_app_context
 from nad_ch.domain.entities import DataProvider, DataSubmission
 from nad_ch.application.use_cases import (
     add_data_provider,
@@ -27,13 +27,13 @@ def test_add_data_provider(app_context):
 
 
 def test_add_data_provider_logs_error_if_no_provider_name_given(mocker):
-    mock_context = mocker.patch("nad_ch.application_context.create_app_context")
+    mock_context = mocker.patch("nad_ch.config.create_app_context")
     add_data_provider(mock_context, "")
     mock_context.logger.error.assert_called_once_with("Provider name required")
 
 
 def test_add_data_provider_logs_error_if_provider_name_not_unique(mocker):
-    mock_context = mocker.patch("nad_ch.application_context.create_app_context")
+    mock_context = mocker.patch("nad_ch.config.create_app_context")
     mock_context.providers.get_by_name.return_value("State X")
     add_data_provider(mock_context, "State X")
 

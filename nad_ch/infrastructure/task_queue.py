@@ -1,3 +1,4 @@
+import os
 from celery import Celery
 import geopandas as gpd
 from nad_ch.application.interfaces import TaskQueue
