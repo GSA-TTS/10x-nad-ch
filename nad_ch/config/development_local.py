@@ -9,12 +9,9 @@ from nad_ch.infrastructure.database import (
 )
 from nad_ch.infrastructure.logger import BasicLogger
 from nad_ch.infrastructure.storage import MinioStorage
-from nad_ch.infrastructure.task_queue import celery_app, CeleryTaskQueue
 
 
-# Local development config
 STORAGE_PATH = os.getenv("STORAGE_PATH")
-
 postgres_user = os.getenv("POSTGRES_USER")
 postgres_password = os.getenv("POSTGRES_PASSWORD")
 postgres_host = os.getenv("POSTGRES_HOST")
@@ -24,7 +21,8 @@ DATABASE_URL = (
     f"postgresql+psycopg2://{postgres_user}:{postgres_password}"
     f"@{postgres_host}:{postgres_port}/{postgres_db}"
 )
-
+QUEUE_BROKER_URL = os.getenv("QUEUE_BROKER_URL")
+QUEUE_BACKEND_URL = os.getenv("QUEUE_BACKEND_URL")
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
 S3_ENDPOINT = os.getenv("S3_ENDPOINT")
 S3_ACCESS_KEY = os.getenv("S3_ACCESS_KEY")
@@ -59,6 +57,8 @@ class DevLocalApplicationContext(ApplicationContext):
         )
 
     def create_task_queue(self):
+        from nad_ch.infrastructure.task_queue import celery_app, CeleryTaskQueue
+
         return CeleryTaskQueue(celery_app)
 
 

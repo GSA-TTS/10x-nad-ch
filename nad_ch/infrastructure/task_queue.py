@@ -3,10 +3,7 @@ from celery import Celery
 import geopandas as gpd
 from nad_ch.application.interfaces import TaskQueue
 from nad_ch.application.validation import get_feature_count
-
-
-QUEUE_BROKER_URL = os.getenv("QUEUE_BROKER_URL")
-QUEUE_BACKEND_URL = os.getenv("QUEUE_BACKEND_URL")
+from nad_ch.config import QUEUE_BROKER_URL, QUEUE_BACKEND_URL
 
 
 celery_app = Celery(

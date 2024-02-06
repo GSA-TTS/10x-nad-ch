@@ -7,10 +7,11 @@ from tests.fakes_and_mocks import (
     FakeDataSubmissionRepository,
     FakeStorage,
 )
-from nad_ch.infrastructure.task_queue import celery_app, CeleryTaskQueue
 
 
 DATABASE_URL = os.getenv("DATABASE_URL")
+QUEUE_BROKER_URL = os.getenv("QUEUE_BROKER_URL")
+QUEUE_BACKEND_URL = os.getenv("QUEUE_BACKEND_URL")
 
 
 class TestApplicationContext(ApplicationContext):
@@ -35,6 +36,8 @@ class TestApplicationContext(ApplicationContext):
         return FakeStorage()
 
     def create_task_queue(self):
+        from nad_ch.infrastructure.task_queue import celery_app, CeleryTaskQueue
+
         return CeleryTaskQueue(celery_app)
 
 

@@ -9,7 +9,6 @@ from nad_ch.infrastructure.database import (
 )
 from nad_ch.infrastructure.logger import BasicLogger
 from nad_ch.infrastructure.storage import S3Storage
-from nad_ch.infrastructure.task_queue import celery_app, CeleryTaskQueue
 
 
 def get_credentials(service_name, default={}):
@@ -17,7 +16,6 @@ def get_credentials(service_name, default={}):
     return service[0].get("credentials", default) if service else default
 
 
-# Remote development config
 vcap_services = json.loads(os.getenv("VCAP_SERVICES", "{}"))
 
 
@@ -66,6 +64,8 @@ class DevRemoteApplicationContext(ApplicationContext):
         )
 
     def create_task_queue(self):
+        from nad_ch.infrastructure.task_queue import celery_app, CeleryTaskQueue
+
         return CeleryTaskQueue(celery_app)
 
 
