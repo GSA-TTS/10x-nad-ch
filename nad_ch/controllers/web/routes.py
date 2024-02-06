@@ -1,5 +1,4 @@
 from flask import Blueprint, current_app, render_template, g
-from nad_ch.application.use_cases import list_data_submissions_by_provider
 
 
 home_bp = Blueprint("home", __name__)
