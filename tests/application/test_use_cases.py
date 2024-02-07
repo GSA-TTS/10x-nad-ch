@@ -10,7 +10,6 @@ from nad_ch.application.use_cases import (
     ingest_data_submission,
     validate_data_submission,
 )
-from tests.fakes_and_mocks import MockCeleryTask
 
 
 @pytest.fixture(scope="function")
@@ -95,13 +94,12 @@ def test_validate_data_submission(app_context, caplog):
     filename = "my_cool_file.zip"
     ingest_data_submission(app_context, filename, provider_name)
     submission = app_context.submissions.get_by_id(1)
-    submissions = app_context.submissions
 
     class CustomMockTestTaskQueue:
         def run_load_and_validate(
             self, submissions: DataSubmissionRepository, submission_id: int, path: str
         ):
-            return MockCeleryTask(DataSubmissionReport(1))
+            return DataSubmissionReport(1)
 
     app_context._task_queue = CustomMockTestTaskQueue()
 

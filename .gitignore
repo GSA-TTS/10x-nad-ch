@@ -171,5 +171,8 @@ control/
 # Zipped artifacts
 *.zip
 
-# frontend dependencies
+# Frontend dependencies
 node_modules/
+
+# Local notes
+.notes
