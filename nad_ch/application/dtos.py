@@ -32,10 +32,19 @@ class DataSubmissionReport:
 
 
 def report_to_dict(data_submission_report: DataSubmissionReport) -> dict:
+    """
+    Converts a DataSubmissionReport instance into a dictionary because all data types
+    within the dictionary must be JSON-serializable.
+    """
     return convert(asdict(data_submission_report))
 
 
 def report_from_dict(data: dict) -> DataSubmissionReport:
+    """
+    Creates a DataSubmissionReport instance from a dictionary, reconstructing the
+    overview and features properties from their respective dictionary representations.
+    """
+
     overview_data = data.get("overview", {})
     features_data = data.get("features", [])
 
@@ -48,6 +57,10 @@ def report_from_dict(data: dict) -> DataSubmissionReport:
 
 
 def convert(item):
+    """
+    Recursively converts items within a data structure (including dictionaries, lists,
+    and dataclass instances) such that all numeric types are JSON-serializable.
+    """
     if isinstance(item, dict):
         return {k: convert(v) for k, v in item.items()}
     elif isinstance(item, list):
