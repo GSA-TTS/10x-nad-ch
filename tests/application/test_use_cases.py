@@ -1,6 +1,6 @@
 import pytest
 import re
-from nad_ch.application.dtos import DataSubmissionReport
+from nad_ch.application.dtos import DataSubmissionReport, DataSubmissionReportOverview
 from nad_ch.config import create_app_context
 from nad_ch.domain.entities import DataProvider, DataSubmission
 from nad_ch.domain.repositories import DataSubmissionRepository
@@ -99,7 +99,9 @@ def test_validate_data_submission(app_context, caplog):
         def run_load_and_validate(
             self, submissions: DataSubmissionRepository, submission_id: int, path: str
         ):
-            return DataSubmissionReport(1)
+            return DataSubmissionReport(
+                overview=DataSubmissionReportOverview(feature_count=1)
+            )
 
     app_context._task_queue = CustomMockTestTaskQueue()
 
