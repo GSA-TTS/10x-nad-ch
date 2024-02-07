@@ -86,7 +86,7 @@ def validate_data_submission(ctx: ApplicationContext, filename: str):
     report = ctx.task_queue.run_load_and_validate(
         ctx.submissions, submission.id, download_result.extracted_dir
     )
-
+    print(report)
     ctx.logger.info(f"Total number of features: {report.overview.feature_count}")
 
     ctx.storage.cleanup_temp_dir(download_result.temp_dir)
