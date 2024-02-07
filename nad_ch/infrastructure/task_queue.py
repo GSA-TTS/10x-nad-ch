@@ -3,6 +3,8 @@ import geopandas as gpd
 from nad_ch.application.dtos import (
     DataSubmissionReport,
     DataSubmissionReportOverview,
+    report_to_dict,
+    report_from_dict,
 )
 from nad_ch.application.interfaces import TaskQueue
 from nad_ch.application.validation import get_feature_count, get_feature_details
@@ -30,7 +32,7 @@ def load_and_validate(gdb_file_path: str) -> dict:
     overview = DataSubmissionReportOverview(feature_count=get_feature_count(gdf))
     feature_details = get_feature_details(gdf)
     report = DataSubmissionReport(overview, feature_details)
-    return report.to_dict()
+    return report_to_dict(report)
 
 
 class CeleryTaskQueue(TaskQueue):
@@ -43,4 +45,4 @@ class CeleryTaskQueue(TaskQueue):
         task_result = load_and_validate.apply_async(args=[path])
         report_dict = task_result.get()
         submissions.update_report(submission_id, report_dict)
-        return DataSubmissionReport.from_dict(report_dict)
+        return report_from_dict(report_dict)
