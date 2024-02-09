@@ -1,0 +1,10 @@
+{% extends "_layouts/base.html" %} {% block title %}Report{% endblock %} {%block
+content %}
+<h1>Report</h1>
+<p>Fancy dynamic table coming soon!</p>
+<script>
+  const strReport = {{submission.report|tojson}}
+  const report = JSON.parse(strReport);
+  console.log(report);
+</script>
+{% endblock %}

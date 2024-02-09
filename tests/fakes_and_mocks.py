@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 from nad_ch.application.dtos import DownloadResult
 from nad_ch.domain.entities import DataProvider, DataSubmission
@@ -11,6 +12,7 @@ class FakeDataProviderRepository(DataProviderRepository):
 
     def add(self, provider: DataProvider) -> DataProvider:
         provider.id = self._next_id
+        provider.set_created_at(datetime.now())
         self._providers.add(provider)
         self._next_id += 1
         return provider
@@ -29,6 +31,7 @@ class FakeDataSubmissionRepository(DataSubmissionRepository):
 
     def add(self, submission: DataSubmission) -> DataSubmission:
         submission.id = self._next_id
+        submission.set_created_at(datetime.now())
         self._submissions.add(submission)
         self._next_id += 1
         return submission

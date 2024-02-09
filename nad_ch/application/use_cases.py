@@ -2,10 +2,17 @@ import os
 from typing import List
 from nad_ch.application.dtos import DownloadResult
 from nad_ch.application.interfaces import ApplicationContext
+from nad_ch.application.view_models import (
+    get_view_model,
+    DataProviderViewModel,
+    DataSubmissionViewModel,
+)
 from nad_ch.domain.entities import DataProvider, DataSubmission
 
 
-def add_data_provider(ctx: ApplicationContext, provider_name: str) -> None:
+def add_data_provider(
+    ctx: ApplicationContext, provider_name: str
+) -> DataProviderViewModel:
     if not provider_name:
         ctx.logger.error("Provider name required")
         return
@@ -19,19 +26,21 @@ def add_data_provider(ctx: ApplicationContext, provider_name: str) -> None:
     ctx.providers.add(provider)
     ctx.logger.info("Provider added")
 
+    return get_view_model(provider)
 
-def list_data_providers(ctx: ApplicationContext) -> List[DataProvider]:
+
+def list_data_providers(ctx: ApplicationContext) -> List[DataProviderViewModel]:
     providers = ctx.providers.get_all()
     ctx.logger.info("Data Provider Names:")
     for p in providers:
         ctx.logger.info(p.name)
 
-    return providers
+    return get_view_model(providers)
 
 
 def ingest_data_submission(
     ctx: ApplicationContext, file_path: str, provider_name: str
-) -> None:
+) -> DataSubmissionViewModel:
     if not file_path:
         ctx.logger.error("File path required")
         return
@@ -53,12 +62,24 @@ def ingest_data_submission(
         submission = DataSubmission(filename, provider)
         ctx.submissions.add(submission)
         ctx.logger.info(f"Submission added: {submission.filename}")
+
+        return get_view_model(submission)
     except Exception as e:
         ctx.storage.delete(filename)
         ctx.logger.error(f"Failed to process submission: {e}")
 
 
-def list_data_submissions_by_provider(ctx: ApplicationContext, provider_name: str):
+def get_data_submission(
+    ctx: ApplicationContext, submission_id: int
+) -> DataSubmissionViewModel:
+    submission = ctx.submissions.get_by_id(submission_id)
+
+    return get_view_model(submission)
+
+
+def list_data_submissions_by_provider(
+    ctx: ApplicationContext, provider_name: str
+) -> List[DataSubmissionViewModel]:
     provider = ctx.providers.get_by_name(provider_name)
     if not provider:
         ctx.logger.error("Provider with that name does not exist")
@@ -69,7 +90,7 @@ def list_data_submissions_by_provider(ctx: ApplicationContext, provider_name: st
     for s in submissions:
         ctx.logger.info(f"{s.provider.name}: {s.filename}")
 
-    return submissions
+    return get_view_model(submissions)
 
 
 def validate_data_submission(ctx: ApplicationContext, filename: str):
