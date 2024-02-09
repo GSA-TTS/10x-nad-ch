@@ -59,4 +59,4 @@ class DataSubmission(Entity):
         return filename
 
     def has_report(self) -> bool:
-        return False if self.report is None or not self.report else True
+        return self.report is not None
