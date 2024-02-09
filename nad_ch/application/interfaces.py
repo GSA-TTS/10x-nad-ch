@@ -29,7 +29,9 @@ class Storage(Protocol):
 
 
 class TaskQueue(Protocol):
-    def run_load_and_validate(self, path: str):
+    def run_load_and_validate(
+        self, submissions: DataSubmissionRepository, submission_id: int, path: str
+    ):
         ...
 
 

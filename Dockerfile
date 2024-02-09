@@ -31,6 +31,6 @@ ENV PATH="${PATH}:/opt/poetry/bin"
 # Install dependencies and start app
 WORKDIR /app
 COPY pyproject.toml poetry.lock ./
-RUN poetry install --only main
+RUN poetry install --without dev
 COPY . .
 CMD ["/bin/sh", "start_local.sh"]

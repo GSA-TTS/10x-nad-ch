@@ -32,7 +32,7 @@ S3_REGION = os.getenv("S3_REGION")
 
 class DevLocalApplicationContext(ApplicationContext):
     def __init__(self):
-        self._session = create_session_factory(DATABASE_URL)
+        self._session_factory = create_session_factory(DATABASE_URL)
         self._providers = self.create_provider_repository()
         self._submissions = self.create_submission_repository()
         self._logger = self.create_logger()
@@ -40,10 +40,10 @@ class DevLocalApplicationContext(ApplicationContext):
         self._task_queue = self.create_task_queue()
 
     def create_provider_repository(self):
-        return SqlAlchemyDataProviderRepository(self._session)
+        return SqlAlchemyDataProviderRepository(self._session_factory)
 
     def create_submission_repository(self):
-        return SqlAlchemyDataSubmissionRepository(self._session)
+        return SqlAlchemyDataSubmissionRepository(self._session_factory)
 
     def create_logger(self):
         return BasicLogger(__name__, logging.DEBUG)

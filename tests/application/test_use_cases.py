@@ -1,14 +1,15 @@
 import pytest
 import re
+from nad_ch.application.dtos import DataSubmissionReport, DataSubmissionReportOverview
 from nad_ch.config import create_app_context
 from nad_ch.domain.entities import DataProvider, DataSubmission
+from nad_ch.domain.repositories import DataSubmissionRepository
 from nad_ch.application.use_cases import (
     add_data_provider,
     list_data_providers,
     ingest_data_submission,
     validate_data_submission,
 )
-from tests.fakes_and_mocks import MockCeleryTask
 
 
 @pytest.fixture(scope="function")
@@ -95,8 +96,12 @@ def test_validate_data_submission(app_context, caplog):
     submission = app_context.submissions.get_by_id(1)
 
     class CustomMockTestTaskQueue:
-        def run_load_and_validate(self, path: str):
-            return MockCeleryTask(1)
+        def run_load_and_validate(
+            self, submissions: DataSubmissionRepository, submission_id: int, path: str
+        ):
+            return DataSubmissionReport(
+                overview=DataSubmissionReportOverview(feature_count=1)
+            )
 
     app_context._task_queue = CustomMockTestTaskQueue()
 
