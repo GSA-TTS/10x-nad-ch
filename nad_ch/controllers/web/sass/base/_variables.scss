@@ -1,0 +1,20 @@
+// Example of defining custom variables
+// $primary-color: #0071bc; // Custom primary color
+// $secondary-color: #205493; // Custom secondary color
+
+// Example of overriding USWDS variables
+// $theme-color-primary: $primary-color;
+// $theme-color-secondary: $secondary-color;
+
+// Typography
+$font-family-base: "Source Sans Pro", Arial, sans-serif;
+$theme-font-family-sans: $font-family-base;
+
+// Spacing
+// $theme-spacing-unit: 1.5rem;
+
+// Custom Sidenav Link Colors
+$usa-sidenav-current-blue: var(--Accent-cool-accent-cool-light, #97d4ea);
+$usa-sidenav-default-white: var(--Base-base-lightest, #f0f0f0);
+$hover-active-background-color: var(--Indigo-cool-indigo-cool-70, #374274);
+$focus-border-color: var(--Blue-vivid-blue-vivid-40v, #2491ff);

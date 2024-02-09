@@ -1,3 +1,5 @@
-@forward "uswds-theme.scss";
 @forward "@uswds";
-@import "project-styles.scss";
+@import "base/variables";
+@import "components/usa-header";
+@import "components/usa-sidenav";
+@import "components/usa-table";
