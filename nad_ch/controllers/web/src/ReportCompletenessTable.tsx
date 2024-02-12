@@ -1,4 +1,26 @@
-import { h, Component, FunctionalComponent } from "preact";
+import { h, Component } from "preact";
+
+type StatusTdProps = {
+  status: string;
+};
+
+function StatusTd(props: StatusTdProps) {
+  const { status } = props;
+  let statusClass = "usa-tag__info";
+  if (status === "No error") {
+    statusClass = "usa-tag__success";
+  } else if (status === "Updated by calculation") {
+    statusClass = "usa-tag__warning";
+  } else if (status === "Rejected") {
+    statusClass = "usa-tag__error";
+  }
+
+  return (
+    <td>
+      <span className={`usa-tag ${statusClass}`}>{status}</span>
+    </td>
+  );
+}
 
 type CountPercentageTdProps = {
   count: number;
@@ -8,10 +30,10 @@ type CountPercentageTdProps = {
 function CountPercentageTd(props: CountPercentageTdProps) {
   const { count, percentage } = props;
   return (
-    <td>
-      {percentage}
+    <td className="text-right">
+      <span className="font-mono-sm">{percentage}</span>
       <br />
-      {count}
+      <span className="font-mono-3xs">{count}</span>
     </td>
   );
 }
@@ -35,25 +57,38 @@ function Row(props: RowProps) {
     null_percentage,
   } = props;
 
+  function getRandomStatus(): string {
+    const statuses = [
+      "No error",
+      "Rejected",
+      "Updated by calculation",
+      "Custom ETL needed",
+    ];
+    const randomIndex = Math.floor(Math.random() * statuses.length);
+    return statuses[randomIndex];
+  }
+
   return (
     <tr>
       <td>{provided_feature_name}</td>
       <td>{nad_feature_name}</td>
-      <td>Status</td>
+      <StatusTd status={getRandomStatus()} />
+      <CountPercentageTd count={null_count} percentage={null_percentage} />
       <CountPercentageTd
         count={populated_count}
         percentage={populated_percentage}
       />
-      <CountPercentageTd count={null_count} percentage={null_percentage} />
     </tr>
   );
 }
 
 export class ReportCompletenessTable extends Component {
   render() {
-    const rows = window.completenessReportData.features.map((obj: any) => (
-      <Row key={obj.provided_feature_name} {...(obj as RowProps)} />
-    ));
+    const rows = window.completenessReportData.features
+      .sort((a: RowProps, b: RowProps) => b.populated_count - a.populated_count)
+      .map((obj: any) => (
+        <Row key={obj.provided_feature_name} {...(obj as RowProps)} />
+      ));
 
     return (
       <div class="usa-table-default">
