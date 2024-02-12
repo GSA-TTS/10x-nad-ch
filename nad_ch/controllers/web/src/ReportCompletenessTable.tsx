@@ -1,23 +1,28 @@
 import { h, Component } from "preact";
 
 type StatusTdProps = {
-  status: string;
+  status:
+    | "No error"
+    | "Updated by calculation"
+    | "Rejected"
+    | "Custom ETL required"
+    | string;
 };
 
-function StatusTd(props: StatusTdProps) {
-  const { status } = props;
-  let statusClass = "usa-tag__info";
-  if (status === "No error") {
-    statusClass = "usa-tag__success";
-  } else if (status === "Updated by calculation") {
-    statusClass = "usa-tag__warning";
-  } else if (status === "Rejected") {
-    statusClass = "usa-tag__error";
-  }
+const statusClassMapping: { [key in StatusTdProps["status"]]?: string } = {
+  "No error": "usa-tag__success",
+  "Updated by calculation": "usa-tag__warning",
+  Rejected: "usa-tag__error",
+};
+
+function StatusTd({ status }: StatusTdProps) {
+  const statusClass = `usa-tag ${
+    statusClassMapping[status] || "usa-tag__info"
+  }`;
 
   return (
     <td>
-      <span className={`usa-tag ${statusClass}`}>{status}</span>
+      <span className={statusClass}>{status}</span>
     </td>
   );
 }
@@ -39,6 +44,8 @@ function CountPercentageTd(props: CountPercentageTdProps) {
 }
 
 type RowProps = {
+  required: boolean;
+  status: string;
   provided_feature_name: string;
   nad_feature_name: string;
   populated_count: number;
@@ -49,6 +56,8 @@ type RowProps = {
 
 function Row(props: RowProps) {
   const {
+    required,
+    status,
     provided_feature_name,
     nad_feature_name,
     populated_count,
@@ -57,22 +66,14 @@ function Row(props: RowProps) {
     null_percentage,
   } = props;
 
-  function getRandomStatus(): string {
-    const statuses = [
-      "No error",
-      "Rejected",
-      "Updated by calculation",
-      "Custom ETL needed",
-    ];
-    const randomIndex = Math.floor(Math.random() * statuses.length);
-    return statuses[randomIndex];
-  }
-
   return (
     <tr>
       <td>{provided_feature_name}</td>
-      <td>{nad_feature_name}</td>
-      <StatusTd status={getRandomStatus()} />
+      <td>
+        {required && <span>* </span>}
+        {nad_feature_name}
+      </td>
+      <StatusTd status={status} />
       <CountPercentageTd count={null_count} percentage={null_percentage} />
       <CountPercentageTd
         count={populated_count}
@@ -83,6 +84,7 @@ function Row(props: RowProps) {
 }
 
 type ReportCompletenessTableState = {
+  featureData: [];
   isGrouped: boolean;
 };
 
@@ -93,36 +95,64 @@ export class ReportCompletenessTable extends Component<
   constructor() {
     super();
     this.state = {
+      featureData: [],
       isGrouped: false,
     };
 
     this.toggleGrouped = this.toggleGrouped.bind(this);
   }
 
-  toggleGrouped() {
-    this.setState((prevState) => ({
-      isGrouped: !prevState.isGrouped,
+  componentDidMount() {
+    const sortedFeatureData = window.completenessReportData.features.sort(
+      (a: RowProps, b: RowProps) => b.populated_count - a.populated_count
+    );
+
+    this.setState(() => ({
+      featureData: sortedFeatureData,
     }));
   }
 
-  render() {
-    console.log(this.state);
-    const rows = window.completenessReportData.features
-      .sort((a: RowProps, b: RowProps) => b.populated_count - a.populated_count)
-      .map((obj: any) => (
-        <Row key={obj.provided_feature_name} {...(obj as RowProps)} />
-      ));
+  toggleGrouped = () => {
+    this.setState((prevState) => {
+      const isGrouped = !prevState.isGrouped;
+      const featureData = prevState.featureData.sort(
+        (a: RowProps, b: RowProps) => {
+          if (isGrouped) {
+            const statusOrder: any = {
+              Rejected: 1,
+              "Updated by calculation": 2,
+              "Custom ETL needed": 3,
+              "No error": 4,
+            };
+            return (
+              (statusOrder[a.status] || Number.MAX_VALUE) -
+              (statusOrder[b.status] || Number.MAX_VALUE)
+            );
+          } else {
+            return b.populated_count - a.populated_count;
+          }
+        }
+      );
 
-    const buttonClass = this.state.isGrouped
-      ? "usa-button usa-button-toggle-on"
-      : "usa-button usa-button-toggle-off";
+      return { isGrouped, featureData };
+    });
+  };
+
+  render() {
+    const rows = this.state.featureData.map((obj: any) => (
+      <Row key={obj.provided_feature_name} {...(obj as RowProps)} />
+    ));
+
+    const buttonClass = `usa-button ${
+      this.state.isGrouped ? "usa-button-toggle-on" : "usa-button-toggle-off"
+    }`;
     const buttonText = this.state.isGrouped
       ? "Grouped By Status"
       : "Group By Status";
 
     return (
       <div class="padding-top-2">
-        <ul class="usa-button-group" style="justify-content: space-between;">
+        <ul class="usa-button-group usa-button-group-toggle">
           <li class="usa-button-group__item">
             <button
               type="button"
@@ -143,7 +173,12 @@ export class ReportCompletenessTable extends Component<
             <thead class="width-full">
               <tr>
                 <th scope="col">Submitted Field</th>
-                <th scope="col">NAD Field</th>
+                <th scope="col">
+                  <div class="usa-tooltip" data-position="top" title="Required">
+                    *
+                  </div>{" "}
+                  NAD Field
+                </th>
                 <th scope="col">Status</th>
                 <th scope="col">Empty</th>
                 <th scope="col">Populated</th>

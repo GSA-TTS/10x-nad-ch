@@ -23,10 +23,10 @@ def add_data_provider(
         return
 
     provider = DataProvider(provider_name)
-    ctx.providers.add(provider)
+    saved_provider = ctx.providers.add(provider)
     ctx.logger.info("Provider added")
 
-    return get_view_model(provider)
+    return get_view_model(saved_provider)
 
 
 def list_data_providers(ctx: ApplicationContext) -> List[DataProviderViewModel]:
@@ -60,10 +60,10 @@ def ingest_data_submission(
         ctx.storage.upload(file_path, filename)
 
         submission = DataSubmission(filename, provider)
-        ctx.submissions.add(submission)
-        ctx.logger.info(f"Submission added: {submission.filename}")
+        saved_submission = ctx.submissions.add(submission)
+        ctx.logger.info(f"Submission added: {saved_submission.filename}")
 
-        return get_view_model(submission)
+        return get_view_model(saved_submission)
     except Exception as e:
         ctx.storage.delete(filename)
         ctx.logger.error(f"Failed to process submission: {e}")

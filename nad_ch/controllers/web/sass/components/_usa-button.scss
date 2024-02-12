@@ -10,6 +10,10 @@
   }
 }
 
+.usa-button-group-toggle {
+  justify-content: space-between;
+}
+
 .usa-button-toggle-on,
 .usa-button-toggle-off {
   @include rounded-border;
