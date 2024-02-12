@@ -63,6 +63,7 @@ def test_list_a_single_data_provider(app_context):
 
     assert len(result) == 1
     assert isinstance(result[0], DataProviderViewModel)
+    assert result[0].name == name
 
 
 def test_list_multiple_data_providers(app_context):
@@ -75,7 +76,9 @@ def test_list_multiple_data_providers(app_context):
     result = list_data_providers(app_context)
     assert len(result) == 2
     assert isinstance(result[0], DataProviderViewModel)
+    assert result[0].name == first_name
     assert isinstance(result[1], DataProviderViewModel)
+    assert result[1].name == second_name
 
 
 def test_ingest_data_submission(app_context):
