@@ -1,6 +1,9 @@
 @forward "@uswds";
+@import "base/base";
 @import "base/variables";
+@import "components/usa-button";
 @import "components/usa-header";
+@import "components/usa-nav";
 @import "components/usa-sidenav";
 @import "components/usa-table";
 @import "components/usa-tag";

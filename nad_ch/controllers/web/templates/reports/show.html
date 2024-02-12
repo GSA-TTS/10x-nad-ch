@@ -1,6 +1,6 @@
 {% extends "_layouts/base.html" %} {% block title %}Report{% endblock %} {%block
 content %}
-<div>
+<div class="">
   <header class="usa-header usa-header--basic">
     <div class="usa-nav-container">
       <div class="usa-navbar">
@@ -9,7 +9,7 @@ content %}
             >{{ submission.provider_name }} Submission Report</em
           >
         </div>
-        <nav aria-label="Primary navigation" class="usa-nav">
+        <nav aria-label="Primary navigation" class="usa-nav usa-nav-section">
           <div class="usa-nav__inner">
             <ul class="usa-nav__primary usa-accordion">
               <li class="usa-nav__primary-item">
@@ -27,7 +27,7 @@ content %}
                 <button
                   id="completeness-button"
                   type="button"
-                  class="usa-accordion__button usa-nav__link usa-current"
+                  class="usa-accordion__button usa-nav__link"
                   aria-expanded="false"
                   aria-controls="extended-mega-nav-section-two"
                 >
@@ -49,7 +49,6 @@ content %}
           <p>Here is the report summery.</p>
         </div>
         <div id="report-completeness-section">
-          <p>Here is the report completeness information.</p>
           <div id="report-completeness-table"></div>
         </div>
         {% else %}
@@ -66,23 +65,22 @@ content %}
     const summarySection = document.getElementById("report-summary-section");
     const completenessSection = document.getElementById("report-completeness-section");
 
-    summaryButton.addEventListener(("click"), function(e) {
-        summarySection.style.display = "block";
-        completenessSection.style.display = "none";
-    });
+    const toggleSections = (showSummary) => {
+      summarySection.style.display = showSummary ? "block" : "none";
+      completenessSection.style.display = showSummary ? "none" : "block";
+      summaryButton.classList.toggle("usa-current", showSummary);
+      completenessButton.classList.toggle("usa-current", !showSummary);
+    };
 
-    completenessButton.addEventListener(("click"), function(e) {
-        summarySection.style.display = "none";
-        completenessSection.style.display = "block";
-    });
+    summaryButton.addEventListener("click", () => toggleSections(true));
+    completenessButton.addEventListener("click", () => toggleSections(false));
 
-    // initial state
-    summarySection.style.display = "block";
-    completenessSection.style.display = "none";
+    // Set initial state
+    toggleSections(true);
   })();
 
-  // report data to json
-  const strReport = {{submission.report|tojson}}
+  // Parse report data to JSON
+  const strReport = {{submission.report|tojson}};
   window.completenessReportData = JSON.parse(strReport);
 </script>
 {% endblock %}
