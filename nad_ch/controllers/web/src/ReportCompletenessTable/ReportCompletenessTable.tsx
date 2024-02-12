@@ -57,13 +57,25 @@ export class ReportCompletenessTable extends Component<
   };
 
   render() {
-    const rows = this.state.featureData.map((obj: any) => (
-      <Row key={obj.provided_feature_name} {...(obj as RowProps)} />
-    ));
+    const rows = this.state.featureData.map((obj: any) => {
+      const { isGrouped: _, ...otherProps } = obj as RowProps;
+      const isGrouped = this.state.isGrouped;
+
+      return (
+        <Row
+          key={obj.provided_feature_name}
+          isGrouped={isGrouped}
+          {...otherProps}
+        />
+      );
+    });
 
     const buttonClass = `usa-button ${
       this.state.isGrouped ? "usa-button-toggle-on" : "usa-button-toggle-off"
     }`;
+
+    const thClass = this.state.isGrouped ? "grouped" : "";
+
     const buttonText = this.state.isGrouped
       ? "Grouped By Status"
       : "Group By Status";
@@ -86,7 +98,7 @@ export class ReportCompletenessTable extends Component<
             </button>
           </li>
         </ul>
-        <div class="usa-table-default">
+        <div class="usa-table-report">
           <table class="usa-table usa-table--borderless width-full">
             <thead class="width-full">
               <tr>
@@ -97,7 +109,9 @@ export class ReportCompletenessTable extends Component<
                   </div>{" "}
                   NAD Field
                 </th>
-                <th scope="col">Status</th>
+                <th scope="col" className={thClass}>
+                  Status
+                </th>
                 <th scope="col">Empty</th>
                 <th scope="col">Populated</th>
               </tr>

@@ -1,5 +1,4 @@
-// Dashboard Table Customization
-.usa-table-default .usa-table {
+.usa-table-report {
   td,
   th {
     border-bottom: 1px solid var(--Base-base-lighter, #dfe1e2);
@@ -7,10 +6,14 @@
 
   thead {
     border-bottom: 1px solid var(--Base-base-light, #a9aeb1);
-    background: var(--Base-base-lighter, #dfe1e2);
+    background-color: var(--Base-base-lighter, #dfe1e2);
   }
 }
 
-.usa-table-report .usa-table {
-  //   color: green;
+th.grouped {
+  background: #a1d3ff !important;
+}
+
+td.grouped {
+  background: #e8f5ff !important;
 }

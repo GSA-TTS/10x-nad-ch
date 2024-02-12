@@ -1,6 +1,7 @@
 import { h } from "preact";
 
 type StatusTdProps = {
+  isGrouped: boolean;
   status:
     | "No error"
     | "Updated by calculation"
@@ -15,13 +16,15 @@ const statusClassMapping: { [key in StatusTdProps["status"]]?: string } = {
   Rejected: "usa-tag__error",
 };
 
-export function StatusTd({ status }: StatusTdProps) {
+export function StatusTd({ status, isGrouped }: StatusTdProps) {
   const statusClass = `usa-tag ${
     statusClassMapping[status] || "usa-tag__info"
   }`;
 
+  const tdclass = isGrouped ? "grouped" : "";
+
   return (
-    <td>
+    <td className={tdclass}>
       <span className={statusClass}>{status}</span>
     </td>
   );

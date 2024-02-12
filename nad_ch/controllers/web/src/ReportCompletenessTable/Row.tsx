@@ -3,6 +3,7 @@ import { CountPercentageTd } from "./CountPercentageTd";
 import { StatusTd } from "./StatusTd";
 
 export type RowProps = {
+  isGrouped: boolean;
   required: boolean;
   status: string;
   provided_feature_name: string;
@@ -15,6 +16,7 @@ export type RowProps = {
 
 export function Row(props: RowProps) {
   const {
+    isGrouped,
     required,
     status,
     provided_feature_name,
@@ -32,7 +34,7 @@ export function Row(props: RowProps) {
         {required && <span>* </span>}
         {nad_feature_name}
       </td>
-      <StatusTd status={status} />
+      <StatusTd status={status} isGrouped={isGrouped} />
       <CountPercentageTd count={null_count} percentage={null_percentage} />
       <CountPercentageTd
         count={populated_count}
