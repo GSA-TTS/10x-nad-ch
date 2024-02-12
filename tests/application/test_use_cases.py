@@ -1,15 +1,19 @@
 import pytest
 import re
 from nad_ch.application.dtos import DataSubmissionReport, DataSubmissionReportOverview
-from nad_ch.config import create_app_context
-from nad_ch.domain.entities import DataProvider, DataSubmission
-from nad_ch.domain.repositories import DataSubmissionRepository
 from nad_ch.application.use_cases import (
     add_data_provider,
     list_data_providers,
     ingest_data_submission,
+    list_data_submissions_by_provider,
     validate_data_submission,
 )
+from nad_ch.application.view_models import (
+    DataProviderViewModel,
+    DataSubmissionViewModel,
+)
+from nad_ch.config import create_app_context
+from nad_ch.domain.repositories import DataSubmissionRepository
 
 
 @pytest.fixture(scope="function")
@@ -18,13 +22,23 @@ def app_context():
     yield context
 
 
+def is_valid_date_format(date_str: str) -> bool:
+    """
+    Verify that a given string matches the following format:
+    'January 1, 2024'
+    """
+    pattern = r"^\w+\s+\d{2},\s+\d{4}$"
+    match = re.match(pattern, date_str)
+    return bool(match)
+
+
 def test_add_data_provider(app_context):
     name = "State X"
-    add_data_provider(app_context, name)
 
-    provider = app_context.providers.get_by_name(name)
-    assert provider.name == name
-    assert isinstance(provider, DataProvider) is True
+    result = add_data_provider(app_context, name)
+
+    assert isinstance(result, DataProviderViewModel)
+    assert is_valid_date_format(result.date_created)
 
 
 def test_add_data_provider_logs_error_if_no_provider_name_given(mocker):
@@ -45,10 +59,11 @@ def test_list_a_single_data_provider(app_context):
     name = "State X"
     add_data_provider(app_context, name)
 
-    providers = list_data_providers(app_context)
+    result = list_data_providers(app_context)
 
-    assert len(providers) == 1
-    assert providers[0].name == name
+    assert len(result) == 1
+    assert isinstance(result[0], DataProviderViewModel)
+    assert result[0].name == name
 
 
 def test_list_multiple_data_providers(app_context):
@@ -58,10 +73,12 @@ def test_list_multiple_data_providers(app_context):
     second_name = "State Y"
     add_data_provider(app_context, second_name)
 
-    providers = list_data_providers(app_context)
-    assert len(providers) == 2
-    assert providers[0].name == first_name
-    assert providers[1].name == second_name
+    result = list_data_providers(app_context)
+    assert len(result) == 2
+    assert isinstance(result[0], DataProviderViewModel)
+    assert result[0].name == first_name
+    assert isinstance(result[1], DataProviderViewModel)
+    assert result[1].name == second_name
 
 
 def test_ingest_data_submission(app_context):
@@ -69,10 +86,10 @@ def test_ingest_data_submission(app_context):
     add_data_provider(app_context, provider_name)
 
     filename = "my_cool_file.zip"
-    ingest_data_submission(app_context, filename, provider_name)
 
-    submission = app_context.submissions.get_by_id(1)
-    assert isinstance(submission, DataSubmission) is True
+    result = ingest_data_submission(app_context, filename, provider_name)
+
+    assert isinstance(result, DataSubmissionViewModel)
 
 
 def test_list_data_submissions_by_provider(app_context):
@@ -82,9 +99,10 @@ def test_list_data_submissions_by_provider(app_context):
     filename = "my_cool_file.zip"
     ingest_data_submission(app_context, filename, provider_name)
 
-    provider = app_context.providers.get_by_name(provider_name)
-    submissions = app_context.submissions.get_by_provider(provider)
-    assert len(submissions) == 1
+    result = list_data_submissions_by_provider(app_context, provider_name)
+
+    assert len(result) == 1
+    assert isinstance(result[0], DataSubmissionViewModel)
 
 
 def test_validate_data_submission(app_context, caplog):

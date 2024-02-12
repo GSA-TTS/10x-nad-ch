@@ -6,13 +6,13 @@ import re
 class Entity:
     def __init__(self, id: int = None):
         self.id = id
-        self.created_at = None
-        self.updated_at = None
+        self.created_at: datetime = None
+        self.updated_at: datetime = None
 
-    def set_created_at(self, created_at):
+    def set_created_at(self, created_at: datetime):
         self.created_at = created_at
 
-    def set_updated_at(self, updated_at):
+    def set_updated_at(self, updated_at: datetime):
         self.updated_at = updated_at
 
 
