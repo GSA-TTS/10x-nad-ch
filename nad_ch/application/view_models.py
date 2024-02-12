@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 import json
+import numpy as np
 from typing import Union, List, Tuple
 from nad_ch.domain.entities import Entity, DataProvider, DataSubmission
 
@@ -93,7 +94,7 @@ def calculate_percentages(populated_count: int, null_count: int) -> Tuple[float,
 
 
 def present_percentage(percentage: float) -> str:
-    rounded_percentage = round(percentage, 2)
+    rounded_percentage = np.around(percentage, 2)
     formatted_string = (
         f"{rounded_percentage:05.2f}%" if rounded_percentage != 0 else "00.00%"
     )

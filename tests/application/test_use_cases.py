@@ -22,27 +22,23 @@ def app_context():
     yield context
 
 
-@pytest.fixture
-def validate_date_format():
-    def is_valid_date_format(date_str: str) -> bool:
-        """
-        Verify that a given string matches the following format:
-        'January 1, 2024'
-        """
-        pattern = r"^\w+\s+\d{2},\s+\d{4}$"
-        match = re.match(pattern, date_str)
-        return bool(match)
-
-    return is_valid_date_format
+def is_valid_date_format(date_str: str) -> bool:
+    """
+    Verify that a given string matches the following format:
+    'January 1, 2024'
+    """
+    pattern = r"^\w+\s+\d{2},\s+\d{4}$"
+    match = re.match(pattern, date_str)
+    return bool(match)
 
 
-def test_add_data_provider(app_context, validate_date_format):
+def test_add_data_provider(app_context):
     name = "State X"
 
     result = add_data_provider(app_context, name)
 
     assert isinstance(result, DataProviderViewModel)
-    assert validate_date_format(result.date_created)
+    assert is_valid_date_format(result.date_created)
 
 
 def test_add_data_provider_logs_error_if_no_provider_name_given(mocker):
@@ -67,6 +63,7 @@ def test_list_a_single_data_provider(app_context):
 
     assert len(result) == 1
     assert isinstance(result[0], DataProviderViewModel)
+    assert result[0].name == name
 
 
 def test_list_multiple_data_providers(app_context):
@@ -79,7 +76,9 @@ def test_list_multiple_data_providers(app_context):
     result = list_data_providers(app_context)
     assert len(result) == 2
     assert isinstance(result[0], DataProviderViewModel)
+    assert result[0].name == first_name
     assert isinstance(result[1], DataProviderViewModel)
+    assert result[1].name == second_name
 
 
 def test_ingest_data_submission(app_context):

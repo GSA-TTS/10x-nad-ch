@@ -44,6 +44,7 @@ content %}
   <div class="grid-container">
     <div class="grid-row">
       <div class="grid-col">
+        {% if submission %}
         <div id="report-summary-section">
           <p>Here is the report summery.</p>
         </div>
@@ -51,33 +52,9 @@ content %}
           <p>Here is the report completeness information.</p>
           <div id="report-completeness-table"></div>
         </div>
-        {#
-        <div class="usa-table-default">
-          <table class="usa-table usa-table--borderless width-full">
-            <thead class="width-full">
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Created</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for sub in submissions %}
-              <tr>
-                <th scope="row">{{ sub.filename }}</th>
-                <td>{{ sub.date_created }}</td>
-                <td>
-                  <a
-                    href="{{ url_for('home.view_report', submission_id=sub.id, _external=True) }}"
-                    >View</a
-                  >
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        #}
+        {% else %}
+        <p>No such submission exists.</p>
+        {% endif %} {% endblock %}
       </div>
     </div>
   </div>
