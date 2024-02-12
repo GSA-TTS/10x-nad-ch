@@ -74,6 +74,9 @@ def get_data_submission(
 ) -> DataSubmissionViewModel:
     submission = ctx.submissions.get_by_id(submission_id)
 
+    if submission is None:
+        return None
+
     return get_view_model(submission)
 
 

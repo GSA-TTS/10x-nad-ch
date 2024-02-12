@@ -1,6 +1,7 @@
 {% extends "_layouts/base.html" %} {% block title %}Home Page{% endblock %}
 {%block content %}
 <h1>Reports</h1>
+{% if submissions %}
 <table class="usa-table usa-table--borderless">
   <thead>
     <tr>
@@ -24,4 +25,6 @@
     {% endfor %}
   </tbody>
 </table>
-{% endblock %}
+{% else %}
+<p>You haven't uploaded any data submissions yet.</p>
+{% endif %} {% endblock %}

@@ -1,4 +1,9 @@
 {% extends "_layouts/base.html" %} {% block title %}Report{% endblock %} {%block
 content %}
 <h1>Report</h1>
-{% endblock %}
+{% if submission %}
+<p>{{ submission.filename }}</p>
+<p>{{ submission.date_created}}</p>
+{% else %}
+<p>No such submission exists.</p>
+{% endif %} {% endblock %}
