@@ -29,41 +29,41 @@
   li {
     // Default state
     a {
-      color: $usa-sidenav-default-white; // White text for default state
-      background-color: transparent;
+      color: $usa-sidenav-default-white !important; // White text for default state
+      background-color: transparent !important;
 
       // Default hover state
       &:hover {
-        color: $usa-sidenav-default-white; // Keep text white on hover
-        background-color: $hover-active-background-color; // Change background on hover
+        color: $usa-sidenav-default-white !important; // Keep text white on hover
+        background-color: $hover-active-background-color !important; // Change background on hover
       }
 
       // Default active state
       &:active {
-        color: $usa-sidenav-default-white; // Keep text white on active
-        background-color: $hover-active-background-color; // Change background on active
-        border: 2px solid $focus-border-color; // Unique border for active state
+        color: $usa-sidenav-default-white !important; // Keep text white on active
+        background-color: $hover-active-background-color !important; // Change background on active
+        border: 2px solid $focus-border-color !important; // Unique border for active state
       }
 
       // Default focus state
       &:focus {
-        color: $usa-sidenav-default-white; // Keep text white on focus
-        background-color: transparent; // No background change on focus
-        border: 2px solid $focus-border-color; // Unique border for focus state
+        color: $usa-sidenav-default-white !important; // Keep text white on focus
+        background-color: transparent !important; // No background change on focus
+        border: 2px solid $focus-border-color !important; // Unique border for focus state
         outline: none; // Remove default outline to use custom border
       }
-    }
 
-    // Current (selected) item state
-    &.usa-current {
-      a {
-        color: $usa-sidenav-current-blue; // Blue text for current item
-        background-color: transparent;
+      // Current (selected) item state
+      &.usa-current {
+        a {
+          color: $usa-sidenav-current-blue !important; // Blue text for current item
+          background-color: transparent !important;
 
-        // Current item hover state
-        &:hover {
-          color: $usa-sidenav-current-blue; // Keep text blue on hover
-          background-color: $hover-active-background-color; // Change background on hover
+          // Current item hover state
+          &:hover {
+            color: $usa-sidenav-current-blue !important; // Keep text blue on hover
+            background-color: $hover-active-background-color !important; // Change background on hover
+          }
         }
       }
     }
