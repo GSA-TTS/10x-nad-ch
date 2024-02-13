@@ -77,8 +77,8 @@ export class ReportCompletenessTable extends Component<
     const thClass = this.state.isGrouped ? "grouped" : "";
 
     const buttonText = this.state.isGrouped
-      ? "Grouped By Status"
-      : "Group By Status";
+      ? "Sorted By Status"
+      : "Sort By Status";
 
     return (
       <div class="padding-top-2">
