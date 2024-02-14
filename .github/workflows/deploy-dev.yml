@@ -26,6 +26,22 @@ jobs:
         shell: bash
         run: poetry export --without-hashes --format=requirements.txt > requirements.txt
 
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.11.0
+
+      - name: Install and build frontend dependencies
+        working-directory: ./nad_ch/controllers/web
+        run: |
+          npm install --omit=dev
+          npm run build
+
       - name: Deploy to dev environment
         uses: 18f/cg-deploy-action@main
         with:

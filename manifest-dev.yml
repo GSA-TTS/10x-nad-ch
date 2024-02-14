@@ -10,6 +10,6 @@ applications:
     random-route: true
     memory: 256M
     stack: cflinuxfs4
-    command: python nad_ch/web.py
+    command: python nad_ch/main.py serve_flask_app
     env:
       APP_ENV: dev_remote
