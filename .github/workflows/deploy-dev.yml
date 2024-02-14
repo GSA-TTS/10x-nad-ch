@@ -39,7 +39,7 @@ jobs:
       - name: Install and build frontend dependencies
         working-directory: ./nad_ch/controllers/web
         run: |
-          npm install --omit=dev
+          npm install
           npm run build
 
       - name: Deploy to dev environment
