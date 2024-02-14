@@ -27,6 +27,7 @@ jobs:
         run: poetry export --without-hashes --format=requirements.txt > requirements.txt
 
       - name: Install Python dependencies
+        shell: bash
         run: |
           python3 -m pip install --upgrade pip
           pip install -r requirements.txt
@@ -38,6 +39,7 @@ jobs:
 
       - name: Install and build frontend dependencies
         working-directory: ./nad_ch/controllers/web
+        shell: bash
         run: |
           npm install
           npm run build
