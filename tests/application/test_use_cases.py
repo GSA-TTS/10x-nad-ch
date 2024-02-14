@@ -2,14 +2,14 @@ import pytest
 import re
 from nad_ch.application.dtos import DataSubmissionReport, DataSubmissionReportOverview
 from nad_ch.application.use_cases import (
-    add_data_provider,
-    list_data_providers,
+    add_data_producer,
+    list_data_producers,
     ingest_data_submission,
-    list_data_submissions_by_provider,
+    list_data_submissions_by_producer,
     validate_data_submission,
 )
 from nad_ch.application.view_models import (
-    DataProviderViewModel,
+    DataProducerViewModel,
     DataSubmissionViewModel,
 )
 from nad_ch.config import create_app_context
@@ -32,85 +32,85 @@ def is_valid_date_format(date_str: str) -> bool:
     return bool(match)
 
 
-def test_add_data_provider(app_context):
+def test_add_data_producer(app_context):
     name = "State X"
 
-    result = add_data_provider(app_context, name)
+    result = add_data_producer(app_context, name)
 
-    assert isinstance(result, DataProviderViewModel)
+    assert isinstance(result, DataProducerViewModel)
     assert is_valid_date_format(result.date_created)
 
 
-def test_add_data_provider_logs_error_if_no_provider_name_given(mocker):
+def test_add_data_producer_logs_error_if_no_producer_name_given(mocker):
     mock_context = mocker.patch("nad_ch.config.create_app_context")
-    add_data_provider(mock_context, "")
-    mock_context.logger.error.assert_called_once_with("Provider name required")
+    add_data_producer(mock_context, "")
+    mock_context.logger.error.assert_called_once_with("Producer name required")
 
 
-def test_add_data_provider_logs_error_if_provider_name_not_unique(mocker):
+def test_add_data_producer_logs_error_if_producer_name_not_unique(mocker):
     mock_context = mocker.patch("nad_ch.config.create_app_context")
-    mock_context.providers.get_by_name.return_value("State X")
-    add_data_provider(mock_context, "State X")
+    mock_context.producer.get_by_name.return_value("State X")
+    add_data_producer(mock_context, "State X")
 
-    mock_context.logger.error.assert_called_once_with("Provider name must be unique")
+    mock_context.logger.error.assert_called_once_with("Producer name must be unique")
 
 
-def test_list_a_single_data_provider(app_context):
+def test_list_a_single_data_producer(app_context):
     name = "State X"
-    add_data_provider(app_context, name)
+    add_data_producer(app_context, name)
 
-    result = list_data_providers(app_context)
+    result = list_data_producers(app_context)
 
     assert len(result) == 1
-    assert isinstance(result[0], DataProviderViewModel)
+    assert isinstance(result[0], DataProducerViewModel)
     assert result[0].name == name
 
 
-def test_list_multiple_data_providers(app_context):
+def test_list_multiple_data_producers(app_context):
     first_name = "State X"
-    add_data_provider(app_context, first_name)
+    add_data_producer(app_context, first_name)
 
     second_name = "State Y"
-    add_data_provider(app_context, second_name)
+    add_data_producer(app_context, second_name)
 
-    result = list_data_providers(app_context)
+    result = list_data_producers(app_context)
     assert len(result) == 2
-    assert isinstance(result[0], DataProviderViewModel)
+    assert isinstance(result[0], DataProducerViewModel)
     assert result[0].name == first_name
-    assert isinstance(result[1], DataProviderViewModel)
+    assert isinstance(result[1], DataProducerViewModel)
     assert result[1].name == second_name
 
 
 def test_ingest_data_submission(app_context):
-    provider_name = "State X"
-    add_data_provider(app_context, provider_name)
+    producer_name = "State X"
+    add_data_producer(app_context, producer_name)
 
     filename = "my_cool_file.zip"
 
-    result = ingest_data_submission(app_context, filename, provider_name)
+    result = ingest_data_submission(app_context, filename, producer_name)
 
     assert isinstance(result, DataSubmissionViewModel)
 
 
-def test_list_data_submissions_by_provider(app_context):
-    provider_name = "State X"
-    add_data_provider(app_context, provider_name)
+def test_list_data_submissions_by_producer(app_context):
+    producer_name = "State X"
+    add_data_producer(app_context, producer_name)
 
     filename = "my_cool_file.zip"
-    ingest_data_submission(app_context, filename, provider_name)
+    ingest_data_submission(app_context, filename, producer_name)
 
-    result = list_data_submissions_by_provider(app_context, provider_name)
+    result = list_data_submissions_by_producer(app_context, producer_name)
 
     assert len(result) == 1
     assert isinstance(result[0], DataSubmissionViewModel)
 
 
 def test_validate_data_submission(app_context, caplog):
-    provider_name = "State X"
-    add_data_provider(app_context, provider_name)
+    producer_name = "State X"
+    add_data_producer(app_context, producer_name)
 
     filename = "my_cool_file.zip"
-    ingest_data_submission(app_context, filename, provider_name)
+    ingest_data_submission(app_context, filename, producer_name)
     submission = app_context.submissions.get_by_id(1)
 
     class CustomMockTestTaskQueue:

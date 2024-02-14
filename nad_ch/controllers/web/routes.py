@@ -1,6 +1,6 @@
 from flask import Blueprint, current_app, render_template, g
 from nad_ch.application.use_cases import (
-    list_data_submissions_by_provider,
+    list_data_submissions_by_producer,
     get_data_submission,
 )
 
@@ -20,8 +20,8 @@ def home():
 
 @home_bp.route("/reports")
 def reports():
-    # For demo purposes, hard-code the provider name
-    view_model = list_data_submissions_by_provider(g.ctx, "NJ")
+    # For demo purposes, hard-code the producer name
+    view_model = list_data_submissions_by_producer(g.ctx, "NJ")
     return render_template("reports/index.html", submissions=view_model)
 
 

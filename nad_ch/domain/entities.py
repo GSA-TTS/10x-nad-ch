@@ -16,38 +16,38 @@ class Entity:
         self.updated_at = updated_at
 
 
-class DataProvider(Entity):
+class DataProducer(Entity):
     def __init__(self, name: str, id: int = None):
         super().__init__(id)
         self.name = name
 
     def __repr__(self):
-        return f"DataProvider {self.id}, {self.name})"
+        return f"DataProducer {self.id}, {self.name})"
 
 
 class DataSubmission(Entity):
     def __init__(
         self,
         filename: str,
-        provider: DataProvider,
+        producer: DataProducer,
         report=None,
         id: int = None,
     ):
         super().__init__(id)
         self.filename = filename
-        self.provider = provider
+        self.producer = producer
         self.report = report
 
     def __repr__(self):
         return f"DataSubmission \
-            {self.id}, {self.filename}, {self.provider}"
+            {self.id}, {self.filename}, {self.producer}"
 
     @staticmethod
-    def generate_filename(file_path: str, provider: DataProvider) -> str:
-        s = re.sub(r"\W+", "_", provider.name)
+    def generate_filename(file_path: str, producer: DataProducer) -> str:
+        s = re.sub(r"\W+", "_", producer.name)
         s = s.lower()
         s = s.strip("_")
-        formatted_provider_name = re.sub(r"_+", "_", s)
+        formatted_producer_name = re.sub(r"_+", "_", s)
 
         current_time_utc = datetime.now(timezone.utc)
         timestamp = current_time_utc.timestamp()
@@ -55,7 +55,7 @@ class DataSubmission(Entity):
         datetime_str = datetime_obj.strftime("%Y%m%d_%H%M%S")
 
         _, file_extension = os.path.splitext(file_path)
-        filename = f"{formatted_provider_name}_{datetime_str}{file_extension}"
+        filename = f"{formatted_producer_name}_{datetime_str}{file_extension}"
         return filename
 
     def has_report(self) -> bool:

@@ -26,5 +26,5 @@ def upgrade():
     )
 
 
-def add_column():
+def downgrade():
     op.drop_column("data_submissions", "report")

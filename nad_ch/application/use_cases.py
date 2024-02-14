@@ -4,42 +4,42 @@ from nad_ch.application.dtos import DownloadResult
 from nad_ch.application.interfaces import ApplicationContext
 from nad_ch.application.view_models import (
     get_view_model,
-    DataProviderViewModel,
+    DataProducerViewModel,
     DataSubmissionViewModel,
 )
-from nad_ch.domain.entities import DataProvider, DataSubmission
+from nad_ch.domain.entities import DataProducer, DataSubmission
 
 
-def add_data_provider(
-    ctx: ApplicationContext, provider_name: str
-) -> DataProviderViewModel:
-    if not provider_name:
-        ctx.logger.error("Provider name required")
+def add_data_producer(
+    ctx: ApplicationContext, producer_name: str
+) -> DataProducerViewModel:
+    if not producer_name:
+        ctx.logger.error("Producer name required")
         return
 
-    matching_provider = ctx.providers.get_by_name(provider_name)
-    if matching_provider:
-        ctx.logger.error("Provider name must be unique")
+    matching_producer = ctx.producers.get_by_name(producer_name)
+    if matching_producer:
+        ctx.logger.error("Producer name must be unique")
         return
 
-    provider = DataProvider(provider_name)
-    ctx.providers.add(provider)
-    ctx.logger.info("Provider added")
+    producer = DataProducer(producer_name)
+    saved_producer = ctx.producers.add(producer)
+    ctx.logger.info("Producer added")
 
-    return get_view_model(provider)
+    return get_view_model(saved_producer)
 
 
-def list_data_providers(ctx: ApplicationContext) -> List[DataProviderViewModel]:
-    providers = ctx.providers.get_all()
-    ctx.logger.info("Data Provider Names:")
-    for p in providers:
+def list_data_producers(ctx: ApplicationContext) -> List[DataProducerViewModel]:
+    producers = ctx.producers.get_all()
+    ctx.logger.info("Data Producer Names:")
+    for p in producers:
         ctx.logger.info(p.name)
 
-    return get_view_model(providers)
+    return get_view_model(producers)
 
 
 def ingest_data_submission(
-    ctx: ApplicationContext, file_path: str, provider_name: str
+    ctx: ApplicationContext, file_path: str, producer_name: str
 ) -> DataSubmissionViewModel:
     if not file_path:
         ctx.logger.error("File path required")
@@ -50,20 +50,20 @@ def ingest_data_submission(
         ctx.logger.error("Invalid file format. Only ZIP or CSV files are accepted.")
         return
 
-    provider = ctx.providers.get_by_name(provider_name)
-    if not provider:
-        ctx.logger.error("Provider with that name does not exist")
+    producer = ctx.producers.get_by_name(producer_name)
+    if not producer:
+        ctx.logger.error("Producer with that name does not exist")
         return
 
     try:
-        filename = DataSubmission.generate_filename(file_path, provider)
+        filename = DataSubmission.generate_filename(file_path, producer)
         ctx.storage.upload(file_path, filename)
 
-        submission = DataSubmission(filename, provider)
-        ctx.submissions.add(submission)
-        ctx.logger.info(f"Submission added: {submission.filename}")
+        submission = DataSubmission(filename, producer)
+        saved_submission = ctx.submissions.add(submission)
+        ctx.logger.info(f"Submission added: {saved_submission.filename}")
 
-        return get_view_model(submission)
+        return get_view_model(saved_submission)
     except Exception as e:
         ctx.storage.delete(filename)
         ctx.logger.error(f"Failed to process submission: {e}")
@@ -80,18 +80,18 @@ def get_data_submission(
     return get_view_model(submission)
 
 
-def list_data_submissions_by_provider(
-    ctx: ApplicationContext, provider_name: str
+def list_data_submissions_by_producer(
+    ctx: ApplicationContext, producer_name: str
 ) -> List[DataSubmissionViewModel]:
-    provider = ctx.providers.get_by_name(provider_name)
-    if not provider:
-        ctx.logger.error("Provider with that name does not exist")
+    producer = ctx.producers.get_by_name(producer_name)
+    if not producer:
+        ctx.logger.error("Producer with that name does not exist")
         return
 
-    submissions = ctx.submissions.get_by_provider(provider)
-    ctx.logger.info(f"Data submissions for {provider.name}")
+    submissions = ctx.submissions.get_by_producer(producer)
+    ctx.logger.info(f"Data submissions for {producer.name}")
     for s in submissions:
-        ctx.logger.info(f"{s.provider.name}: {s.filename}")
+        ctx.logger.info(f"{s.producer.name}: {s.filename}")
 
     return get_view_model(submissions)
 
