@@ -1,6 +1,6 @@
 from typing import Optional, Protocol
 from nad_ch.application.dtos import DownloadResult
-from nad_ch.domain.repositories import DataProviderRepository, DataSubmissionRepository
+from nad_ch.domain.repositories import DataProducerRepository, DataSubmissionRepository
 
 
 class Logger(Protocol):
@@ -37,8 +37,8 @@ class TaskQueue(Protocol):
 
 class ApplicationContext:
     @property
-    def providers(self) -> DataProviderRepository:
-        return self._providers
+    def producers(self) -> DataProducerRepository:
+        return self._producers
 
     @property
     def submissions(self) -> DataSubmissionRepository:

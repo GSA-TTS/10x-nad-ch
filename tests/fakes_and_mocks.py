@@ -1,27 +1,27 @@
 from datetime import datetime
 from typing import Optional
 from nad_ch.application.dtos import DownloadResult
-from nad_ch.domain.entities import DataProvider, DataSubmission
-from nad_ch.domain.repositories import DataProviderRepository, DataSubmissionRepository
+from nad_ch.domain.entities import DataProducer, DataSubmission
+from nad_ch.domain.repositories import DataProducerRepository, DataSubmissionRepository
 
 
-class FakeDataProviderRepository(DataProviderRepository):
+class FakeDataProducerRepository(DataProducerRepository):
     def __init__(self) -> None:
-        self._providers = set()
+        self._producers = set()
         self._next_id = 1
 
-    def add(self, provider: DataProvider) -> DataProvider:
-        provider.id = self._next_id
-        provider.set_created_at(datetime.now())
-        self._providers.add(provider)
+    def add(self, producer: DataProducer) -> DataProducer:
+        producer.id = self._next_id
+        producer.set_created_at(datetime.now())
+        self._producers.add(producer)
         self._next_id += 1
-        return provider
+        return producer
 
-    def get_by_name(self, name: str) -> Optional[DataProvider]:
-        return next((p for p in self._providers if p.name == name), None)
+    def get_by_name(self, name: str) -> Optional[DataProducer]:
+        return next((p for p in self._producers if p.name == name), None)
 
     def get_all(self):
-        return sorted(list(self._providers), key=lambda provider: provider.id)
+        return sorted(list(self._producers), key=lambda producer: producer.id)
 
 
 class FakeDataSubmissionRepository(DataSubmissionRepository):
@@ -39,8 +39,8 @@ class FakeDataSubmissionRepository(DataSubmissionRepository):
     def get_by_id(self, id: int) -> Optional[DataSubmission]:
         return next((s for s in self._submissions if s.id == id), None)
 
-    def get_by_provider(self, provider: DataProvider) -> Optional[DataSubmission]:
-        return [s for s in self._submissions if s.provider.name == provider.name]
+    def get_by_producer(self, producer: DataProducer) -> Optional[DataSubmission]:
+        return [s for s in self._submissions if s.producer.name == producer.name]
 
     def get_by_filename(self, filename: str) -> Optional[DataSubmission]:
         return next((s for s in self._submissions if s.filename == filename), None)

@@ -4,7 +4,7 @@ from .base import *
 from nad_ch.application.interfaces import ApplicationContext
 from nad_ch.infrastructure.database import (
     create_session_factory,
-    SqlAlchemyDataProviderRepository,
+    SqlAlchemyDataProducerRepository,
     SqlAlchemyDataSubmissionRepository,
 )
 from nad_ch.infrastructure.logger import BasicLogger
@@ -33,14 +33,14 @@ S3_REGION = os.getenv("S3_REGION")
 class DevLocalApplicationContext(ApplicationContext):
     def __init__(self):
         self._session_factory = create_session_factory(DATABASE_URL)
-        self._providers = self.create_provider_repository()
+        self._producers = self.create_producer_repository()
         self._submissions = self.create_submission_repository()
         self._logger = self.create_logger()
         self._storage = self.create_storage()
         self._task_queue = self.create_task_queue()
 
-    def create_provider_repository(self):
-        return SqlAlchemyDataProviderRepository(self._session_factory)
+    def create_producer_repository(self):
+        return SqlAlchemyDataProducerRepository(self._session_factory)
 
     def create_submission_repository(self):
         return SqlAlchemyDataSubmissionRepository(self._session_factory)

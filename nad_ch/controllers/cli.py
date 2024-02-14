@@ -1,9 +1,9 @@
 import click
 from nad_ch.application.use_cases import (
-    add_data_provider,
-    list_data_providers,
+    add_data_producer,
+    list_data_producers,
     ingest_data_submission,
-    list_data_submissions_by_provider,
+    list_data_submissions_by_producer,
     validate_data_submission,
 )
 
@@ -16,34 +16,34 @@ def cli(ctx):
 
 @cli.command()
 @click.pass_context
-@click.argument("provider_name")
-def add_provider(ctx, provider_name):
+@click.argument("producer_name")
+def add_producer(ctx, producer_name):
     context = ctx.obj
-    add_data_provider(context, provider_name)
+    add_data_producer(context, producer_name)
 
 
 @cli.command()
 @click.pass_context
-def list_providers(ctx):
+def list_producers(ctx):
     context = ctx.obj
-    list_data_providers(context)
+    list_data_producers(context)
 
 
 @cli.command()
 @click.pass_context
 @click.argument("file_path")
-@click.argument("provider")
-def ingest(ctx, file_path, provider):
+@click.argument("producer")
+def ingest(ctx, file_path, producer):
     context = ctx.obj
-    ingest_data_submission(context, file_path, provider)
+    ingest_data_submission(context, file_path, producer)
 
 
 @cli.command()
 @click.pass_context
-@click.argument("provider")
-def list_submissions_by_provider(ctx, provider):
+@click.argument("producer")
+def list_submissions_by_producer(ctx, producer):
     context = ctx.obj
-    list_data_submissions_by_provider(context, provider)
+    list_data_submissions_by_producer(context, producer)
 
 
 @cli.command()

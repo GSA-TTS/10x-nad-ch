@@ -3,7 +3,7 @@ from datetime import datetime
 import json
 import numpy as np
 from typing import Union, List, Tuple
-from nad_ch.domain.entities import Entity, DataProvider, DataSubmission
+from nad_ch.domain.entities import Entity, DataProducer, DataSubmission
 
 
 def get_view_model(entity: Union[Entity, List[Entity]]) -> Union[Entity, List[Entity]]:
@@ -12,7 +12,7 @@ def get_view_model(entity: Union[Entity, List[Entity]]) -> Union[Entity, List[En
     get a static view model object that it can return to its caller.
     """
     entity_to_vm_function_map = {
-        DataProvider: create_data_provider_vm,
+        DataProducer: create_data_producer_vm,
         DataSubmission: create_data_submission_vm,
     }
 
@@ -31,17 +31,17 @@ def get_view_model(entity: Union[Entity, List[Entity]]) -> Union[Entity, List[En
 
 
 @dataclass
-class DataProviderViewModel:
+class DataProducerViewModel:
     id: int
     date_created: str
     name: str
 
 
-def create_data_provider_vm(provider: DataProvider) -> DataProviderViewModel:
-    return DataProviderViewModel(
-        id=provider.id,
-        date_created=present_date(provider.created_at),
-        name=provider.name,
+def create_data_producer_vm(producer: DataProducer) -> DataProducerViewModel:
+    return DataProducerViewModel(
+        id=producer.id,
+        date_created=present_date(producer.created_at),
+        name=producer.name,
     )
 
 
@@ -50,7 +50,7 @@ class DataSubmissionViewModel:
     id: int
     date_created: str
     filename: str
-    provider_name: str
+    producer_name: str
     report: str
 
 
@@ -65,7 +65,7 @@ def create_data_submission_vm(submission: DataSubmission) -> DataSubmissionViewM
         id=submission.id,
         date_created=present_date(submission.created_at),
         filename=submission.filename,
-        provider_name=submission.provider.name,
+        producer_name=submission.producer.name,
         report=report_json,
     )
 
