@@ -52,11 +52,6 @@ def before_request():
     g.ctx = current_app.extensions["ctx"]
 
 
-@auth_bp.route("/logout")
-def logout():
-    return redirect(url_for(login_view))
-
-
 @auth_bp.route("/logout/<provider>")
 def logout_provider(provider: str):
     logout_user()
@@ -64,8 +59,7 @@ def logout_provider(provider: str):
     redirect_url = get_logged_out_user_redirect_url(g.ctx, provider)
     if not redirect_url:
         abort(404)
-    print("redirect_url:")
-    print(redirect_url)
+
     return redirect(redirect_url)
 
 
