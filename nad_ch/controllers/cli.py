@@ -1,7 +1,9 @@
 import click
-from nad_ch.application.use_cases import (
+from nad_ch.application.use_cases.data_producers import (
     add_data_producer,
     list_data_producers,
+)
+from nad_ch.application.use_cases.data_submissions import (
     ingest_data_submission,
     list_data_submissions_by_producer,
     validate_data_submission,

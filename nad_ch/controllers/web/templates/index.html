@@ -1,4 +1,33 @@
 {% extends "_layouts/base.html" %} {% block title %}Home Page{% endblock %} {%
-block content %}
-<h1>Welcome to the NAD Collaboration Hub</h1>
-{% endblock %}
+block content %} {% if current_user.is_authenticated %}
+<div class="d-flex justify-content-center align-items-center">
+  <div class="border border-1 rounded p-5" style="border-color: grey">
+    <h2>Hi, {{ current_user.username }}!</h2>
+    <h2>Thanks for logging in with {{ current_user.login_provider }}.</h2>
+  </div>
+</div>
+{% else %}
+<div class="d-flex justify-content-center align-items-center">
+  <div class="border border-1 rounded p-5" style="border-color: grey">
+    <div class="mb-0">
+      <h2>Log In</h2>
+      <!-- <a class="btn btn-primary" href="{{ url_for('auth.oauth2_authorize', provider='google') }}">Login with Google</a> -->
+      <div class="d-flex flex-column align-items-center">
+        {#
+        <a
+          class="btn btn-primary m-2 mt-5"
+          href="{{ url_for('auth.oauth2_authorize', provider='logingov') }}"
+          >Login with login.gov</a
+        >
+        #}
+
+        <a
+          class="btn btn-primary m-2"
+          href="{{ url_for('auth.oauth2_authorize', provider='cloudgov') }}"
+          >Login with cloud.gov</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}{% endblock %}

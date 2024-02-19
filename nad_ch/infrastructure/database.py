@@ -1,11 +1,16 @@
-from typing import List, Optional
+import contextlib
+from flask_login import UserMixin
 from sqlalchemy import Column, Integer, String, create_engine, ForeignKey, DateTime
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship, Session
+from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from sqlalchemy.sql import func
 from sqlalchemy.types import JSON
-import contextlib
-from nad_ch.domain.entities import DataProducer, DataSubmission
-from nad_ch.domain.repositories import DataProducerRepository, DataSubmissionRepository
+from typing import List, Optional
+from nad_ch.domain.entities import DataProducer, DataSubmission, User
+from nad_ch.domain.repositories import (
+    DataProducerRepository,
+    DataSubmissionRepository,
+    UserRepository,
+)
 
 
 def create_session_factory(connection_string: str):
@@ -94,6 +99,43 @@ class DataSubmissionModel(CommonBase):
     def to_entity(self, producer: DataProducer):
         entity = DataSubmission(
             id=self.id, filename=self.filename, report=self.report, producer=producer
+        )
+
+        if self.created_at is not None:
+            entity.set_created_at(self.created_at)
+
+        if self.updated_at is not None:
+            entity.set_updated_at(self.updated_at)
+
+        return entity
+
+
+class UserModel(UserMixin, CommonBase):
+    __tablename__ = "users"
+
+    username = Column(String)
+    email = Column(String)
+    login_provider = Column(String)
+    logout_url = Column(String)
+
+    @staticmethod
+    def from_entity(user):
+        model = UserModel(
+            id=user.id,
+            email=user.email,
+            username=user.username,
+            login_provider=user.login_provider,
+            logout_url=user.logout_url,
+        )
+        return model
+
+    def to_entity(self):
+        entity = User(
+            id=self.id,
+            email=self.email,
+            username=self.username,
+            login_provider=self.login_provider,
+            logout_url=self.logout_url,
         )
 
         if self.created_at is not None:
@@ -208,3 +250,36 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
 
             if model_instance:
                 model_instance.report = report
+
+
+class SQLAlchemyUserRepository(UserRepository):
+    def __init__(self, session_factory):
+        self.session_factory = session_factory
+
+    def add(self, user: User) -> User:
+        with session_scope(self.session_factory) as session:
+            user_model = UserModel.from_entity(user)
+            session.add(user_model)
+            session.commit()
+            session.refresh(user_model)
+            return user_model.to_entity()
+
+    def get_by_email(self, email: str) -> Optional[User]:
+        with session_scope(self.session_factory) as session:
+            user_model = (
+                session.query(UserModel).filter(UserModel.email == email).first()
+            )
+
+            if user_model:
+                return user_model.to_entity()
+            else:
+                return None
+
+    def get_by_id(self, id: int) -> Optional[User]:
+        with session_scope(self.session_factory) as session:
+            user_model = session.query(UserModel).filter(UserModel.id == id).first()
+
+            if user_model:
+                return user_model.to_entity()
+            else:
+                return None

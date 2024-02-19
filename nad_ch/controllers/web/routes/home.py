@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, render_template, g
-from nad_ch.application.use_cases import (
-    list_data_submissions_by_producer,
+from nad_ch.application.use_cases.data_submissions import (
     get_data_submission,
+    list_data_submissions_by_producer,
 )
 
 

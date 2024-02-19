@@ -4,10 +4,11 @@ applications:
     buildpacks:
       - https://github.com/cloudfoundry/python-buildpack
     services:
+      - nad-ch-identity-provider
       - nad-ch-dev-postgres
       - nad-ch-dev-redis
       - nad-ch-dev-s3
-    random-route: true
+    random-route: false
     memory: 256M
     stack: cflinuxfs4
     command: python nad_ch/web.py

@@ -18,7 +18,7 @@ def client(app):
 def test_home_route(client):
     response = client.get("/")
     assert response.status_code == 200
-    assert "Welcome" in response.data.decode("utf-8")
+    assert "Login" in response.data.decode("utf-8")
 
 
 def test_reports_route(client):
