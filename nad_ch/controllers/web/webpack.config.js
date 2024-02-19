@@ -5,7 +5,7 @@ module.exports = {
   mode: "development",
   entry: {
     main: [
-      "./src/index.ts", // Path to your main JavaScript or TypeScript file
+      "./src/index.tsx", // Path to your main JavaScript or TypeScript file
       "./sass/index.scss", // Path to your SASS entry file
     ],
   },

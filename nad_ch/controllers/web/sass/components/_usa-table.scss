@@ -1,0 +1,19 @@
+.usa-table-report {
+  td,
+  th {
+    border-bottom: 1px solid var(--Base-base-lighter, #dfe1e2);
+  }
+
+  thead {
+    border-bottom: 1px solid var(--Base-base-light, #a9aeb1);
+    background-color: var(--Base-base-lighter, #dfe1e2);
+  }
+}
+
+th.grouped {
+  background: #a1d3ff !important;
+}
+
+td.grouped {
+  background: #e8f5ff !important;
+}

@@ -71,6 +71,25 @@ def create_data_submission_vm(submission: DataSubmission) -> DataSubmissionViewM
 
 
 def enrich_report(report: dict) -> dict:
+    required_fields = [
+        "Add_Number",
+        "AddNo_Full",
+        "St_Name",
+        "StName_Full",
+        "County",
+        "Inc_Muni",
+        "Urbnztn_PR",
+        "State",
+        "UUID",
+        "Longitude",
+        "Latitude",
+        "NatGrid",
+        "AddrPoint",
+        "DateUpdate",
+        "NAD_Source",
+        "DataSet_ID",
+    ]
+
     for feature in report.get("features", []):
         percent_populated, percent_empty = calculate_percentages(
             feature.get("populated_count"), feature.get("null_count")
@@ -78,6 +97,12 @@ def enrich_report(report: dict) -> dict:
 
         feature["populated_percentage"] = present_percentage(percent_populated)
         feature["null_percentage"] = present_percentage(percent_empty)
+
+        nad_feature_name = feature.get("nad_feature_name")
+        if nad_feature_name in required_fields:
+            feature["required"] = True
+        else:
+            feature["required"] = False
 
     return report
 

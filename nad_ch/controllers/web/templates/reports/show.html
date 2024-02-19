@@ -1,9 +1,125 @@
 {% extends "_layouts/base.html" %} {% block title %}Report{% endblock %} {%block
 content %}
-<h1>Report</h1>
-{% if submission %}
-<p>{{ submission.filename }}</p>
-<p>{{ submission.date_created}}</p>
-{% else %}
-<p>No such submission exists.</p>
-{% endif %} {% endblock %}
+<div class="">
+  <header class="usa-header usa-header--basic">
+    <div class="usa-nav-container">
+      <div class="usa-navbar">
+        <div class="usa-logo">
+          <em class="usa-logo__text"
+            >{{ submission.provider_name }} Submission Report</em
+          >
+        </div>
+        <nav aria-label="Primary navigation" class="usa-nav usa-nav-section">
+          <div class="usa-nav__inner">
+            <ul class="usa-nav__primary usa-accordion">
+              <li class="usa-nav__primary-item">
+                <button
+                  id="summary-button"
+                  type="button"
+                  class="usa-accordion__button usa-nav__link usa-current"
+                  aria-expanded="false"
+                  aria-controls="extended-mega-nav-section-one"
+                >
+                  <span>Summary</span>
+                </button>
+              </li>
+              <li class="usa-nav__primary-item">
+                <button
+                  id="completeness-button"
+                  type="button"
+                  class="usa-accordion__button usa-nav__link"
+                  aria-expanded="false"
+                  aria-controls="extended-mega-nav-section-two"
+                >
+                  <span>Completeness</span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid-container">
+    <div class="grid-row">
+      <div class="grid-col">
+        {% if submission %}
+        <div id="report-summary-section">
+          <div class="grid-container padding-left-0">
+            <div class="grid-row padding-top-2">
+              <p>
+                NJ submitted Submission 1.0 to US DOT Schema version 3.0
+                04/2023. Data was extracted from 1 file.
+              </p>
+            </div>
+            <div class="grid-row">
+              <div class="grid-col">
+                <h3>1141</h3>
+                <p>Total records submitted</p>
+              </div>
+              <div class="grid-col">
+                <h3>0</h3>
+                <p>Records added to NAD</p>
+              </div>
+              <div class="grid-col">
+                <h3>537</h3>
+                <p>Records flagged</p>
+              </div>
+            </div>
+            <div class="grid-row">
+              <div class="grid-col">
+                <h3>Yes</h3>
+                <p>ETL update required</p>
+              </div>
+              <div class="grid-col">
+                <h3>Yes</h3>
+                <p>Data update required</p>
+              </div>
+              <div class="grid-col"></div>
+            </div>
+            <div class="grid-row">
+              <div class="grid-col">
+                <h3>Need support? Contact NAD</h3>
+                <p><a href="mailto:nad.dot.gov">nad.dot.gov</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="report-completeness-section">
+          <div id="report-completeness-table"></div>
+        </div>
+        {% else %}
+        <p>No such submission exists.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    const summaryButton = document.getElementById("summary-button");
+    const completenessButton = document.getElementById("completeness-button");
+    const summarySection = document.getElementById("report-summary-section");
+    const completenessSection = document.getElementById("report-completeness-section");
+
+    const toggleSections = (showSummary) => {
+      summarySection.style.display = showSummary ? "block" : "none";
+      completenessSection.style.display = showSummary ? "none" : "block";
+      summaryButton.classList.toggle("usa-current", showSummary);
+      completenessButton.classList.toggle("usa-current", !showSummary);
+    };
+
+    summaryButton.addEventListener("click", () => toggleSections(true));
+    completenessButton.addEventListener("click", () => toggleSections(false));
+
+    // Set initial state
+    toggleSections(true);
+  })();
+
+  // Parse report data to JSON
+  const strReport = {{ submission.report|tojson }};
+  window.completenessReportData = JSON.parse(strReport);
+</script>
+{% endblock %}
