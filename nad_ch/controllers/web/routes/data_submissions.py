@@ -1,31 +1,34 @@
 from flask import Blueprint, current_app, render_template, g
+from flask_login import login_required
 from nad_ch.application.use_cases.data_submissions import (
     get_data_submission,
     list_data_submissions_by_producer,
 )
 
 
-home_bp = Blueprint("home", __name__)
+submissions_bp = Blueprint("submissions", __name__)
 
 
-@home_bp.before_request
+@submissions_bp.before_request
 def before_request():
     g.ctx = current_app.extensions["ctx"]
 
 
-@home_bp.route("/")
+@submissions_bp.route("/")
 def home():
     return render_template("index.html")
 
 
-@home_bp.route("/reports")
+@submissions_bp.route("/reports")
+@login_required
 def reports():
     # For demo purposes, hard-code the producer name
     view_model = list_data_submissions_by_producer(g.ctx, "NJ")
     return render_template("reports/index.html", submissions=view_model)
 
 
-@home_bp.route("/reports/<submission_id>")
+@submissions_bp.route("/reports/<submission_id>")
+@login_required
 def view_report(submission_id):
     view_model = get_data_submission(g.ctx, submission_id)
     return render_template("reports/show.html", submission=view_model)

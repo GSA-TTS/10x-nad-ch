@@ -69,8 +69,6 @@ class AuthenticationImplementation(Authentication):
 
         return None
 
-    def get_logout_url(self, provider_name: str) -> str:
-        return self._providers[provider_name]["logout_url"]
 
     def make_login_url(self, provider_name: str, state_token: str) -> str | None:
         provider_config = self._providers[provider_name]
@@ -99,19 +97,17 @@ class AuthenticationImplementation(Authentication):
         if not provider_config:
             return None
 
+        redirect_uri = url_for(
+            "index",
+            _scheme=self._callback_url_scheme,
+            _external=True,
+        )
+
         query_string = urlencode(
             {
                 "client_id": provider_config["client_id"],
-                "redirect_uri": url_for(
-                    "auth.logout",
-                    _scheme=self._callback_url_scheme,
-                    _external=True,
-                ),
-                "post_logout_redirect_uri": url_for(
-                    "auth.logout",
-                    _scheme=self._callback_url_scheme,
-                    _external=True,
-                ),
+                "redirect_uri": redirect_uri,
+                "post_logout_redirect_uri": redirect_uri,
             },
         )
 

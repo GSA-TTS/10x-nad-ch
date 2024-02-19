@@ -1,4 +1,4 @@
-{% block sidebar %}
+{% block sidebar %} {% if current_user.is_authenticated %}
 <nav aria-label="Side navigation,">
   <ul class="usa-sidenav height-viewport">
     <div class="usa-sidenav__logo">
@@ -7,11 +7,28 @@
     </div>
     <li class="usa-sidenav__item">
       {% if request.path.startswith('/reports') %}
-      <a href="{{ url_for('home.reports') }}" class="usa-current">Reports</a>
+      <a href="{{ url_for('submissions.reports') }}" class="usa-current"
+        >Reports</a
+      >
       {% else %}
-      <a href="{{ url_for('home.reports') }}">Reports</a>
+      <a href="{{ url_for('submissions.reports') }}">Reports</a>
       {% endif %}
+      <a href="{{ url_for('auth.logout_provider', provider='cloudgov') }}"
+        >Logout</a
+      >
     </li>
   </ul>
 </nav>
-{% endblock %}
+{% else %}
+<ul class="usa-sidenav height-viewport">
+  <div class="usa-sidenav__logo">
+    <h6>National Address Database</h6>
+    <h3>Collaboration Hub</h3>
+  </div>
+  <li class="usa-sidenav__item">
+    <a href="{{ url_for('auth.oauth2_authorize', provider='cloudgov') }}"
+      >Login</a
+    >
+  </li>
+</ul>
+{% endif %} {% endblock %}
