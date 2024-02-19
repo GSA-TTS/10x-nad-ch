@@ -96,30 +96,4 @@ content %}
     </div>
   </div>
 </div>
-
-<script>
-  (() => {
-    const summaryButton = document.getElementById("summary-button");
-    const completenessButton = document.getElementById("completeness-button");
-    const summarySection = document.getElementById("report-summary-section");
-    const completenessSection = document.getElementById("report-completeness-section");
-
-    const toggleSections = (showSummary) => {
-      summarySection.style.display = showSummary ? "block" : "none";
-      completenessSection.style.display = showSummary ? "none" : "block";
-      summaryButton.classList.toggle("usa-current", showSummary);
-      completenessButton.classList.toggle("usa-current", !showSummary);
-    };
-
-    summaryButton.addEventListener("click", () => toggleSections(true));
-    completenessButton.addEventListener("click", () => toggleSections(false));
-
-    // Set initial state
-    toggleSections(true);
-  })();
-
-  // Parse report data to JSON
-  const strReport = {{ submission.report|tojson }};
-  window.completenessReportData = JSON.parse(strReport);
-</script>
 {% endblock %}
