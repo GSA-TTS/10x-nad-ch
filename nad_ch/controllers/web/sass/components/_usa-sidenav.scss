@@ -76,4 +76,16 @@
   .usa-sidenav__logo {
     padding-top: 1em;
   }
+
+  .usa-sidenav__button {
+    display: flex;
+    justify-content: center;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 2em;
+    margin-left: 3em;
+    margin-right: 3em;
+    position: absolute;
+  }
 }

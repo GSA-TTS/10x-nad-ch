@@ -16,13 +16,25 @@ block content %}
       <p>Hi, {{ current_user.username }}!</p>
       <p>Thanks for logging in with {{ current_user.login_provider }}.</p>
       {% else %}
-      <p>
-        <a
-          class="btn btn-primary m-2"
-          href="{{ url_for('auth.oauth2_authorize', provider='cloudgov') }}"
-          >Login with cloud.gov</a
-        >
-      </p>
+      <ul class="usa-card-group">
+        <li class="usa-card tablet-lg:grid-col-6 widescreen:grid-col-4">
+          <div class="usa-card__container">
+            <div class="usa-card__header">
+              <h2 class="usa-card__heading">Welcome</h2>
+            </div>
+            <div class="usa-card__body">
+              <p>Log in to begin.</p>
+            </div>
+            <div class="usa-card__footer">
+              <a
+                href="{{ url_for('auth.oauth2_authorize', provider='cloudgov') }}"
+                class="usa-button"
+                >Login with cloud.gov</a
+              >
+            </div>
+          </div>
+        </li>
+      </ul>
       {% endif %}
     </div>
   </div>
