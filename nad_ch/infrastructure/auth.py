@@ -69,7 +69,6 @@ class AuthenticationImplementation(Authentication):
 
         return None
 
-
     def make_login_url(self, provider_name: str, state_token: str) -> str | None:
         provider_config = self._providers[provider_name]
         if not provider_config:
