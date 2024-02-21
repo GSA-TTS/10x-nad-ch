@@ -20,7 +20,6 @@ def client(app):
 @pytest.fixture
 def logged_in_client(client, app):
     with app.app_context(), app.test_request_context():
-        # Assuming you have a User model and a user in your database
         user = User(
             "test_user", "test_user@test.org", "test_provider", "test_logout_url"
         )
@@ -29,7 +28,6 @@ def logged_in_client(client, app):
 
         yield client
 
-        # Log out the user at the end of the test
         logout_user()
 
 
