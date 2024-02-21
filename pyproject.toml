@@ -49,7 +49,7 @@ APP_ENV="test"
 DATABASE_URL="sqlite:///:memory:"
 QUEUE_BROKER_URL="memory://"
 QUEUE_BACKEND_URL="cache+memory://"
-ALLOWED_LOGIN_DOMAINS = ["test.org"]
+LOCAL_ALLOWED_DOMAIN = "test.org"
 
 [tool.flake8]
 max-line-length = 88
