@@ -21,7 +21,9 @@ def client(app):
 def logged_in_client(client, app):
     with app.app_context(), app.test_request_context():
         # Assuming you have a User model and a user in your database
-        user = User("test_user", "test_user@test.org", "test_provider", "test_logout_url")
+        user = User(
+            "test_user", "test_user@test.org", "test_provider", "test_logout_url"
+        )
         saved_user = app.extensions["ctx"]["users"].add(user)
         login_user(saved_user)
 
