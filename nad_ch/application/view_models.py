@@ -2,11 +2,17 @@ from dataclasses import dataclass
 from datetime import datetime
 import json
 import numpy as np
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, TypeVar, Protocol
 from nad_ch.domain.entities import Entity, DataProducer, DataSubmission
 
 
-def get_view_model(entity: Union[Entity, List[Entity]]) -> Union[Entity, List[Entity]]:
+class ViewModel(Protocol):
+    pass
+
+
+def get_view_model(
+    entity: Union[Entity, List[Entity]]
+) -> Union[ViewModel, List[ViewModel]]:
     """
     Provide a single factory function that an application use case can call in order to
     get a static view model object that it can return to its caller.
@@ -31,7 +37,7 @@ def get_view_model(entity: Union[Entity, List[Entity]]) -> Union[Entity, List[En
 
 
 @dataclass
-class DataProducerViewModel:
+class DataProducerViewModel(ViewModel):
     id: int
     date_created: str
     name: str
@@ -46,7 +52,7 @@ def create_data_producer_vm(producer: DataProducer) -> DataProducerViewModel:
 
 
 @dataclass
-class DataSubmissionViewModel:
+class DataSubmissionViewModel(ViewModel):
     id: int
     date_created: str
     filename: str
