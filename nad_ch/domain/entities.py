@@ -84,7 +84,7 @@ class User(Entity):
     def is_anonymous(self):
         return False
 
-    def get_id(self):
+    def get_id(self) -> str:
         try:
             return str(self.id)
         except AttributeError:
