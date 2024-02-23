@@ -107,6 +107,9 @@ def validate_data_submission(ctx: ApplicationContext, filename: str):
         ctx.logger.error("Data extration error")
         return
 
+    # data_producer = submission.producer
+    # config_name = f"{data_producer.name}_{data_producer.id}"
+    # TODO: Incorporate config
     report = ctx.task_queue.run_load_and_validate(
         ctx.submissions, submission.id, download_result.extracted_dir
     )

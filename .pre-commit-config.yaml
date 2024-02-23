@@ -1,0 +1,35 @@
+# Yaml for setting up precommit hooks using:
+# `pre-commit` library <https://pre-commit.com/>
+
+exclude: '^$'
+
+fail_fast: false
+repos:
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v3.4.0
+      hooks:
+          - id: trailing-whitespace
+            exclude: '[snap|json]$'
+          - id: end-of-file-fixer
+          - id: check-ast
+          - id: debug-statements
+
+    - repo: https://github.com/python/black
+      rev: 20.8b1
+      hooks:
+          - id: black
+            language_version: python
+            additional_dependencies: ['click==8.0.4']
+
+    - repo: https://github.com/pre-commit/mirrors-pylint
+      rev: v2.7.2
+      hooks:
+          - id: pylint
+            language: python
+            args: [
+                    '--disable=R,wrong-import-position,fixme',
+                ]
+    - repo: https://github.com/pre-commit/mirrors-mypy
+      rev: v0.961
+      hooks:
+          - id: mypy

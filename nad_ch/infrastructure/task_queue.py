@@ -6,6 +6,8 @@ from nad_ch.application.dtos import (
     report_to_dict,
     report_from_dict,
 )
+from typing import Optional
+from nad_ch.application.data_reader import DataReader
 from nad_ch.application.interfaces import TaskQueue
 from nad_ch.application.validation import get_feature_count, get_feature_details
 from nad_ch.config import QUEUE_BROKER_URL, QUEUE_BACKEND_URL

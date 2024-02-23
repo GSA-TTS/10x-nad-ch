@@ -1,0 +1,119 @@
+data_required_fields:
+  - Add_Number
+  - AddNo_Full
+  - St_Name
+  - StNam_Full
+  - County
+  - Inc_Muni
+  - Post_City
+  - State
+  - UUID
+  - AddAuth
+  - Longitude
+  - Latitude
+  - NatGrid
+  - Placement
+  - AddrPoint
+  - DateUpdate
+  - NAD_Source
+  - DataSet_ID
+data_column_mapping:
+  AddNum_Pre:
+    - ANUMBERPRE
+  Add_Number:
+    - ANUMBER
+  AddNum_Suf:
+    - ANUMBERSUF
+  AddNo_Full:
+    - ADR_NUM_COMP
+  St_PreMod:
+    - ST_PRE_MOD
+  St_PreDir:
+    - ST_PRE_DIR
+  St_PreTyp:
+    - ST_PRE_TYP
+  St_PreSep:
+    - ST_PRE_SEP
+  St_Name:
+  St_PosTyp:
+    - ST_POS_TYP
+  St_PosDir:
+    - ST_POS_DIR
+  St_PosMod:
+    - ST_POS_MOD
+  StNam_Full:
+    - ST_FULNAM
+  Building:
+  Floor:
+  Unit:
+  Room:
+  Seat:
+  Addtl_Loc:
+  SubAddress:
+  LandmkName:
+    - LANDMARK
+  County:
+    - CO_NAME
+  Inc_Muni:
+  Post_City:
+    - Post_Comm
+    - POSTCOMM
+  Census_Plc:
+  Uninc_Comm:
+  Nbrhd_Comm:
+  NatAmArea:
+  NatAmSub:
+  Urbnztn_PR:
+  PlaceOther:
+  State:
+  Zip_Code:
+    - Post_Code
+    - ZIP
+  Plus_4:
+    - Post_Code4
+    - ZIP4
+  UUID:
+    - GlobalID
+  AddAuth:
+    - DiscrpAgID
+    - AAUTHORITY
+  AddrRefSys:
+  Longitude:
+    - Long
+    - LONGITUDE
+  Latitude:
+    - Lat
+    - LATITUDE
+  NatGrid:
+    - USNG_CODE
+  Elevation:
+    - Elev
+  Placement:
+    - PLACE_LOC
+  AddrPoint:
+  Related_ID:
+  RelateType:
+  ParcelSrc:
+  Parcel_ID:
+    - STATE_PIN
+  AddrClass:
+  Lifecycle:
+    - STATUS
+  Effective:
+    - EFF_DATE
+  Expire:
+    - RET_DATE
+  DateUpdate:
+    - EDIT_DATE
+  AnomStatus:
+    - VERROR_911
+  LocatnDesc:
+    - LOC_DESC
+  Addr_Type:
+    - Place_Type
+  PlaceNmTyp:
+  DeliverTyp:
+  NAD_Source:
+  DataSet_ID:
+    - Site_NGUID
+    - ADD_ID
