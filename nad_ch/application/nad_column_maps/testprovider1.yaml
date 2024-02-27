@@ -25,6 +25,7 @@ data_column_mapping:
     - AREASQMETER
   COL_2:
     - TRACT
+    - Pacific
   COL_20:
     - Shape_Length
   COL_21:
@@ -39,6 +40,7 @@ data_column_mapping:
     - TOTPOP
   COL_6:
     - POPDENS
+    - totPop
   COL_7:
     - RACEBASE
   COL_8:

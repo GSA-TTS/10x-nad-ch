@@ -6,6 +6,7 @@ from tests.test_data.config_baselines import (
 )
 import pickle
 from pandas.testing import assert_frame_equal
+import pytest
 
 TEST_DATA_DIR = "tests/test_data"
 
@@ -34,6 +35,17 @@ def test_read_column_map():
         reader.column_map["data_column_mapping"]
         == TESTPROVIDER1_CONFIG["data_column_mapping"]
     )
+
+
+def test_validate_column_map():
+    with pytest.raises(Exception) as exc:
+        reader = DataReader("testprovider1")
+        reader.validate_column_map()
+    msg = "Duplicate inputs found for destination fields: COL_13 & COL_2, COL_5 & COL_6"
+    assert str(exc.value) == msg
+
+    reader = DataReader("testprovider2")
+    reader.validate_column_map()
 
 
 def test_read_file_in_batches_shape():

@@ -27,6 +27,26 @@ class DataReader(object):
                 )
         return column_map_config
 
+    def validate_column_map(self):
+        column_map = self.column_map["data_column_mapping"]
+        column_map_reverse = {}
+
+        for key, values in column_map.items():
+            for value in values:
+                value_lcase = value.lower()
+                if value_lcase in column_map_reverse:
+                    column_map_reverse[value_lcase].append(key)
+                else:
+                    column_map_reverse[value_lcase] = [key]
+        duplicates = {k: v for k, v in column_map_reverse.items() if len(v) > 1}
+        if duplicates:
+            duplicate_nad_fields = ", ".join(
+                [" & ".join(nad_fields) for nad_fields in list(duplicates.values())]
+            )
+            raise Exception(
+                f"Duplicate inputs found for destination fields: {duplicate_nad_fields}"
+            )
+
     def rename_columns(self, gdf: GeoDataFrame) -> GeoDataFrame:
         column_map = self.column_map["data_column_mapping"]
         original_names = {col.lower(): col for col in gdf.columns}
