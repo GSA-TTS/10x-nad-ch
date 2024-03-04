@@ -24,5 +24,5 @@ class InvalidEmailError(NadChError):
 class OAuth2TokenError(NadChError):
     """Exception raised when an OAuth2 token cannot be retrieved."""
 
-    def __init__(self, message="OAuth2 token retrieval failed"):
+    def __init__(self, message="OAuth2 token retrieval failed."):
         super().__init__(message)
