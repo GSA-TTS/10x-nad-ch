@@ -2,7 +2,7 @@ import pytest
 from nad_ch.application.use_cases.auth import (
     get_logged_in_user_redirect_url,
     get_logged_out_user_redirect_url,
-    get_newly_authenticated_user,
+    get_or_create_user,
     get_oauth2_token,
     get_user_email,
     get_user_email_domain_status,
@@ -17,7 +17,7 @@ def app_context():
     yield context
 
 
-def test_get_newly_authenticated_user_existing_user(app_context):
+def test_get_or_create_user_existing_user(app_context):
     app_context.auth.make_login_url = lambda x: "test"
     email = "johnny@test.org"
     login_provider = "test"
@@ -25,14 +25,14 @@ def test_get_newly_authenticated_user_existing_user(app_context):
         username="johnny", email=email, login_provider=login_provider, logout_url="test"
     )
     app_context.users.add(user)
-    result = get_newly_authenticated_user(app_context, login_provider, email)
+    result = get_or_create_user(app_context, login_provider, email)
     assert result == user
 
 
-def test_get_newly_authenticated_user_new_user(app_context):
+def test_get_or_create_user_new_user(app_context):
     email = "johnny@test.org"
     login_provider = "test"
-    result = get_newly_authenticated_user(app_context, login_provider, email)
+    result = get_or_create_user(app_context, login_provider, email)
     assert isinstance(result, User)
     assert result.email == email
     assert result.username == "johnny"

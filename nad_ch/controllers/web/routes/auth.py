@@ -13,7 +13,7 @@ from flask_login import LoginManager, login_user, logout_user, current_user
 import secrets
 from typing import Optional
 from nad_ch.application.use_cases.auth import (
-    get_newly_authenticated_user,
+    get_or_create_user,
     get_logged_in_user_redirect_url,
     get_logged_out_user_redirect_url,
     get_oauth2_token,
@@ -105,7 +105,7 @@ def oauth2_callback(provider: str):
 
     session["oauth2_token"] = oauth2_token
 
-    user = get_newly_authenticated_user(g.ctx, provider, email)
+    user = get_or_create_user(g.ctx, provider, email)
 
     login_user(user)
 

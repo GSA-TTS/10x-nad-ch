@@ -2,7 +2,7 @@ from nad_ch.application.interfaces import ApplicationContext
 from nad_ch.domain.entities import User
 
 
-def get_newly_authenticated_user(
+def get_or_create_user(
     ctx: ApplicationContext, provider_name: str, email: str
 ) -> User:
     """
