@@ -1,0 +1,50 @@
+{% extends "_layouts/base.html" %} {% block title %}Home Page{% endblock %}
+{%block content %}
+<div>
+  <header class="usa-header usa-header--basic">
+    <div class="usa-nav-container">
+      <div class="usa-navbar">
+        <div class="usa-logo">
+          <em class="usa-logo__text">Reports</em>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid-container">
+    <div class="grid-row">
+      <div class="grid-col">
+        {% if submissions %}
+        <div class="usa-table-default">
+          <table class="usa-table usa-table--borderless width-full">
+            <thead class="width-full">
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Created</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for sub in submissions %}
+              <tr>
+                <th scope="row">{{ sub.filename }}</th>
+                <td>{{ sub.date_created }}</td>
+                <td>
+                  <a
+                    href="{{ url_for('submissions.view_report', submission_id=sub.id, _external=True) }}"
+                    >View</a
+                  >
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p>You haven't uploaded any data submissions yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

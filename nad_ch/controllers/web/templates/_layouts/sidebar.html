@@ -1,19 +1,28 @@
 {% block sidebar %}
-<div class="sidebar">
-  <div class="sidebar-logo">
-    <h4>National Address Database</h4>
-    <h2>Collaboration Hub</h2>
-  </div>
-  <nav aria-label="Side navigation,">
-    <ul class="usa-sidenav">
-      <li class="usa-sidenav__item">
-        {% if request.endpoint == 'home.reports' %}
-        <a href="{{ url_for('home.reports') }}" class="usa-current">Reports</a>
-        {% else %}
-        <a href="{{ url_for('home.reports') }}">Reports</a>
-        {% endif %}
-      </li>
-    </ul>
-  </nav>
-</div>
+<nav aria-label="Side navigation,">
+  <ul class="usa-sidenav height-viewport">
+    <div class="usa-sidenav__logo">
+      <h6>National Address Database</h6>
+      <h3>Collaboration Hub</h3>
+    </div>
+    {% if current_user.is_authenticated %}
+    <li class="usa-sidenav__item">
+      {% if request.path.startswith('/reports') %}
+      <a href="{{ url_for('submissions.reports') }}" class="usa-current"
+        >Reports</a
+      >
+      {% else %}
+      <a href="{{ url_for('submissions.reports') }}">Reports</a>
+      {% endif %}
+    </li>
+    <li>
+      <a
+        href="{{ url_for('auth.logout_provider', provider='cloudgov') }}"
+        class="usa-button usa-button--outline usa-button--inverse usa-sidenav__button"
+        >Logout</a
+      >
+    </li>
+    {% endif %}
+  </ul>
+</nav>
 {% endblock %}

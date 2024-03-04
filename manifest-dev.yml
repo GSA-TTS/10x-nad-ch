@@ -7,9 +7,10 @@ applications:
       - nad-ch-dev-postgres
       - nad-ch-dev-redis
       - nad-ch-dev-s3
-    random-route: true
+      - nad-ch-identity-provider
+    random-route: false
     memory: 256M
     stack: cflinuxfs4
-    command: python nad_ch/web.py
+    command: python3 ./nad_ch/main.py serve_flask_app
     env:
       APP_ENV: dev_remote

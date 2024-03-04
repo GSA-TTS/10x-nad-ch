@@ -3,9 +3,6 @@ FROM python:3.11-slim
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-# Create a non-root user to run the app
-RUN useradd --create-home --shell /bin/bash appuser
-
 # Update and install packages
 RUN apt-get update && apt-get install -y \
     curl \
@@ -23,14 +20,21 @@ ENV CPLUS_INCLUDE_PATH=/usr/include/gdal \
 # Install GDAL Python bindings with the specified version
 RUN pip install GDAL==$GDAL_VERSION
 
-# Install Python Poetry for managing project dependencies in /opt/poetry
+# Install poetry in /opt/poetry
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python3 -
-USER appuser
 ENV PATH="${PATH}:/opt/poetry/bin"
+
+# Add the current directory to the PYTHONPATH
+ENV PYTHONPATH="${PYTHONPATH}:/app"
+
+# Create a non-root user to run the app
+RUN useradd --create-home --shell /bin/bash appuser
 
 # Install dependencies and start app
 WORKDIR /app
 COPY pyproject.toml poetry.lock ./
-RUN poetry install --without dev
+RUN poetry export -f requirements.txt --output requirements.txt
+RUN pip install -r requirements.txt
 COPY . .
-CMD ["/bin/sh", "start_local.sh"]
+USER appuser
+CMD ["/bin/sh", "./scripts/start_local.sh"]

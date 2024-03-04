@@ -60,3 +60,35 @@ class DataSubmission(Entity):
 
     def has_report(self) -> bool:
         return self.report is not None
+
+
+class User(Entity):
+    def __init__(self, username, email, login_provider, logout_url, id: int = None):
+        super().__init__(id)
+        self.username = username
+        self.email = email
+        self.login_provider = login_provider
+        self.logout_url = logout_url
+
+    # The following property definitions and get_id method are required in order for the
+    # Flask-Login library to be able to handle instances of the User domain entity.
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_authenticated(self):
+        return self.is_active
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self) -> str:
+        try:
+            return str(self.id)
+        except AttributeError:
+            raise NotImplementedError("No `id` attribute - override `get_id`") from None
+
+    def __repr__(self):
+        return f"User {self.id}, {self.username}, {self.email})"

@@ -1,8 +1,12 @@
 from datetime import datetime
 from typing import Optional
 from nad_ch.application.dtos import DownloadResult
-from nad_ch.domain.entities import DataProducer, DataSubmission
-from nad_ch.domain.repositories import DataProducerRepository, DataSubmissionRepository
+from nad_ch.domain.entities import DataProducer, DataSubmission, User
+from nad_ch.domain.repositories import (
+    DataProducerRepository,
+    DataSubmissionRepository,
+    UserRepository,
+)
 
 
 class FakeDataProducerRepository(DataProducerRepository):
@@ -49,6 +53,25 @@ class FakeDataSubmissionRepository(DataSubmissionRepository):
         return None
 
 
+class FakeUserRepository(UserRepository):
+    def __init__(self) -> None:
+        self._users = set()
+        self._next_id = 1
+
+    def add(self, user: User) -> User:
+        user.id = self._next_id
+        user.set_created_at(datetime.now())
+        self._users.add(user)
+        self._next_id += 1
+        return user
+
+    def get_by_email(self, email: str) -> Optional[User]:
+        return next((u for u in self._users if u.email == email), None)
+
+    def get_by_id(self, id: int) -> Optional[User]:
+        return next((u for u in self._users if u.id == id), None)
+
+
 class FakeStorage:
     def __init__(self):
         self._files = set()
@@ -77,3 +100,44 @@ class MockCeleryTask:
         if self.result is None:
             raise Exception("No result has been set for the mock task")
         return self.result
+
+
+class FakeAuth:
+    def __init__(
+        self, providers: dict, allowed_domains: list, callback_url_scheme: str
+    ):
+        self._providers = providers
+        self._allowed_domains = allowed_domains
+        self._callback_url_scheme = callback_url_scheme
+
+    def fetch_oauth2_token(self, provider_name: str, code: str) -> str | None:
+        pass
+
+    def fetch_user_email_from_login_provider(
+        self, provider_name: str, oauth2_token: str
+    ) -> str | list[str] | None:
+        pass
+
+    def get_logout_url(self, provider_name: str) -> str:
+        pass
+
+    def make_login_url(self, provider_name: str, state_token: str) -> str | None:
+        pass
+
+    def make_logout_url(self, provider_name: str) -> str | None:
+        pass
+
+    def user_email_address_has_permitted_domain(self, email: str | list[str]) -> bool:
+        def is_domain_allowed(email_address: str) -> bool:
+            domain = email_address.split("@")[1]
+            return domain in self._allowed_domains
+
+        if isinstance(email, list):
+            for email_address in email:
+                if is_domain_allowed(email_address):
+                    return True
+        else:
+            if is_domain_allowed(email):
+                return True
+
+        return False
