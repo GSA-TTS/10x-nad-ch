@@ -1,3 +1,4 @@
+from nad_ch.application.exceptions import InvalidEmailDomainError, OAuth2TokenError
 from nad_ch.application.interfaces import ApplicationContext
 from nad_ch.domain.entities import User
 
@@ -42,8 +43,9 @@ def get_oauth2_token(
     oauth2_token = ctx.auth.fetch_oauth2_token(provider_name, code)
 
     if not oauth2_token:
-        ctx.logger.error("OAUTH2 error: Could not get access token.")
-        return None
+        error_message = "Could not get access token."
+        ctx.logger.error(f"OAUTH2 error: {error_message}")
+        raise OAuth2TokenError(error_message)
 
     return oauth2_token
 
@@ -60,8 +62,8 @@ def get_user_email_domain_status(
     is_valid_domain = ctx.auth.user_email_address_has_permitted_domain(email)
 
     if not is_valid_domain:
-        ctx.logger.info(
-            "OAUTH2 error: Attempted login with non-permitted email domain."
-        )
+        error_message = "Attempted login with non-permitted email domain."
+        ctx.logger.info(f"OAUTH2 error: {error_message}")
+        raise InvalidEmailDomainError(error_message)
 
     return is_valid_domain
