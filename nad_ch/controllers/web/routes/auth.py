@@ -12,7 +12,11 @@ from flask import (
 from flask_login import LoginManager, login_user, logout_user, current_user
 import secrets
 from typing import Optional
-from nad_ch.application.exceptions import InvalidEmailDomainError, OAuth2TokenError
+from nad_ch.application.exceptions import (
+    InvalidEmailDomainError,
+    InvalidEmailError,
+    OAuth2TokenError,
+)
 from nad_ch.application.use_cases.auth import (
     get_or_create_user,
     get_logged_in_user_redirect_url,
@@ -82,8 +86,6 @@ def oauth2_authorize(provider: str):
 
 @auth_bp.route("/callback/<provider>")
 def oauth2_callback(provider: str):
-    logger = g.ctx.logger
-
     if not current_user.is_anonymous or "error" in request.args:
         return redirect(url_for(login_view))
 
@@ -93,8 +95,9 @@ def oauth2_callback(provider: str):
             and "code" in request.args
         )
         if not login_request_is_valid:
-            logger.error("OAUTH2 error: Request state and/or code invalid")
-            abort(401)
+            error_message = "Request state and/or code invalid."
+            g.ctx.logger.error(f"OAUTH2 error: {error_message}")
+            abort(401, description=error_message)
 
         oauth2_token = get_oauth2_token(g.ctx, provider, request.args["code"])
 
@@ -112,5 +115,7 @@ def oauth2_callback(provider: str):
     except InvalidEmailDomainError:
         logout_user()
         return redirect(url_for("logout_provider", provider=provider))
-    except OAuth2TokenError:
-        abort(401)
+    except InvalidEmailError as e:
+        abort(400, description=e.message)
+    except OAuth2TokenError as e:
+        abort(401, description=e.message)
