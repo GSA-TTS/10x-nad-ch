@@ -18,13 +18,7 @@ def get_or_create_user(ctx: ApplicationContext, provider_name: str, email: str) 
     if user:
         return user
 
-    # TODO validate email address and throw invalid email error if necessary
-    # Regular expression for validating an email
-    email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-
-    # re.match returns an object if the string matches the pattern
-    # Otherwise, it returns None
-    if not re.match(email_regex, email):
+    if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
         error_message = "Invalid email address provided."
         ctx.logger.error(f"get_or_create_user error: {error_message}")
         raise InvalidEmailError(error_message)
