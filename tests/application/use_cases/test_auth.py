@@ -75,7 +75,9 @@ def test_get_oauth2_token_succeeds(app_context):
 
 
 def test_get_oauth2_token_fails(app_context):
-    app_context.auth.fetch_oauth2_token = lambda provider_name, code: (_ for _ in ()).throw(OAuth2TokenError("Error message"))
+    app_context.auth.fetch_oauth2_token = lambda provider_name, code: (
+        _ for _ in ()
+    ).throw(OAuth2TokenError("Error message"))
     provider_name = "test"
     code = "some-code"
     with pytest.raises(OAuth2TokenError):
@@ -108,4 +110,3 @@ def test_get_user_email_domain_status_invalid(app_context):
     with pytest.raises(InvalidEmailDomainError):
         email = "johnny@google.com"
         get_user_email_domain_status(app_context, email)
-
