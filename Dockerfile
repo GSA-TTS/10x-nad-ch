@@ -20,6 +20,9 @@ ENV CPLUS_INCLUDE_PATH=/usr/include/gdal \
 # Install GDAL Python bindings with the specified version
 RUN pip install GDAL==$GDAL_VERSION
 
+# Compile Python bytecode for system packages and CWD
+RUN python -c "import compileall; compileall.compile_path(maxlevels=10)"
+
 # Install poetry in /opt/poetry
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python3 -
 ENV PATH="${PATH}:/opt/poetry/bin"
@@ -35,6 +38,10 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock ./
 RUN poetry export -f requirements.txt --output requirements.txt
 RUN pip install -r requirements.txt
+
+# Copy application code and compile Python bytecode
 COPY . .
+RUN python -m compileall /app
+
 USER appuser
 CMD ["/bin/sh", "./scripts/start_local.sh"]
