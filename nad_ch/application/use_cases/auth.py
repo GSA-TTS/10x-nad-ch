@@ -14,6 +14,8 @@ def get_or_create_user(
     if user:
         return user
 
+    # TODO validate email address and throw invalid email error if necessary
+
     new_user = User(
         email=email,
         username=email.split("@")[0],
