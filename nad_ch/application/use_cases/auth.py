@@ -2,9 +2,7 @@ from nad_ch.application.interfaces import ApplicationContext
 from nad_ch.domain.entities import User
 
 
-def get_or_create_user(
-    ctx: ApplicationContext, provider_name: str, email: str
-) -> User:
+def get_or_create_user(ctx: ApplicationContext, provider_name: str, email: str) -> User:
     """
     Using an email address, retrieve the entity of the user who has just logged in. If
     no such user exists, create a new one and return it.
