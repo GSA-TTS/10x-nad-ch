@@ -6,7 +6,7 @@ from nad_ch.application.view_models import (
     get_view_model,
     DataSubmissionViewModel,
 )
-from nad_ch.domain.entities import DataSubmission
+from nad_ch.domain.entities import DataSubmission, ColumnMap
 
 
 def ingest_data_submission(
@@ -30,7 +30,10 @@ def ingest_data_submission(
         filename = DataSubmission.generate_filename(file_path, producer)
         ctx.storage.upload(file_path, filename)
 
-        submission = DataSubmission(filename, producer)
+        # TODO: Finish logic for obtaining column map from user
+        column_map = ColumnMap("placeholder", producer, 1)
+
+        submission = DataSubmission(filename, producer, column_map)
         saved_submission = ctx.submissions.add(submission)
         ctx.logger.info(f"Submission added: {saved_submission.filename}")
 
@@ -67,7 +70,7 @@ def list_data_submissions_by_producer(
     return get_view_model(submissions)
 
 
-def validate_data_submission(ctx: ApplicationContext, filename: str):
+def validate_data_submission(ctx: ApplicationContext, filename: str, config_name: str):
     submission = ctx.submissions.get_by_filename(filename)
     if not submission:
         ctx.logger.error("Data submission with that filename does not exist")
@@ -78,11 +81,8 @@ def validate_data_submission(ctx: ApplicationContext, filename: str):
         ctx.logger.error("Data extration error")
         return
 
-    # data_producer = submission.producer
-    # config_name = f"{data_producer.name}_{data_producer.id}"
-    # TODO: Incorporate config
     report = ctx.task_queue.run_load_and_validate(
-        ctx.submissions, submission.id, download_result.extracted_dir
+        ctx.submissions, submission.id, download_result.extracted_dir, config_name
     )
 
     ctx.logger.info(f"Total number of features: {report.overview.feature_count}")

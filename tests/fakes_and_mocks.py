@@ -7,6 +7,7 @@ from nad_ch.domain.repositories import (
     DataSubmissionRepository,
     UserRepository,
 )
+import os
 
 
 class FakeDataProducerRepository(DataProducerRepository):
@@ -85,6 +86,13 @@ class FakeStorage:
 
     def cleanup_temp_dir(self, temp_dir: str):
         pass
+
+    def delete(self, file_path: str) -> bool:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            return True
+        else:
+            return False
 
 
 class MockCeleryTask:

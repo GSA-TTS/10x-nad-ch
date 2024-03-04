@@ -1,15 +1,17 @@
 from celery import Celery
-import geopandas as gpd
 from nad_ch.application.dtos import (
     DataSubmissionReport,
-    DataSubmissionReportOverview,
     report_to_dict,
     report_from_dict,
 )
-from typing import Optional
 from nad_ch.application.data_reader import DataReader
 from nad_ch.application.interfaces import TaskQueue
-from nad_ch.application.validation import get_feature_count, get_feature_details
+from nad_ch.application.validation import (
+    update_feature_details,
+    initialize_overview_details,
+    update_overview_details,
+    finalize_overview_details,
+)
 from nad_ch.config import QUEUE_BROKER_URL, QUEUE_BACKEND_URL
 from nad_ch.domain.repositories import DataSubmissionRepository
 
@@ -29,11 +31,19 @@ celery_app.conf.update(
 
 
 @celery_app.task
-def load_and_validate(gdb_file_path: str) -> dict:
-    gdf = gpd.read_file(gdb_file_path)
-    overview = DataSubmissionReportOverview(feature_count=get_feature_count(gdf))
-    feature_details = get_feature_details(gdf)
-    report = DataSubmissionReport(overview, feature_details)
+def load_and_validate(gdb_file_path: str, config_name: str) -> dict:
+    data_reader = DataReader(config_name)
+    first_batch = True
+    for gdf in data_reader.read_file_in_batches(path=gdb_file_path):
+        if first_batch:
+            overview, feature_details = initialize_overview_details(
+                data_reader.valid_renames
+            )
+        feature_details = update_feature_details(gdf, feature_details)
+        overview = update_overview_details(gdf, overview)
+        first_batch = False
+    overview = finalize_overview_details(overview, feature_details)
+    report = DataSubmissionReport(overview, list(feature_details.values()))
     return report_to_dict(report)
 
 
@@ -42,9 +52,13 @@ class CeleryTaskQueue(TaskQueue):
         self.app = app
 
     def run_load_and_validate(
-        self, submissions: DataSubmissionRepository, submission_id: int, path: str
+        self,
+        submissions: DataSubmissionRepository,
+        submission_id: int,
+        path: str,
+        config_name: str,
     ):
-        task_result = load_and_validate.apply_async(args=[path])
+        task_result = load_and_validate.apply_async(args=[path, config_name])
         report_dict = task_result.get()
         submissions.update_report(submission_id, report_dict)
         return report_from_dict(report_dict)
