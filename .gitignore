@@ -176,3 +176,6 @@ node_modules/
 
 # Local notes
 .notes
+
+# Mac Desktop Services Store
+*.DS_Store
