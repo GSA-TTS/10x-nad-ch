@@ -30,7 +30,7 @@ def main():
         login_provider="cloudgov",
         logout_url=OAUTH2_CONFIG["cloudgov"]["logout_url"],
     )
-    saved_user = ctx.users.add(new_user)
+    ctx.users.add(new_user)
 
     current_script_path = os.path.abspath(__file__)
     project_root = os.path.dirname(os.path.dirname(current_script_path))
@@ -45,7 +45,7 @@ def main():
     filename = DataSubmission.generate_filename(zipped_gdb_path, saved_producer)
     ctx.storage.upload(zipped_gdb_path, filename)
     new_submission = DataSubmission(filename, saved_producer)
-    saved_submission = ctx.submissions.add(new_submission)
+    ctx.submissions.add(new_submission)
 
     os.remove(zipped_gdb_path)
 
