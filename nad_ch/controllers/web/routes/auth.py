@@ -12,6 +12,11 @@ from flask import (
 from flask_login import LoginManager, login_user, logout_user, current_user
 import secrets
 from typing import Optional
+from nad_ch.application.exceptions import (
+    InvalidEmailDomainError,
+    InvalidEmailError,
+    OAuth2TokenError,
+)
 from nad_ch.application.use_cases.auth import (
     get_or_create_user,
     get_logged_in_user_redirect_url,
@@ -81,32 +86,36 @@ def oauth2_authorize(provider: str):
 
 @auth_bp.route("/callback/<provider>")
 def oauth2_callback(provider: str):
-    logger = g.ctx.logger
-
     if not current_user.is_anonymous or "error" in request.args:
         return redirect(url_for(login_view))
 
-    login_request_is_valid = (
-        request.args["state"] == session.get("oauth2_state") and "code" in request.args
-    )
-    if not login_request_is_valid:
-        logger.error("OAUTH2 error: Request state and/or code invalid")
-        abort(401)
+    try:
+        login_request_is_valid = (
+            request.args["state"] == session.get("oauth2_state")
+            and "code" in request.args
+        )
+        if not login_request_is_valid:
+            error_message = "Request state and/or code invalid."
+            g.ctx.logger.error(f"OAUTH2 error: {error_message}")
+            abort(401, description=error_message)
 
-    oauth2_token = get_oauth2_token(g.ctx, provider, request.args["code"])
-    if not oauth2_token:
-        abort(401)
+        oauth2_token = get_oauth2_token(g.ctx, provider, request.args["code"])
 
-    email = get_user_email(g.ctx, provider, oauth2_token)
+        email = get_user_email(g.ctx, provider, oauth2_token)
 
-    if not get_user_email_domain_status(g.ctx, email):
+        get_user_email_domain_status(g.ctx, email)
+
+        session["oauth2_token"] = oauth2_token
+
+        user = get_or_create_user(g.ctx, provider, email)
+
+        login_user(user)
+
+        return redirect(url_for(login_view))
+    except InvalidEmailDomainError:
         logout_user()
         return redirect(url_for("logout_provider", provider=provider))
-
-    session["oauth2_token"] = oauth2_token
-
-    user = get_or_create_user(g.ctx, provider, email)
-
-    login_user(user)
-
-    return redirect(url_for(login_view))
+    except InvalidEmailError as e:
+        abort(400, description=e.message)
+    except OAuth2TokenError as e:
+        abort(401, description=e.message)

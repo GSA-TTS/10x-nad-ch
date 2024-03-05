@@ -1,4 +1,9 @@
 import pytest
+from nad_ch.application.exceptions import (
+    InvalidEmailDomainError,
+    InvalidEmailError,
+    OAuth2TokenError,
+)
 from nad_ch.application.use_cases.auth import (
     get_logged_in_user_redirect_url,
     get_logged_out_user_redirect_url,
@@ -39,6 +44,13 @@ def test_get_or_create_user_new_user(app_context):
     assert result.login_provider == login_provider
 
 
+def test_get_or_create_user_invalid_email(app_context):
+    email = "my_cool_email_address"
+    login_provider = "test"
+    with pytest.raises(InvalidEmailError):
+        get_or_create_user(app_context, login_provider, email)
+
+
 def test_get_logged_in_user_redirect_url(app_context):
     app_context.auth.make_login_url = lambda provider_name, state_token: "test"
     provider_name = "test"
@@ -54,12 +66,22 @@ def test_get_logged_out_user_redirect_url(app_context):
     assert result == "test"
 
 
-def test_get_oauth2_token(app_context):
+def test_get_oauth2_token_succeeds(app_context):
     app_context.auth.fetch_oauth2_token = lambda provider_name, code: "test"
     provider_name = "test"
     code = "some-code"
     result = get_oauth2_token(app_context, provider_name, code)
     assert result == "test"
+
+
+def test_get_oauth2_token_fails(app_context):
+    app_context.auth.fetch_oauth2_token = lambda provider_name, code: (
+        _ for _ in ()
+    ).throw(OAuth2TokenError("Error message"))
+    provider_name = "test"
+    code = "some-code"
+    with pytest.raises(OAuth2TokenError):
+        get_oauth2_token(app_context, provider_name, code)
 
 
 def test_get_user_email(app_context):
@@ -85,6 +107,6 @@ def test_get_user_email_domain_status_multiple(app_context):
 
 
 def test_get_user_email_domain_status_invalid(app_context):
-    email = "johnny@google.com"
-    result = get_user_email_domain_status(app_context, email)
-    assert result is False
+    with pytest.raises(InvalidEmailDomainError):
+        email = "johnny@google.com"
+        get_user_email_domain_status(app_context, email)
