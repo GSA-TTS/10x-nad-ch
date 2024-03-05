@@ -63,9 +63,8 @@ class DataSubmission(Entity):
 
 
 class User(Entity):
-    def __init__(self, username, email, login_provider, logout_url, id: int = None):
+    def __init__(self, email, login_provider, logout_url, id: int = None):
         super().__init__(id)
-        self.username = username
         self.email = email
         self.login_provider = login_provider
         self.logout_url = logout_url
@@ -91,4 +90,4 @@ class User(Entity):
             raise NotImplementedError("No `id` attribute - override `get_id`") from None
 
     def __repr__(self):
-        return f"User {self.id}, {self.username}, {self.email})"
+        return f"User {self.id}, {self.email})"

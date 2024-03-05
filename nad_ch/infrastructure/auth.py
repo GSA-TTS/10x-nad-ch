@@ -69,6 +69,13 @@ class AuthenticationImplementation(Authentication):
 
         return None
 
+    def get_logout_url(self, provider_name: str) -> str | None:
+        provider_config = self._providers[provider_name]
+        if not provider_config:
+            return None
+
+        return provider_config["logout_url"]
+
     def make_login_url(self, provider_name: str, state_token: str) -> str | None:
         provider_config = self._providers[provider_name]
         if not provider_config:

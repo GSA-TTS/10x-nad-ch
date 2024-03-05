@@ -13,7 +13,7 @@ block content %}
   <div class="grid-row">
     <div class="grid-col">
       {% if current_user.is_authenticated %}
-      <p>Hi, {{ current_user.username }}!</p>
+      <p>Hi, {{ current_user.email }}!</p>
       <p>Thanks for logging in with {{ current_user.login_provider }}.</p>
       {% else %}
       <ul class="usa-card-group">

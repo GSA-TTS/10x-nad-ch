@@ -113,7 +113,6 @@ class DataSubmissionModel(CommonBase):
 class UserModel(UserMixin, CommonBase):
     __tablename__ = "users"
 
-    username = Column(String)
     email = Column(String)
     login_provider = Column(String)
     logout_url = Column(String)
@@ -123,7 +122,6 @@ class UserModel(UserMixin, CommonBase):
         model = UserModel(
             id=user.id,
             email=user.email,
-            username=user.username,
             login_provider=user.login_provider,
             logout_url=user.logout_url,
         )
@@ -133,7 +131,6 @@ class UserModel(UserMixin, CommonBase):
         entity = User(
             id=self.id,
             email=self.email,
-            username=self.username,
             login_provider=self.login_provider,
             logout_url=self.logout_url,
         )
