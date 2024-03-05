@@ -21,9 +21,7 @@ def test_get_or_create_user_existing_user(app_context):
     app_context.auth.make_login_url = lambda x: "test"
     email = "johnny@test.org"
     login_provider = "test"
-    user = User(
-        username="johnny", email=email, login_provider=login_provider, logout_url="test"
-    )
+    user = User(email=email, login_provider=login_provider, logout_url="test")
     app_context.users.add(user)
     result = get_or_create_user(app_context, login_provider, email)
     assert result == user
@@ -35,7 +33,6 @@ def test_get_or_create_user_new_user(app_context):
     result = get_or_create_user(app_context, login_provider, email)
     assert isinstance(result, User)
     assert result.email == email
-    assert result.username == "johnny"
     assert result.login_provider == login_provider
 
 

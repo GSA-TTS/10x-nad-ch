@@ -16,7 +16,6 @@ def get_or_create_user(ctx: ApplicationContext, provider_name: str, email: str) 
 
     new_user = User(
         email=email,
-        username=email.split("@")[0],
         login_provider=provider_name,
         logout_url=ctx.auth.get_logout_url(provider_name),
     )

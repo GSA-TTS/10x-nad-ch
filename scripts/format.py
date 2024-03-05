@@ -2,7 +2,7 @@ import subprocess
 
 
 def main():
-    subprocess.run(["black", "./nad_ch", "./alembic", "./tests"])
+    subprocess.run(["black", "./alembic", "./nad_ch", "./scripts", "./tests"])
 
 
 if __name__ == "__main__":
