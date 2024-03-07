@@ -6,7 +6,7 @@ from nad_ch.infrastructure.database import (
     create_session_factory,
     SqlAlchemyDataProducerRepository,
     SqlAlchemyDataSubmissionRepository,
-    SQLAlchemyUserRepository,
+    SqlAlchemyUserRepository,
 )
 from nad_ch.infrastructure.auth import AuthenticationImplementation
 from nad_ch.infrastructure.logger import BasicLogger
@@ -57,7 +57,7 @@ class DevRemoteApplicationContext(ApplicationContext):
         return SqlAlchemyDataSubmissionRepository(self._session_factory)
 
     def create_user_repository(self):
-        return SQLAlchemyUserRepository(self._session_factory)
+        return SqlAlchemyUserRepository(self._session_factory)
 
     def create_logger(self):
         return BasicLogger(__name__)

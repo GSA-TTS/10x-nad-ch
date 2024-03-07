@@ -9,13 +9,17 @@ from nad_ch.application.dtos import (
 
 
 def test_to_dict_simple():
-    overview = DataSubmissionReportOverview(feature_count=100, features_flagged=5)
+    overview = DataSubmissionReportOverview(
+        feature_count=100, features_flagged=5, records_count=100, records_flagged=50
+    )
 
     overview_dict = report_to_dict(overview)
 
     assert overview_dict == {
         "feature_count": 100,
         "features_flagged": 5,
+        "records_count": 100,
+        "records_flagged": 50,
         "etl_update_required": False,
         "data_update_required": False,
     }
@@ -27,6 +31,9 @@ def test_to_dict_with_numpy_types():
         nad_feature_name="id",
         populated_count=np.int64(100),
         null_count=np.float32(0),
+        valid_domain_count=np.int64(90),
+        invalid_domain_count=np.int64(10),
+        invalid_domains=[],
     )
 
     feature_dict = report_to_dict(feature)
@@ -36,6 +43,9 @@ def test_to_dict_with_numpy_types():
         "nad_feature_name": "id",
         "populated_count": 100,
         "null_count": 0,
+        "valid_domain_count": 90,
+        "invalid_domain_count": 10,
+        "invalid_domains": [],
     }
     assert isinstance(feature_dict["populated_count"], int)
     assert isinstance(feature_dict["null_count"], float)
@@ -46,6 +56,8 @@ def test_from_dict_to_dataclass():
         "overview": {
             "feature_count": 100,
             "features_flagged": 5,
+            "records_count": 100,
+            "records_flagged": 50,
             "etl_update_required": False,
             "data_update_required": False,
         },
@@ -55,6 +67,9 @@ def test_from_dict_to_dataclass():
                 "nad_feature_name": "id",
                 "populated_count": 100,
                 "null_count": 0,
+                "valid_domain_count": 90,
+                "invalid_domain_count": 10,
+                "invalid_domains": [],
             }
         ],
     }
@@ -62,8 +77,10 @@ def test_from_dict_to_dataclass():
     report = report_from_dict(report_dict)
 
     assert report.overview.feature_count == 100
+    assert report.overview.etl_update_required is False
     assert report.features[0].provided_feature_name == "id"
     assert report.features[0].populated_count == 100
+    assert report.features[0].invalid_domains == []
 
 
 def test_round_trip_conversion():

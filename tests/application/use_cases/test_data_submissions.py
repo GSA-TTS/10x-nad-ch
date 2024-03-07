@@ -54,13 +54,17 @@ def test_validate_data_submission(app_context, caplog):
 
     class CustomMockTestTaskQueue:
         def run_load_and_validate(
-            self, submissions: DataSubmissionRepository, submission_id: int, path: str
+            self,
+            submissions: DataSubmissionRepository,
+            submission_id: int,
+            path: str,
+            config_name: str,
         ):
             return DataSubmissionReport(
                 overview=DataSubmissionReportOverview(feature_count=1)
             )
 
     app_context._task_queue = CustomMockTestTaskQueue()
-
-    validate_data_submission(app_context, submission.filename)
+    config_name = "default"
+    validate_data_submission(app_context, submission.filename, config_name)
     assert re.search(r"Total number of features: 1", caplog.text)

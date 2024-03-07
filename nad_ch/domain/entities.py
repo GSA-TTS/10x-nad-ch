@@ -1,10 +1,11 @@
 from datetime import datetime, timezone, UTC
 import os
 import re
+from typing import Optional, Dict
 
 
 class Entity:
-    def __init__(self, id: int = None):
+    def __init__(self, id: Optional[int] = None):
         self.id = id
         self.created_at: datetime = None
         self.updated_at: datetime = None
@@ -17,7 +18,7 @@ class Entity:
 
 
 class DataProducer(Entity):
-    def __init__(self, name: str, id: int = None):
+    def __init__(self, name: str, id: Optional[int] = None):
         super().__init__(id)
         self.name = name
 
@@ -25,17 +26,38 @@ class DataProducer(Entity):
         return f"DataProducer {self.id}, {self.name})"
 
 
+class ColumnMap(Entity):
+    def __init__(
+        self,
+        name: str,
+        producer: DataProducer,
+        mapping: Dict[str, str] = {},
+        version_id: Optional[int] = None,
+        id: Optional[int] = None,
+    ):
+        super().__init__(id)
+        self.name = name
+        self.producer = producer
+        self.version_id = version_id
+        self.mapping = mapping
+
+    def __repr__(self):
+        return f"ColumnMap {self.id}, {self.name})"
+
+
 class DataSubmission(Entity):
     def __init__(
         self,
         filename: str,
         producer: DataProducer,
-        report=None,
-        id: int = None,
+        column_map: ColumnMap,
+        report: Optional[Dict[any, any]] = None,
+        id: Optional[int] = None,
     ):
         super().__init__(id)
         self.filename = filename
         self.producer = producer
+        self.column_map = column_map
         self.report = report
 
     def __repr__(self):

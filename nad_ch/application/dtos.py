@@ -13,6 +13,8 @@ class DownloadResult:
 class DataSubmissionReportOverview:
     feature_count: int = 0
     features_flagged: int = 0
+    records_count: int = 0
+    records_flagged: int = 0
     etl_update_required: bool = False
     data_update_required: bool = False
 
@@ -21,8 +23,11 @@ class DataSubmissionReportOverview:
 class DataSubmissionReportFeature:
     provided_feature_name: str
     nad_feature_name: str
-    populated_count: int
-    null_count: int
+    populated_count: int = 0
+    null_count: int = 0
+    invalid_domain_count: int = 0
+    valid_domain_count: int = 0
+    invalid_domains: List[str] = field(default_factory=list)
 
 
 @dataclass

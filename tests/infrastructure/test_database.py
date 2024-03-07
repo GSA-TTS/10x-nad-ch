@@ -1,32 +1,5 @@
-import os
-import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from nad_ch.domain.entities import DataProducer, DataSubmission
-from nad_ch.infrastructure.database import (
-    ModelBase,
-    SqlAlchemyDataProducerRepository,
-    SqlAlchemyDataSubmissionRepository,
-)
-
-
-@pytest.fixture(scope="function")
-def test_database():
-    engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
-    ModelBase.metadata.create_all(engine)
-    return engine
-
-
-@pytest.fixture(scope="function")
-def producers(test_database):
-    Session = sessionmaker(bind=test_database)
-    return SqlAlchemyDataProducerRepository(Session)
-
-
-@pytest.fixture(scope="function")
-def submissions(test_database):
-    Session = sessionmaker(bind=test_database)
-    return SqlAlchemyDataSubmissionRepository(Session)
+from nad_ch.domain.entities import DataProducer, DataSubmission, ColumnMap
+from tests.fixtures import *
 
 
 def test_add_data_producer_to_repository_and_get_by_name(producers):
@@ -43,11 +16,14 @@ def test_add_data_producer_to_repository_and_get_by_name(producers):
     assert isinstance(retrieved_producer, DataProducer) is True
 
 
-def test_add_data_producer_and_then_data_submission(producers, submissions):
+def test_add_data_producer_and_then_data_submission(repositories):
+    producers, submissions, column_maps, users = repositories
     producer_name = "State X"
     new_producer = DataProducer(producer_name)
     saved_producer = producers.add(new_producer)
-    new_submission = DataSubmission("some-file-name", saved_producer)
+    new_column_map = ColumnMap("TestMap", saved_producer, version_id=1)
+    saved_column_map = column_maps.add(new_column_map)
+    new_submission = DataSubmission("some-file-name", saved_producer, saved_column_map)
 
     result = submissions.add(new_submission)
 
@@ -58,13 +34,18 @@ def test_add_data_producer_and_then_data_submission(producers, submissions):
     assert result.filename == "some-file-name"
 
 
-def test_retrieve_a_list_of_submissions_by_producer(producers, submissions):
+def test_retrieve_a_list_of_submissions_by_producer(repositories):
+    producers, submissions, column_maps, users = repositories
     producer_name = "State X"
     new_producer = DataProducer(producer_name)
     saved_producer = producers.add(new_producer)
-    new_submission = DataSubmission("some-file-name", saved_producer)
+    new_column_map = ColumnMap("TestMap", saved_producer, version_id=1)
+    saved_column_map = column_maps.add(new_column_map)
+    new_submission = DataSubmission("some-file-name", saved_producer, saved_column_map)
     submissions.add(new_submission)
-    another_new_submission = DataSubmission("some-other-file-name", saved_producer)
+    another_new_submission = DataSubmission(
+        "some-other-file-name", saved_producer, saved_column_map
+    )
     submissions.add(another_new_submission)
 
     submissions = submissions.get_by_producer(saved_producer)

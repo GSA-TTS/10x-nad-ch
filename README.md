@@ -38,10 +38,22 @@ the app and start up its services:
 docker compose up --build
 ```
 
+To create database migrations (add comment associated with migration in quotes):
+
+```bash
+docker exec nad-ch-dev-local poetry run alembic revision --autogenerate -m "ENTER COMMENT"
+```
+
 To run database migrations:
 
 ```bash
 docker exec nad-ch-dev-local poetry run alembic upgrade head
+```
+
+To downgrade database migrations:
+
+```bash
+docker exec nad-ch-dev-local poetry run alembic downgrade <enter down_revision id>
 ```
 
 ## Testing

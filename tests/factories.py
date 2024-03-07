@@ -2,6 +2,7 @@ import geopandas as gpd
 import pandas as pd
 import numpy as np
 from uuid import uuid4
+from typing import Dict
 
 
 def create_fake_geopandas_dataframe(num_rows=10):
@@ -63,3 +64,10 @@ def create_fake_geopandas_dataframe(num_rows=10):
     gdf.__geo_interface__["metadata"] = gdf_metadata
 
     return gdf
+
+
+def create_fake_column_map_from_gdf(gdf: gpd.GeoDataFrame) -> Dict[str, str]:
+    column_map = {}
+    for i, column in enumerate(gdf.columns):
+        column_map[f"COL_{i}"] = column
+    return column_map
