@@ -6,9 +6,11 @@
   </head>
   <body>
     <div class="grid-row minh-viewport">
-      <div class="grid-col-2">{% include "_layouts/sidebar.html" %}</div>
-      <div class="grid-col-10">
-        <main class="main" id="main-content">
+      <div class="grid-col" style="max-width: 200px">
+        {% include "_layouts/sidebar.html" %}
+      </div>
+      <div class="grid-col">
+        <main class="main grid-container" id="main-content">
           <section>{% block content %}{% endblock %}</section>
         </main>
       </div>

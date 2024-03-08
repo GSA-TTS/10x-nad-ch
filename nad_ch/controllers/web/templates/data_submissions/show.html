@@ -1,6 +1,6 @@
 {% extends "_layouts/base.html" %} {% block title %}Report{% endblock %} {%block
 content %}
-<div class="">
+<div x-data="{ showSummary: true, showCompleteness: false }">
   <header class="usa-header usa-header--basic">
     <div class="usa-nav-container">
       <div class="usa-navbar">
@@ -16,11 +16,13 @@ content %}
                 <button
                   id="summary-button"
                   type="button"
-                  class="usa-accordion__button usa-nav__link usa-current"
+                  class="usa-accordion__button usa-nav__link"
                   aria-expanded="false"
                   aria-controls="extended-mega-nav-section-one"
+                  :class="showSummary ? 'usa-current' : ''"
+                  @click="showSummary = true; showCompleteness = false"
                 >
-                  <span>Summary</span>
+                  Summary
                 </button>
               </li>
               <li class="usa-nav__primary-item">
@@ -30,8 +32,10 @@ content %}
                   class="usa-accordion__button usa-nav__link"
                   aria-expanded="false"
                   aria-controls="extended-mega-nav-section-two"
+                  :class="showCompleteness ? 'usa-current' : ''"
+                  @click="showSummary = false; showCompleteness = true"
                 >
-                  <span>Completeness</span>
+                  Completeness
                 </button>
               </li>
             </ul>
@@ -41,59 +45,53 @@ content %}
     </div>
   </header>
 
-  <div class="grid-container">
-    <div class="grid-row">
-      <div class="grid-col">
-        {% if submission %}
-        <div id="report-summary-section">
-          <div class="grid-container padding-left-0">
-            <div class="grid-row padding-top-2">
-              <p>
-                NJ submitted Submission 1.0 to US DOT Schema version 3.0
-                04/2023. Data was extracted from 1 file.
-              </p>
-            </div>
-            <div class="grid-row">
-              <div class="grid-col">
-                <h3>1141</h3>
-                <p>Total records submitted</p>
-              </div>
-              <div class="grid-col">
-                <h3>0</h3>
-                <p>Records added to NAD</p>
-              </div>
-              <div class="grid-col">
-                <h3>537</h3>
-                <p>Records flagged</p>
-              </div>
-            </div>
-            <div class="grid-row">
-              <div class="grid-col">
-                <h3>Yes</h3>
-                <p>ETL update required</p>
-              </div>
-              <div class="grid-col">
-                <h3>Yes</h3>
-                <p>Data update required</p>
-              </div>
-              <div class="grid-col"></div>
-            </div>
-            <div class="grid-row">
-              <div class="grid-col">
-                <h3>Need support? Contact NAD</h3>
-                <p><a href="mailto:nad.dot.gov">nad.dot.gov</a></p>
-              </div>
-            </div>
-          </div>
+  {% if submission %}
+  <div id="report-summary-section" x-show="showSummary">
+    <div class="grid-container padding-left-0">
+      <div class="grid-row padding-top-2">
+        <p>
+          NJ submitted Submission 1.0 to US DOT Schema version 3.0 04/2023. Data
+          was extracted from 1 file.
+        </p>
+      </div>
+      <div class="grid-row">
+        <div class="grid-col">
+          <h3>1141</h3>
+          <p>Total records submitted</p>
         </div>
-        <div id="report-completeness-section">
-          <div id="report-completeness-table"></div>
+        <div class="grid-col">
+          <h3>0</h3>
+          <p>Records added to NAD</p>
         </div>
-        {% else %}
-        <p>No such submission exists.</p>
-        {% endif %}
+        <div class="grid-col">
+          <h3>537</h3>
+          <p>Records flagged</p>
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-col">
+          <h3>Yes</h3>
+          <p>ETL update required</p>
+        </div>
+        <div class="grid-col">
+          <h3>Yes</h3>
+          <p>Data update required</p>
+        </div>
+        <div class="grid-col"></div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-col">
+          <h3>Need support? Contact NAD</h3>
+          <p><a href="mailto:nad@dot.gov">nad@dot.gov</a></p>
+        </div>
       </div>
     </div>
   </div>
+  <div id="report-completeness-section" x-show="showCompleteness">
+    {# Table goes here #}
+  </div>
+  {% else %}
+  <p>No such submission exists.</p>
+  {% endif %}
 </div>
 {% endblock %}

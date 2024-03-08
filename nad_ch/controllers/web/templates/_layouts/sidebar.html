@@ -1,27 +1,31 @@
 {% block sidebar %}
 <nav aria-label="Side navigation,">
   <ul class="usa-sidenav height-viewport">
-    <div class="usa-sidenav__logo">
-      <h6>National Address Database</h6>
-      <h3>Collaboration Hub</h3>
+    <div>
+      <div class="usa-sidenav__logo">
+        <a href="{{ url_for('index') }}">
+          <div class="logo-top">National Address Database</div>
+          <div class="logo-bottom">Collaboration Hub</div>
+        </a>
+      </div>
+      {% if current_user.is_authenticated %}
+      <li class="usa-sidenav__item">
+        {% if request.path.startswith('/reports') %}
+        <a href="{{ url_for('submissions.reports') }}" class="usa-current"
+          >Reports</a
+        >
+        {% else %}
+        <a href="{{ url_for('submissions.reports') }}">Reports</a>
+        {% endif %}
+      </li>
     </div>
-    {% if current_user.is_authenticated %}
-    <li class="usa-sidenav__item">
-      {% if request.path.startswith('/reports') %}
-      <a href="{{ url_for('submissions.reports') }}" class="usa-current"
-        >Reports</a
-      >
-      {% else %}
-      <a href="{{ url_for('submissions.reports') }}">Reports</a>
-      {% endif %}
-    </li>
-    <li>
-      <a
-        href="{{ url_for('auth.logout_provider', provider='cloudgov') }}"
-        class="usa-button usa-button--outline usa-button--inverse usa-sidenav__button"
-        >Logout</a
-      >
-    </li>
+    <div>
+      <li class="usa-sidenav__item">
+        <a href="{{ url_for('auth.logout_provider', provider='cloudgov') }}"
+          >Logout</a
+        >
+      </li>
+    </div>
     {% endif %}
   </ul>
 </nav>
