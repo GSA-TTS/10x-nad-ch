@@ -1,7 +1,7 @@
 import os
 import zipfile
 from nad_ch.config import create_app_context, OAUTH2_CONFIG
-from nad_ch.domain.entities import DataProducer, DataSubmission, User
+from nad_ch.domain.entities import ColumnMap, DataProducer, DataSubmission, User
 
 
 def zip_directory(folder_path, zip_path):
@@ -32,6 +32,10 @@ def main():
     )
     ctx.users.add(new_user)
 
+    new_column_map = ColumnMap(name="New Jersey Mapping v1", producer=saved_producer)
+    # TODO save column map once ApplicationContext can provide a repository
+    # saved_column_map = ctx.column_maps.add(new_column_map)
+
     current_script_path = os.path.abspath(__file__)
     project_root = os.path.dirname(os.path.dirname(current_script_path))
     gdb_path = os.path.join(
@@ -44,8 +48,9 @@ def main():
 
     filename = DataSubmission.generate_filename(zipped_gdb_path, saved_producer)
     ctx.storage.upload(zipped_gdb_path, filename)
-    new_submission = DataSubmission(filename, saved_producer)
-    ctx.submissions.add(new_submission)
+    # TODO save submission once column map has been saved to disk
+    # new_submission = DataSubmission(filename, saved_producer, saved_column_map)
+    # ctx.submissions.add(new_submission)
 
     os.remove(zipped_gdb_path)
 

@@ -30,9 +30,6 @@ ENV PATH="${PATH}:/opt/poetry/bin"
 # Add the current directory to the PYTHONPATH
 ENV PYTHONPATH="${PYTHONPATH}:/app"
 
-# Create a non-root user to run the app
-RUN useradd --create-home --shell /bin/bash appuser
-
 # Install dependencies and start app
 WORKDIR /app
 COPY pyproject.toml poetry.lock ./
@@ -43,5 +40,9 @@ RUN pip install -r requirements.txt
 COPY . .
 RUN python -m compileall /app
 
+# Create and switch to a non-root user to run the app
+RUN useradd --create-home --shell /bin/bash appuser
 USER appuser
+
+# Start application
 CMD ["/bin/sh", "./scripts/start_local.sh"]
