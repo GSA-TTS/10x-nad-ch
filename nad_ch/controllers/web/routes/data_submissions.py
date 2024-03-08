@@ -23,7 +23,7 @@ def home():
 @login_required
 def reports():
     # For demo purposes, hard-code the producer name
-    view_model = list_data_submissions_by_producer(g.ctx, "NJ")
+    view_model = list_data_submissions_by_producer(g.ctx, "New Jersey")
     return render_template("data_submissions/index.html", submissions=view_model)
 
 
