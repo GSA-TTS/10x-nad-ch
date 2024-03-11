@@ -20,7 +20,7 @@ def home():
 
 
 @submissions_bp.route("/reports")
-@login_required
+# @login_required
 def reports():
     # For demo purposes, hard-code the producer name
     view_model = list_data_submissions_by_producer(g.ctx, "New Jersey")
@@ -28,7 +28,7 @@ def reports():
 
 
 @submissions_bp.route("/reports/<submission_id>")
-@login_required
+# @login_required
 def view_report(submission_id):
     view_model = get_data_submission(g.ctx, submission_id)
     return render_template("data_submissions/show.html", submission=view_model)

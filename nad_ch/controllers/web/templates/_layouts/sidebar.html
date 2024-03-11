@@ -8,7 +8,7 @@
           <span class="logo-bottom">Collaboration Hub</span>
         </a>
       </div>
-      {% if current_user.is_authenticated %}
+      {# {% if current_user.is_authenticated %} #}
       <li class="usa-sidenav__item">
         {% if request.path.startswith('/reports') %}
         <a href="{{ url_for('submissions.reports') }}" class="usa-current"
@@ -18,7 +18,15 @@
         <a href="{{ url_for('submissions.reports') }}">Reports</a>
         {% endif %}
       </li>
+      <li class="usa-sidenav__item">
+        {% if request.path.startswith('/about') %}
+        <a href="{{ url_for('about') }}" class="usa-current">About</a>
+        {% else %}
+        <a href="{{ url_for('about') }}">About</a>
+        {% endif %}
+      </li>
     </div>
+    {#
     <div>
       <li class="usa-sidenav__item">
         <a href="{{ url_for('auth.logout_provider', provider='cloudgov') }}"
@@ -26,7 +34,7 @@
         >
       </li>
     </div>
-    {% endif %}
+    #} {# {% endif %} #}
   </ul>
 </nav>
 {% endblock %}

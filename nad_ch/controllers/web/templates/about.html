@@ -1,0 +1,66 @@
+{% extends "_layouts/base.html" %} {% from "components/card.html" import card %}
+{% block title %}About{% endblock %} {% block content %}
+<style>
+  .about-lead {
+    color: var(--Base-ink, #1b1b1b);
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 162%; /* 35.64px */
+  }
+  .about-body {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+  }
+</style>
+<header class="usa-header usa-header--basic">
+  <div class="usa-nav-container">
+    <div class="usa-navbar">
+      <div class="usa-logo">
+        <em class="usa-logo__text">About</em>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="grid-col-8">
+  <p class="about-lead">
+    The 10x team is piloting the National Address Database Collaboration Hub
+    (NAD-CH) with the Department of Transportation (DOT) and the U.S. Virgin
+    Island's Geospatial Information Services Division.
+  </p>
+  <p class="about-body">
+    This product will provide a platform for State, Local, Tribal, and
+    Territorial (SLTT) and federal data administrators to connect, collaborate,
+    and share data in an efficient, streamlined manner—enabling a more complete
+    and authoritative public domain address list to aid federal agencies with
+    emergency and disaster response, location data sharing, and reduction of
+    duplicative efforts—all while saving tax-payer dollars.
+  </p>
+
+  {% call card("Help Shape the NAD-CH") %}
+  <p>
+    If you manage State, Local, Tribal, or Territorial address point data, sign
+    up to participate in research with the 10x team. We'll use your feedback to
+    guide the future of this platform.
+  </p>
+
+  <p>
+    Your inputs will make it possible for us to continue our mission of enabling
+    every household within the U.S. Territories to be reached efficiently and
+    effectively for purposes of communication, benefits administration, and
+    disaster relief through address point data.
+  </p>
+
+  <p>
+    <a
+      href="{{ url_for('auth.oauth2_authorize', provider='cloudgov') }}"
+      class="usa-button"
+      >Sign Up
+    </a>
+  </p>
+
+  {% endcall %}
+</div>
+{% endblock %}
