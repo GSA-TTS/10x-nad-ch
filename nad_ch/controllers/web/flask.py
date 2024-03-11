@@ -26,6 +26,18 @@ def create_flask_application(ctx: ApplicationContext):
     def about():
         return render_template("about.html")
 
+    @app.route("/data-checklist")
+    def data_checklist():
+        data_checklist = [
+            {"field_name": "AddNum_Pre", "alias": "Address number prefix",
+             "description": "The prefix of the address number", "type": "String",
+             "length": 15, "required": "*"},
+            {"field_name": "Add_Number", "alias": "Address number",
+             "description": "The address number", "type": "Integer",
+             "length": "-", "required": "*"},
+        ]
+        return render_template("data-checklist.html", data_checklist=data_checklist)
+
     @app.errorhandler(404)
     def page_not_found(e):
         return render_template("404.html"), 404

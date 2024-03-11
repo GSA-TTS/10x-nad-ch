@@ -10,20 +10,26 @@
       </div>
       {# {% if current_user.is_authenticated %} #}
       <li class="usa-sidenav__item">
-        {% if request.path.startswith('/reports') %}
-        <a href="{{ url_for('submissions.reports') }}" class="usa-current"
-          >Reports</a
+        <a
+          href="{{ url_for('data_checklist') }}"
+          class="{{ 'usa-current' if request.path.startswith('/data-checklist') else '' }}"
+          >Data Checklist</a
         >
-        {% else %}
-        <a href="{{ url_for('submissions.reports') }}">Reports</a>
-        {% endif %}
       </li>
       <li class="usa-sidenav__item">
-        {% if request.path.startswith('/about') %}
-        <a href="{{ url_for('about') }}" class="usa-current">About</a>
-        {% else %}
-        <a href="{{ url_for('about') }}">About</a>
-        {% endif %}
+        <a
+          href="{{ url_for('submissions.reports') }}"
+          class="{{ 'usa-current' if request.path.startswith('/reports') else '' }}"
+          >Reports</a
+        >
+      </li>
+
+      <li class="usa-sidenav__item">
+        <a
+          href="{{ url_for('about') }}"
+          class="{{ 'usa-current' if request.path.startswith('/about') else '' }}"
+          >About</a
+        >
       </li>
     </div>
     {#
