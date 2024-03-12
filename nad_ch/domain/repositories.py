@@ -41,6 +41,9 @@ class UserRepository(Protocol):
     def get_by_id(self, id: int) -> Optional[User]:
         ...
 
+    def get_all(self) -> Iterable[User]:
+        ...
+
 
 class ColumnMapRepository(Protocol):
     def add(self, column_map: ColumnMap) -> ColumnMap:

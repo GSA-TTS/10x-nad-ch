@@ -32,7 +32,7 @@ def main():
     )
     ctx.users.add(new_user)
 
-    new_column_map = ColumnMap(name="New Jersey Mapping v1", producer=saved_producer)
+    # new_column_map = ColumnMap(name="New Jersey Mapping v1", producer=saved_producer)
     # TODO save column map once ApplicationContext can provide a repository
     # saved_column_map = ctx.column_maps.add(new_column_map)
 

@@ -122,5 +122,5 @@ def test_finalize_overview_details():
     overview, features = initialize_overview_details(gdf, column_maps)
     features["St_Name"].null_count = 2
     features["Floor"].invalid_domain_count = 7
-    overview = finalize_overview_details(features, overview)
+    overview = finalize_overview_details(overview, features)
     assert overview.features_flagged == 2
