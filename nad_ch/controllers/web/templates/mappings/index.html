@@ -41,12 +41,7 @@ page_header("Mappings") }}
 >
   <div class="usa-modal__content margin-x-0">
     <div class="usa-modal__main width-full">
-      <form
-        x-data="mappingForm"
-        @submit.prevent="createMapping"
-        class=""
-        novalidate
-      >
+      <form x-data="MappingForm" @submit.prevent="createMapping" novalidate>
         <h2 class="usa-modal__heading" id="mapping-modal-heading">
           New mapping
         </h2>
@@ -60,9 +55,9 @@ page_header("Mappings") }}
         />
         <br />
         <span
-          x-show="hasError"
           class="usa-error-message"
           role="alert"
+          x-show="hasError"
           x-text="errorMessage"
         ></span>
         <div class="usa-modal__footer">
@@ -83,52 +78,6 @@ page_header("Mappings") }}
           </ul>
         </div>
       </form>
-      <script>
-        document.addEventListener("alpine:init", () => {
-          Alpine.data("mappingForm", () => ({
-            hasError: false,
-            errorMessage: "",
-            title: "",
-            init() {
-              const self = this;
-              document.addEventListener("click", (event) => {
-                if (event.target.classList.contains("usa-modal-overlay")) {
-                  self.closeModal();
-                }
-              });
-            },
-            createMapping(e) {
-              if (!this.title) {
-                this.setError("Mapping name is required");
-              } else if (this.title.length > 25) {
-                this.setError("Enter less than 25 letters or numbers");
-              } else if (/[^a-zA-Z0-9]/.test(this.title)) {
-                this.setError("Name can only contain letters and numbers");
-              } else {
-                const baseUrl = Alpine.store("config").BASE_URL;
-                const url = `${baseUrl}/mappings/create?title=${this.title}`;
-                this.closeModal();
-                window.location.href = url;
-              }
-            },
-            setError(message) {
-              this.hasError = true;
-              this.errorMessage = message;
-            },
-            clearError() {
-              this.hasError = false;
-              this.errorMessage = "";
-            },
-            closeModal() {
-              this.title = "";
-              this.clearError();
-              const button = document.getElementById("cancel-button");
-              button.setAttribute("data-close-modal", "");
-              button.click();
-            },
-          }));
-        });
-      </script>
     </div>
   </div>
 </div>
