@@ -1,5 +1,5 @@
-{% extends "_layouts/base.html" %} {% from "components/card.html" import card %}
-{% block title %}About{% endblock %} {% block content %}
+{% extends "_layouts/base.html" %} {% block title %}About{% endblock %} {% block
+content %}
 <style>
   .about-lead {
     color: var(--Base-ink, #1b1b1b);
@@ -15,15 +15,10 @@
     line-height: 150%;
   }
 </style>
-<header class="usa-header usa-header--basic">
-  <div class="usa-nav-container">
-    <div class="usa-navbar">
-      <div class="usa-logo">
-        <em class="usa-logo__text">About</em>
-      </div>
-    </div>
-  </div>
-</header>
+
+{% from "components/page-header.html" import page_header %} {{
+page_header("About") }}
+
 <div class="grid-col-8">
   <p class="about-lead">
     The 10x team is piloting the National Address Database Collaboration Hub
@@ -39,7 +34,8 @@
     duplicative efforts—all while saving tax-payer dollars.
   </p>
 
-  {% call card("Help Shape the NAD-CH") %}
+  {% from "components/card.html" import card %} {% call card("Help Shape the
+  NAD-CH") %}
   <p>
     If you manage State, Local, Tribal, or Territorial address point data, sign
     up to participate in research with the 10x team. We'll use your feedback to

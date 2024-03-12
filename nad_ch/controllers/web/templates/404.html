@@ -1,14 +1,6 @@
 {% extends "_layouts/base.html" %} {% block title %}Home Page{% endblock %} {%
-block content %}
-<header class="usa-header usa-header--basic">
-  <div class="usa-nav-container">
-    <div class="usa-navbar">
-      <div class="usa-logo">
-        <em class="usa-logo__text">NAD Collaboration Hub</em>
-      </div>
-    </div>
-  </div>
-</header>
+block content %} {% from "components/page-header.html" import page_header %} {{
+page_header("NAD Collaboration Hub") }}
 <h3>404 Not Found</h3>
 <p>The server cannot find the requested resource.</p>
 {% endblock %}

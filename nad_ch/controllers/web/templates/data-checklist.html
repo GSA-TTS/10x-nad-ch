@@ -9,14 +9,12 @@
         </div>
         <nav aria-label="Primary navigation" class="usa-nav usa-nav-section">
           <div class="usa-nav__inner">
-            <ul class="usa-nav__primary usa-accordion">
+            <ul class="usa-nav__primary">
               <li class="usa-nav__primary-item">
                 <button
                   id="summary-button"
                   type="button"
-                  class="usa-accordion__button usa-nav__link"
-                  aria-expanded="false"
-                  aria-controls="extended-mega-nav-section-one"
+                  class="usa-nav__link"
                   :class="showAddressPoints ? 'usa-current' : ''"
                   @click="showAddressPoints = true; showDomains = false"
                 >
@@ -25,11 +23,9 @@
               </li>
               <li class="usa-nav__primary-item">
                 <button
-                  id="completeness-button"
+                  id="domains-button"
                   type="button"
-                  class="usa-accordion__button usa-nav__link"
-                  aria-expanded="false"
-                  aria-controls="extended-mega-nav-section-two"
+                  class="usa-nav__link"
                   :class="showDomains ? 'usa-current' : ''"
                   @click="showAddressPoints = false; showDomains = true"
                 >
@@ -81,24 +77,21 @@
   </div>
 
   <div id="domains-section" x-show="showDomains" class="padding-top-2">
-    <div x-data="usaAccordion()" class="usa-accordion">
+    <div
+      class="usa-accordion usa-accordion--multiselectable"
+      data-allow-multiple
+    >
       <h4 class="usa-accordion__heading">
         <button
-          @click="toggle('a1')"
           type="button"
           class="usa-accordion__button"
-          :aria-expanded="isOpen('a1')"
-          aria-controls="a1"
+          aria-expanded="false"
+          aria-controls="address-number"
         >
           AddressNumber
         </button>
       </h4>
-      <div
-        x-show="isOpen('a1')"
-        x-transition
-        id="a1"
-        class="usa-accordion__content usa-prose"
-      >
+      <div id="address-number" class="usa-accordion__content usa-prose">
         <p><span class="text-bold">DomainName:</span> AddressNumber</p>
         <p>
           <span class="text-bold">Description:</span> The numeric identifier of
@@ -123,21 +116,15 @@
       </div>
       <h4 class="usa-accordion__heading">
         <button
-          @click="toggle('a2')"
           type="button"
           class="usa-accordion__button"
-          :aria-expanded="isOpen('a2')"
-          aria-controls="a2"
+          aria-expanded="false"
+          aria-controls="delivery-type"
         >
           Delivery_Type
         </button>
       </h4>
-      <div
-        x-show="isOpen('a2')"
-        x-transition
-        id="a2"
-        class="usa-accordion__content usa-prose"
-      >
+      <div id="delivery-type" class="usa-accordion__content usa-prose">
         <p><span class="text-bold">DomainName:</span> Delivery_Type</p>
         <p>
           <span class="text-bold">Description:</span> Flag to separate address
@@ -172,25 +159,4 @@
     </div>
   </div>
 </div>
-<script>
-  document.addEventListener("alpine:init", () => {
-    Alpine.data("usaAccordion", () => ({
-      openSections: [],
-
-      toggle(section) {
-        const index = this.openSections.indexOf(section);
-        if (index > -1) {
-          this.openSections.splice(index, 1);
-        } else {
-          this.openSections.push(section);
-        }
-      },
-
-      isOpen(section) {
-        return this.openSections.includes(section);
-      },
-    }));
-  });
-</script>
-
 {% endblock %}

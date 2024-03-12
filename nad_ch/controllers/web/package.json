@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "@types/alpinejs": "^3.13.6",
+    "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^6.10.0",
     "mini-css-extract-plugin": "^2.8.0",
     "node-sass": "^9.0.0",

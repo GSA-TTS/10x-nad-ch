@@ -1,13 +1,11 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "development",
   entry: {
-    main: [
-      "./src/index.ts", // Path to your main JavaScript or TypeScript file
-      "./sass/index.scss", // Path to your SASS entry file
-    ],
+    main: ["./src/index.ts", "./sass/index.scss"],
   },
   module: {
     rules: [
@@ -53,6 +51,15 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: "style.css",
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, "images"),
+          to: path.resolve(__dirname, "dist"),
+          noErrorOnMissing: true,
+        },
+      ],
     }),
   ],
   resolve: {

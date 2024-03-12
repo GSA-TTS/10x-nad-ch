@@ -1,0 +1,135 @@
+{% extends "_layouts/base.html" %} {% block title %}Mappings{% endblock %} {%
+from "components/page-header.html" import page_header %} {% block content %} {{
+page_header("Mappings") }}
+
+<div class="usa-card padding-top-2 grid-col-4">
+  <div class="usa-card__container">
+    <div class="usa-card__header">
+      <h2 class="usa-card__heading">Create Your First Mapping</h2>
+    </div>
+    <div class="usa-card__media">
+      <div class="usa-card__img">
+        <img
+          src="{{ url_for('static', filename='mapping.png') }}"
+          alt="A placeholder mapping image"
+        />
+      </div>
+    </div>
+    <div class="usa-card__body">
+      <p>
+        Tell NAD which of your fields maps to NAD's so you can crosswalk your
+        address data seamlessly.
+      </p>
+    </div>
+    <div class="usa-card__footer">
+      <a
+        href="#mapping-modal"
+        class="usa-button"
+        aria-controls="mapping-modal"
+        data-open-modal
+        >Create mapping</a
+      >
+    </div>
+  </div>
+</div>
+
+<div
+  class="usa-modal"
+  id="mapping-modal"
+  aria-labelledby="mapping-modal-heading"
+  aria-describedby="mapping-modal-description"
+>
+  <div class="usa-modal__content margin-x-0">
+    <div class="usa-modal__main width-full">
+      <form
+        x-data="mappingForm"
+        @submit.prevent="createMapping"
+        class=""
+        novalidate
+      >
+        <h2 class="usa-modal__heading" id="mapping-modal-heading">
+          New mapping
+        </h2>
+        <label for="mapping-name">Mapping name</label>
+        <br />
+        <input
+          type="text"
+          id="mapping-name"
+          name="mapping-name"
+          x-model="title"
+        />
+        <br />
+        <span
+          x-show="hasError"
+          class="usa-error-message"
+          role="alert"
+          x-text="errorMessage"
+        ></span>
+        <div class="usa-modal__footer">
+          <ul class="usa-button-group">
+            <li class="usa-button-group__item">
+              <button type="submit" class="usa-button">Create</button>
+            </li>
+            <li class="usa-button-group__item">
+              <button
+                id="cancel-button"
+                type="button"
+                class="usa-button usa-button--unstyled padding-105 text-center"
+                @click="closeModal"
+              >
+                Cancel
+              </button>
+            </li>
+          </ul>
+        </div>
+      </form>
+      <script>
+        document.addEventListener("alpine:init", () => {
+          Alpine.data("mappingForm", () => ({
+            hasError: false,
+            errorMessage: "",
+            title: "",
+            init() {
+              const self = this;
+              document.addEventListener("click", (event) => {
+                if (event.target.classList.contains("usa-modal-overlay")) {
+                  self.closeModal();
+                }
+              });
+            },
+            createMapping(e) {
+              if (!this.title) {
+                this.setError("Mapping name is required");
+              } else if (this.title.length > 25) {
+                this.setError("Enter less than 25 letters or numbers");
+              } else if (/[^a-zA-Z0-9]/.test(this.title)) {
+                this.setError("Name can only contain letters and numbers");
+              } else {
+                const baseUrl = Alpine.store("config").BASE_URL;
+                const url = `${baseUrl}/mappings/create?title=${this.title}`;
+                this.closeModal();
+                window.location.href = url;
+              }
+            },
+            setError(message) {
+              this.hasError = true;
+              this.errorMessage = message;
+            },
+            clearError() {
+              this.hasError = false;
+              this.errorMessage = "";
+            },
+            closeModal() {
+              this.title = "";
+              this.clearError();
+              const button = document.getElementById("cancel-button");
+              button.setAttribute("data-close-modal", "");
+              button.click();
+            },
+          }));
+        });
+      </script>
+    </div>
+  </div>
+</div>
+{% endblock %}
