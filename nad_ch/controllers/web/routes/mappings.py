@@ -1,4 +1,3 @@
-import os
 from flask import (
     Blueprint,
     current_app,
@@ -10,9 +9,8 @@ from flask import (
     flash,
     url_for,
 )
-
-# from flask_login import login_required
-
+from flask_login import login_required, current_user
+from nad_ch.application.use_cases.column_maps import add_column_map
 
 mappings_bp = Blueprint("mappings", __name__)
 
@@ -23,13 +21,13 @@ def before_request():
 
 
 @mappings_bp.route("/mappings")
-# @login_required
+@login_required
 def index():
     return render_template("mappings/index.html")
 
 
 @mappings_bp.route("/mappings/create")
-# @login_required
+@login_required
 def create():
     if "title" not in request.args:
         abort(404)
@@ -39,6 +37,7 @@ def create():
 
 
 @mappings_bp.route("/mappings", methods=["POST"])
+@login_required
 def store():
     if "mapping-csv-input" not in request.files:
         flash("No file included")
@@ -48,11 +47,6 @@ def store():
         flash("No selected file")
         return redirect(request.url)
     if file:
-        # Save the mapping
-
-        # TODO implement use case and infrastructure
-        # title = request.form.get("title")
-        # view_model = use_case(g.ctx, title, file)
-
-        # Show the saved mapping
-        return redirect(url_for("mappings.show"))
+        title = request.form.get("title")
+        view_model = add_column_map(g.ctx, current_user.id, title, file)
+        return redirect(url_for("mappings.show", id=view_model.id))

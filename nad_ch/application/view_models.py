@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from datetime import datetime
 import json
 import numpy as np
-from typing import Union, List, Tuple, TypeVar, Protocol
-from nad_ch.domain.entities import Entity, DataProducer, DataSubmission
+from typing import Union, List, Tuple, Protocol
+from nad_ch.domain.entities import Entity, ColumnMap, DataProducer, DataSubmission
 
 
 class ViewModel(Protocol):
@@ -18,6 +18,7 @@ def get_view_model(
     get a static view model object that it can return to its caller.
     """
     entity_to_vm_function_map = {
+        ColumnMap: create_column_map_view_model,
         DataProducer: create_data_producer_vm,
         DataSubmission: create_data_submission_vm,
     }
@@ -34,6 +35,23 @@ def get_view_model(
         return mapping_function(entity)  # Call the mapping function for the entity
     else:
         raise ValueError(f"No mapping function defined for entity type: {entity_type}")
+
+
+@dataclass
+class ColumnMapViewModel(ViewModel):
+    id: int
+    date_created: str
+    name: str
+    producer_name: str
+
+
+def create_column_map_view_model(column_map: ColumnMap) -> ColumnMapViewModel:
+    return ColumnMapViewModel(
+        id=column_map.id,
+        date_created=present_date(column_map.created_at),
+        name=column_map.name,
+        producer_name=column_map.producer.name,
+    )
 
 
 @dataclass

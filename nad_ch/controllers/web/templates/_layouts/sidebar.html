@@ -1,6 +1,6 @@
 {% block sidebar %}
 <nav aria-label="Side navigation,">
-  <ul class="usa-sidenav height-viewport">
+  <ul class="usa-sidenav height-viewport display-flex flex-column flex-justify">
     <div>
       <div class="usa-sidenav__logo">
         <a href="{{ url_for('index') }}">
@@ -8,7 +8,7 @@
           <span class="logo-bottom">Collaboration Hub</span>
         </a>
       </div>
-      {# {% if current_user.is_authenticated %} #}
+      {% if current_user.is_authenticated %}
       <li class="usa-sidenav__item">
         <a
           href="{{ url_for('data_checklist') }}"
@@ -30,7 +30,10 @@
           >Reports</a
         >
       </li>
+      {% endif %}
+    </div>
 
+    <div class="padding-bottom-4">
       <li class="usa-sidenav__item">
         <a
           href="{{ url_for('about') }}"
@@ -38,16 +41,14 @@
           >About</a
         >
       </li>
-    </div>
-    {#
-    <div>
+      {% if current_user.is_authenticated %}
       <li class="usa-sidenav__item">
         <a href="{{ url_for('auth.logout_provider', provider='cloudgov') }}"
           >Logout</a
         >
       </li>
+      {% endif %}
     </div>
-    #} {# {% endif %} #}
   </ul>
 </nav>
 {% endblock %}
