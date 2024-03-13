@@ -41,7 +41,7 @@ page_header("Mappings") }}
 >
   <div class="usa-modal__content margin-x-0">
     <div class="usa-modal__main width-full">
-      <form x-data="MappingForm" @submit.prevent="createMapping" novalidate>
+      <form x-data="MappingForm()" @submit.prevent="createMapping" novalidate>
         <h2 class="usa-modal__heading" id="mapping-modal-heading">
           New mapping
         </h2>
