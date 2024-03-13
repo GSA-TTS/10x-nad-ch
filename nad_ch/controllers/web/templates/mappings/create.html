@@ -1,3 +1,59 @@
 {% extends "_layouts/base.html" %} {% block title %}Mappings{% endblock %} {%
 from "components/page-header.html" import page_header %} {% block content %} {{
-page_header("Create Mapping " ~ title) }} {% endblock %}
+page_header("Create " ~ title) }}
+
+<ol class="usa-process-list">
+  <li class="usa-process-list__item">
+    <h4 class="usa-process-list__heading">Fill in your fields</h4>
+    <p class="margin-top-05">
+      Start from a template to indicate which of your area's fields maps to NAD
+      fields. Information you need from the data checklist is in the template to
+      help you map fields accurately.
+    </p>
+    <a href="#" class="usa-button usa-button--outline">Download template</a>
+  </li>
+  <li class="usa-process-list__item">
+    <h4 class="usa-process-list__heading">Upload mapping</h4>
+    <p>Next, upload your completed CSV to proceed with your mapping.</p>
+    <form action="/mappings" method="post" enctype="multipart/form-data">
+      <div class="usa-form-group">
+        <label class="usa-label" for="mapping-csv-input"
+          >Input accepts a single file</label
+        >
+        <input
+          id="mapping-csv-input"
+          class="usa-file-input"
+          type="file"
+          name="mapping-csv-input"
+          required
+        />
+
+        <input type="hidden" name="title" value="{{ title }}" />
+      </div>
+
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="flash-messages">
+        {% for message in messages %}
+        <div class="alert alert-warning" role="alert">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+
+      <div class="usa-form-group">
+        <ul class="usa-button-group">
+          <li class="usa-button-group__item">
+            <a
+              href="{{ url_for('mappings.index') }}"
+              class="usa-button usa-button--outline"
+              >Cancel</a
+            >
+          </li>
+          <li class="usa-button-group__item">
+            <button type="submit" class="usa-button">Create</button>
+          </li>
+        </ul>
+      </div>
+    </form>
+  </li>
+</ol>
+{% endblock %}
