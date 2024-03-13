@@ -2,7 +2,13 @@ import { BASE_URL } from '../config';
 import { getMappingTitleValidationError } from '../formValidation';
 import { navigateTo } from '../utilities';
 
-export default function MappingForm() {
+export default function MappingForm(): {
+  hasError: boolean;
+  errorMessage: string;
+  title: string;
+  createMapping: () => void;
+  closeModal: () => void;
+} {
   return {
     hasError: false,
     errorMessage: '',

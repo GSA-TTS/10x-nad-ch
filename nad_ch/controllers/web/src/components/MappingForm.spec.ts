@@ -11,7 +11,7 @@ jest.mock('../utilities', () => ({
 }));
 
 describe('MappingForm', () => {
-  let mappingForm: any; // Use any for now, you may want to define a proper type for your component
+  let mappingForm: any;
 
   beforeEach(() => {
     mappingForm = MappingForm();
