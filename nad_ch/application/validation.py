@@ -23,14 +23,14 @@ def get_features_flagged(features: Dict[str, DataSubmissionReportFeature]) -> in
 
 
 def initialize_overview_details(
-    gdf: GeoDataFrame, column_maps: Dict[str, str]
+    gdf: GeoDataFrame, column_map: Dict[str, str]
 ) -> Tuple[DataSubmissionReportOverview, Dict[str, DataSubmissionReportFeature]]:
     report_overview = DataSubmissionReportOverview(feature_count=get_feature_count(gdf))
     report_features = {
         nad_name: DataSubmissionReportFeature(
             provided_feature_name=provided_name, nad_feature_name=nad_name
         )
-        for provided_name, nad_name in column_maps.items()
+        for provided_name, nad_name in column_map.items()
     }
     return report_overview, report_features
 
@@ -60,8 +60,8 @@ def update_overview_details(
 
 
 def finalize_overview_details(
-    features: Dict[str, DataSubmissionReportFeature],
     overview: DataSubmissionReportOverview,
+    features: Dict[str, DataSubmissionReportFeature],
 ) -> DataSubmissionReportOverview:
     overview.features_flagged += get_features_flagged(features)
     # TODO: Add logic for etl_update_required & data_update_required

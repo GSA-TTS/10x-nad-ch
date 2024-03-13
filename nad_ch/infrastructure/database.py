@@ -111,7 +111,7 @@ class DataSubmissionModel(CommonBase):
 
     def to_entity(self):
         producer = self.data_producer.to_entity()
-        column_map = self.column_map.to_entity(producer)
+        column_map = self.column_map.to_entity()
         entity = DataSubmission(
             id=self.id,
             filename=self.filename,
@@ -190,13 +190,14 @@ class ColumnMapModel(CommonBase):
         )
         return model
 
-    def to_entity(self, producer: DataProducer):
+    def to_entity(self):
+        producer_entity = self.data_producer.to_entity()
         entity = ColumnMap(
             id=self.id,
             name=self.name,
             version_id=self.version_id,
             mapping=self.mapping,
-            producer=producer,
+            producer=producer_entity,
         )
 
         if self.created_at is not None:
@@ -290,32 +291,32 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
 
     def get_by_filename(self, filename: str) -> Optional[DataSubmission]:
         with session_scope(self.session_factory) as session:
-            result = (
-                session.query(DataSubmissionModel, DataProducerModel)
-                .join(
-                    DataProducerModel,
-                    DataProducerModel.id == DataSubmissionModel.data_producer_id,
-                )
+            submission_model = (
+                session.query(DataSubmissionModel)
                 .filter(DataSubmissionModel.filename == filename)
                 .first()
             )
 
-            if result:
-                submission_model, producer_model = result
-                return submission_model.to_entity(producer_model.to_entity())
+            if submission_model:
+                return submission_model.to_entity()
             else:
                 return None
 
     def update_report(self, id: int, report) -> None:
         with session_scope(self.session_factory) as session:
-            model_instance = (
+            submission_model = (
                 session.query(DataSubmissionModel)
                 .filter(DataSubmissionModel.id == id)
                 .first()
             )
 
-            if model_instance:
-                model_instance.report = report
+            if submission_model:
+                submission_model.report = report
+                session.commit()
+                session.refresh(submission_model)
+                return submission_model.to_entity()
+            else:
+                return None
 
 
 class SqlAlchemyUserRepository(UserRepository):
@@ -350,6 +351,12 @@ class SqlAlchemyUserRepository(UserRepository):
             else:
                 return None
 
+    def get_all(self) -> List[User]:
+        with session_scope(self.session_factory) as session:
+            user_models = session.query(UserModel).all()
+            user_entities = [user.to_entity() for user in user_models]
+            return user_entities
+
 
 class SqlAlchemyColumnMapRepository(ColumnMapRepository):
     def __init__(self, session_factory):
@@ -366,8 +373,7 @@ class SqlAlchemyColumnMapRepository(ColumnMapRepository):
             session.add(column_map_model)
             session.commit()
             session.refresh(column_map_model)
-            producer_model_entity = producer_model.to_entity()
-            return column_map_model.to_entity(producer_model_entity)
+            return column_map_model.to_entity()
 
     def get_all(self) -> List[ColumnMap]:
         with session_scope(self.session_factory) as session:
@@ -387,10 +393,7 @@ class SqlAlchemyColumnMapRepository(ColumnMapRepository):
                 .first()
             )
             if submission_model:
-                producer_entity = submission_model.producer.to_entity()
-                column_map_entity = submission_model.column_map.to_entity(
-                    producer_entity
-                )
+                column_map_entity = submission_model.column_map.to_entity()
                 return column_map_entity
             else:
                 return None
@@ -406,8 +409,7 @@ class SqlAlchemyColumnMapRepository(ColumnMapRepository):
                 )
                 .first()
             )
-            producer_entity = column_map_model.data_producer.to_entity()
             if column_map_model:
-                return column_map_model.to_entity(producer_entity)
+                return column_map_model.to_entity()
             else:
                 return None
