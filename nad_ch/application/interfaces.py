@@ -1,9 +1,10 @@
-from typing import Optional, Protocol
+from typing import Optional, Protocol, Dict
 from nad_ch.application.dtos import DownloadResult
 from nad_ch.domain.repositories import (
     DataProducerRepository,
     DataSubmissionRepository,
     UserRepository,
+    ColumnMapRepository,
 )
 
 
@@ -38,7 +39,7 @@ class TaskQueue(Protocol):
         submissions: DataSubmissionRepository,
         submission_id: int,
         path: str,
-        config_name: str,
+        column_map: Dict[str, str],
     ):
         ...
 
@@ -77,6 +78,10 @@ class ApplicationContext:
     @property
     def users(self) -> UserRepository:
         return self._users
+
+    @property
+    def column_maps(self) -> ColumnMapRepository:
+        return self._column_maps
 
     @property
     def logger(self) -> Logger:

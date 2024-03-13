@@ -1,11 +1,12 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Iterable
 from nad_ch.application.dtos import DownloadResult
-from nad_ch.domain.entities import DataProducer, DataSubmission, User
+from nad_ch.domain.entities import DataProducer, DataSubmission, User, ColumnMap
 from nad_ch.domain.repositories import (
     DataProducerRepository,
     DataSubmissionRepository,
     UserRepository,
+    ColumnMapRepository,
 )
 import os
 
@@ -71,6 +72,38 @@ class FakeUserRepository(UserRepository):
 
     def get_by_id(self, id: int) -> Optional[User]:
         return next((u for u in self._users if u.id == id), None)
+
+
+class FakeColumnMapRepository(ColumnMapRepository):
+    def __init__(self) -> None:
+        self._column_maps = set()
+        self._next_id = 1
+
+    def add(self, column_map: ColumnMap) -> ColumnMap:
+        column_map.id = self._next_id
+        column_map.set_created_at(datetime.now())
+        self._column_maps.add(column_map)
+        self._next_id += 1
+        return column_map
+
+    def get_all(self) -> Iterable[ColumnMap]:
+        return sorted(list(self._column_maps), key=lambda column_map: column_map.id)
+
+    def get_by_data_submission(
+        self, data_submission: DataSubmission
+    ) -> Optional[ColumnMap]:
+        # Not needed for now but may need to implement later
+        pass
+
+    def get_by_name_and_version(self, name: str, version: int) -> Optional[ColumnMap]:
+        return next(
+            (
+                cm
+                for cm in self._column_maps
+                if cm.name == name and cm.version_id == version
+            ),
+            None,
+        )
 
 
 class FakeStorage:

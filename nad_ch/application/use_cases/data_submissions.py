@@ -70,7 +70,9 @@ def list_data_submissions_by_producer(
     return get_view_model(submissions)
 
 
-def validate_data_submission(ctx: ApplicationContext, filename: str, config_name: str):
+def validate_data_submission(
+    ctx: ApplicationContext, filename: str, column_map_name: str
+):
     submission = ctx.submissions.get_by_filename(filename)
     if not submission:
         ctx.logger.error("Data submission with that filename does not exist")
@@ -81,8 +83,14 @@ def validate_data_submission(ctx: ApplicationContext, filename: str, config_name
         ctx.logger.error("Data extration error")
         return
 
+    # Using version 1 for column maps for now, may add feature for user to select
+    # version later
+    column_map = ctx.column_maps.get_by_name_and_version(column_map_name, 1)
     report = ctx.task_queue.run_load_and_validate(
-        ctx.submissions, submission.id, download_result.extracted_dir, config_name
+        ctx.submissions,
+        submission.id,
+        download_result.extracted_dir,
+        column_map.mapping,
     )
 
     ctx.logger.info(f"Total number of features: {report.overview.feature_count}")
