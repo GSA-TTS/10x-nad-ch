@@ -7,7 +7,7 @@ describe('getMappingTitleValidationError', () => {
   });
 
   test('returns error message if title is longer than 25 characters', () => {
-    const longTitle = 'a'.repeat(26); // Creates a string with 26 'a' characters
+    const longTitle = 'a'.repeat(26);
     const result = getMappingTitleValidationError(longTitle);
     expect(result).toBe('Enter less than 25 letters or numbers');
   });

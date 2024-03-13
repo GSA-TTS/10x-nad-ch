@@ -14,6 +14,18 @@ def before_request():
     g.ctx = current_app.extensions["ctx"]
 
 
+@submissions_bp.route("/data-submissions")
+@login_required
+def index():
+    pass
+
+
+@submissions_bp.route("/data-submissions/<submission_id>")
+@login_required
+def show(submission_id):
+    pass
+
+
 @submissions_bp.route("/reports")
 @login_required
 def reports():
