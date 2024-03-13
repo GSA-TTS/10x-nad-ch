@@ -48,5 +48,16 @@ def store():
         return redirect(request.url)
     if file:
         title = request.form.get("title")
-        view_model = add_column_map(g.ctx, current_user.id, title, file)
-        return redirect(url_for("mappings.show", id=view_model.id))
+        content = file.read()
+        mapping_string = content.decode('utf-8')
+
+        view_model = add_column_map(g.ctx, current_user.id, title,  mapping_string)
+
+        return redirect(url_for("mappings.show", mapping_id=view_model.id))
+
+
+@mappings_bp.route("/mappings/<mapping_id>")
+@login_required
+def show(mapping_id):
+    mapping = g.ctx.column_maps.get_by_id(mapping_id)
+    return render_template("mappings/show.html", mapping=mapping)

@@ -38,11 +38,14 @@ class ColumnMap(Entity):
         super().__init__(id)
         self.name = name
         self.producer = producer
-        self.version_id = version_id
         self.mapping = mapping
+        self.version_id = version_id
 
     def __repr__(self):
         return f"ColumnMap {self.id}, {self.name})"
+
+    def is_valid(self) -> bool:
+        return len(self.mapping) > 0
 
 
 class DataSubmission(Entity):

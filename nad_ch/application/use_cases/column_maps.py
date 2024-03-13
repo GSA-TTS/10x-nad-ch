@@ -1,9 +1,27 @@
+import json
 from nad_ch.application.interfaces import ApplicationContext
 from nad_ch.application.view_models import (
     get_view_model,
     ColumnMapViewModel,
 )
+from nad_ch.domain.entities import ColumnMap
 
 
-def add_column_map(ctx: ApplicationContext, user_id: int, title: str, file: str):
-    pass
+def add_column_map(ctx: ApplicationContext, user_id: int, name: str, mapping_string: str):
+    user = ctx.users.get_by_id(user_id)
+    if user is None:
+        raise ValueError("User not found")
+
+    producer = ctx.producers.get_by_name("New Jersey")
+    if producer is None:
+        raise ValueError("Producer not found")
+
+    column_map = ColumnMap(name, producer, mapping_string, 1)
+
+    if not column_map.is_valid():
+        raise ValueError("Invalid mapping")
+
+    saved_column_map = ctx.column_maps.add(column_map)
+    ctx.logger.info("Column Map added")
+
+    return get_view_model(saved_column_map)
