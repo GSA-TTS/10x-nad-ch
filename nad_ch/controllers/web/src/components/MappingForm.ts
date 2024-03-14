@@ -1,34 +1,34 @@
 import { BASE_URL } from '../config';
-import { getMappingTitleValidationError } from '../formValidation';
+import { getMappingNameValidationError } from '../formValidation';
 import { navigateTo } from '../utilities';
 
 export default function MappingForm(): {
   hasError: boolean;
   errorMessage: string;
-  title: string;
+  name: string;
   createMapping: () => void;
   closeModal: () => void;
 } {
   return {
     hasError: false,
     errorMessage: '',
-    title: '',
+    name: '',
     createMapping(): void {
       this.hasError = false;
 
-      const validationError = getMappingTitleValidationError(this.title);
+      const validationError = getMappingNameValidationError(this.name);
 
       if (validationError) {
         this.hasError = true;
         this.errorMessage = validationError;
       } else {
         navigateTo(
-          `${BASE_URL}/mappings/create?title=${encodeURIComponent(this.title)}`,
+          `${BASE_URL}/mappings/create?name=${encodeURIComponent(this.name)}`,
         );
       }
     },
     closeModal(): void {
-      this.title = '';
+      this.name = '';
       this.hasError = false;
       this.errorMessage = '';
       const button: HTMLElement | null =

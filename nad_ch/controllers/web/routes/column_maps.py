@@ -31,11 +31,11 @@ def index():
 @column_maps_bp.route("/column-maps/create")
 @login_required
 def create():
-    if "title" not in request.args:
+    if "name" not in request.args:
         abort(404)
 
-    title = request.args.get("title")
-    return render_template("column-maps/create.html", title=title)
+    name = request.args.get("name")
+    return render_template("column-maps/create.html", name=name)
 
 
 @column_maps_bp.route("/column-maps", methods=["POST"])
@@ -49,11 +49,11 @@ def store():
         flash("No selected file")
         return redirect(request.url)
     if file:
-        title = request.form.get("title")
+        name = request.form.get("name")
         content = file.read()
         mapping_string = content.decode('utf-8')
 
-        view_model = add_column_map(g.ctx, current_user.id, title,  mapping_string)
+        view_model = add_column_map(g.ctx, current_user.id, name,  mapping_string)
 
         return redirect(url_for("column_maps/show.html", column_map=view_model))
 

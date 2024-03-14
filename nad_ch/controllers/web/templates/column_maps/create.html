@@ -1,6 +1,6 @@
 {% extends "_layouts/base.html" %} {% block title %}Mappings{% endblock %} {%
 from "components/page-header.html" import page_header %} {% block content %} {{
-page_header("Create " ~ title) }}
+page_header("Create " ~ name) }}
 
 <ol class="usa-process-list">
   <li class="usa-process-list__item">
@@ -28,7 +28,7 @@ page_header("Create " ~ title) }}
           required
         />
 
-        <input type="hidden" name="title" value="{{ title }}" />
+        <input type="hidden" name="name" value="{{ name }}" />
       </div>
 
       {% with messages = get_flashed_messages() %} {% if messages %}
