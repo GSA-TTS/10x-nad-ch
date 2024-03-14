@@ -398,6 +398,16 @@ class SqlAlchemyColumnMapRepository(ColumnMapRepository):
             else:
                 return None
 
+    def get_by_id(self, id: int) -> Optional[ColumnMap]:
+        with session_scope(self.session_factory) as session:
+            column_map_model = (
+                session.query(ColumnMapModel).filter(ColumnMapModel.id == id).first()
+            )
+            if column_map_model:
+                return column_map_model.to_entity()
+            else:
+                return None
+
     def get_by_name_and_version(
         self, name: str, version: int = 1
     ) -> Optional[ColumnMap]:
