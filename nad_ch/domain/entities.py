@@ -45,7 +45,33 @@ class ColumnMap(Entity):
         return f"ColumnMap {self.id}, {self.name})"
 
     def is_valid(self) -> bool:
-        return len(self.mapping) > 0
+        required_fields = [
+            "State",
+            "County",
+            "Zip_Code",
+            "StreetName",
+            "Add_Number",
+            "Longitude",
+            "Latitude",
+            "NatGrid_Coord",
+            "GUID",
+            "Source",
+            "LastUpdate",
+        ]
+
+        # The mapping must not be empty
+        if not len(self.mapping):
+            return False
+
+        # The mapping must contain all required fields
+        if not all(field in self.mapping for field in required_fields):
+            return False
+
+        # The mapping must not contain any empty values
+        if not all(self.mapping.values()):
+            return False
+
+        return True
 
 
 class DataSubmission(Entity):
