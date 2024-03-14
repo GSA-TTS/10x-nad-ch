@@ -1,7 +1,6 @@
 {% extends "_layouts/base.html" %} {% block title %}Mappings{% endblock %} {%
 from "components/page-header.html" import page_header %} {% block content %} {{
-page_header("Mappings") }}
-
+page_header("Mappings") }} {% if not column_maps %}
 <div class="usa-card padding-top-2 grid-col-4">
   <div class="usa-card__container">
     <div class="usa-card__header">
@@ -83,4 +82,5 @@ page_header("Mappings") }}
     </div>
   </div>
 </div>
-{% endblock %}
+{% else %} {# Table displaying column maps goes here #} {% endif %} {% endblock
+%}

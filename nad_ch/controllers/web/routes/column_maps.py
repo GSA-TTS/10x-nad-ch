@@ -10,7 +10,7 @@ from flask import (
     url_for,
 )
 from flask_login import login_required, current_user
-from nad_ch.application.use_cases.column_maps import add_column_map, get_column_map
+from nad_ch.application.use_cases.column_maps import add_column_map, get_column_map, get_column_maps_by_provider
 
 
 column_maps_bp = Blueprint("column_maps", __name__)
@@ -24,7 +24,8 @@ def before_request():
 @column_maps_bp.route("/column-maps")
 @login_required
 def index():
-    return render_template("column_maps/index.html")
+    view_models = get_column_maps_by_provider(g.ctx, 1)
+    return render_template("column_maps/index.html", column_maps=view_models)
 
 
 @column_maps_bp.route("/column-maps/create")

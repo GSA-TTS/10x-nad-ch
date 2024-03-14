@@ -34,3 +34,10 @@ def get_column_map(ctx: ApplicationContext, id: int) -> ColumnMapViewModel:
         return None
 
     return get_view_model(column_map)
+
+
+def get_column_maps_by_provider(ctx: ApplicationContext, producer_id: int) -> list[ColumnMapViewModel]:
+    pass
+    # column_maps = ctx.column_maps.get_by_producer_id(producer_id)
+
+    # return [get_view_model(column_map) for column_map in column_maps]
