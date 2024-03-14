@@ -12,31 +12,32 @@ from flask import (
 from flask_login import login_required, current_user
 from nad_ch.application.use_cases.column_maps import add_column_map, get_column_map
 
-mappings_bp = Blueprint("mappings", __name__)
+
+column_maps_bp = Blueprint("column_maps", __name__)
 
 
-@mappings_bp.before_request
+@column_maps_bp.before_request
 def before_request():
     g.ctx = current_app.extensions["ctx"]
 
 
-@mappings_bp.route("/mappings")
+@column_maps_bp.route("/column-maps")
 @login_required
 def index():
-    return render_template("mappings/index.html")
+    return render_template("column_maps/index.html")
 
 
-@mappings_bp.route("/mappings/create")
+@column_maps_bp.route("/column-maps/create")
 @login_required
 def create():
     if "title" not in request.args:
         abort(404)
 
     title = request.args.get("title")
-    return render_template("mappings/create.html", title=title)
+    return render_template("column-maps/create.html", title=title)
 
 
-@mappings_bp.route("/mappings", methods=["POST"])
+@column_maps_bp.route("/column-maps", methods=["POST"])
 @login_required
 def store():
     if "mapping-csv-input" not in request.files:
@@ -53,12 +54,11 @@ def store():
 
         view_model = add_column_map(g.ctx, current_user.id, title,  mapping_string)
 
-        return redirect(url_for("mappings.show", mapping_id=view_model.id))
+        return redirect(url_for("column_maps/show.html", column_map=view_model))
 
 
-@mappings_bp.route("/mappings/<mapping_id>")
+@column_maps_bp.route("/column-maps/<mapping_id>")
 @login_required
 def show(mapping_id):
-    column_map = get_column_map(g.ctx, mapping_id)
-    print(column_map)
-    return render_template("mappings/show.html", mapping=column_map)
+    view_model = get_column_map(g.ctx, mapping_id)
+    return render_template("column_maps/show.html", column_map=view_model)
