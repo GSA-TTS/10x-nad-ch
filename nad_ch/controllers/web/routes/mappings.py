@@ -10,7 +10,7 @@ from flask import (
     url_for,
 )
 from flask_login import login_required, current_user
-from nad_ch.application.use_cases.column_maps import add_column_map
+from nad_ch.application.use_cases.column_maps import add_column_map, get_column_map
 
 mappings_bp = Blueprint("mappings", __name__)
 
@@ -59,5 +59,6 @@ def store():
 @mappings_bp.route("/mappings/<mapping_id>")
 @login_required
 def show(mapping_id):
-    mapping = g.ctx.column_maps.get_by_id(mapping_id)
-    return render_template("mappings/show.html", mapping=mapping)
+    column_map = get_column_map(g.ctx, mapping_id)
+    print(column_map)
+    return render_template("mappings/show.html", mapping=column_map)

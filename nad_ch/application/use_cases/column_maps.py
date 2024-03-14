@@ -25,3 +25,12 @@ def add_column_map(ctx: ApplicationContext, user_id: int, name: str, mapping_str
     ctx.logger.info("Column Map added")
 
     return get_view_model(saved_column_map)
+
+
+def get_column_map(ctx: ApplicationContext, id: int) -> ColumnMapViewModel:
+    column_map = ctx.column_maps.get_by_id(id)
+
+    if column_map is None:
+        return None
+
+    return get_view_model(column_map)
