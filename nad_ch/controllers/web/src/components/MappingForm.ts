@@ -2,13 +2,15 @@ import { BASE_URL } from '../config';
 import { getMappingNameValidationError } from '../formValidation';
 import { navigateTo } from '../utilities';
 
-export default function MappingForm(): {
+interface MappingFormComponent {
   hasError: boolean;
   errorMessage: string;
   name: string;
   createMapping: () => void;
   closeModal: () => void;
-} {
+}
+
+export default function MappingForm(): MappingFormComponent {
   return {
     hasError: false,
     errorMessage: '',
