@@ -1,4 +1,5 @@
 from datetime import datetime, timezone, UTC
+import json
 import os
 import re
 from typing import Optional, Dict
@@ -45,6 +46,8 @@ class ColumnMap(Entity):
         return f"ColumnMap {self.id}, {self.name})"
 
     def is_valid(self) -> bool:
+        mapping_dict = json.loads(self.mapping)
+
         required_fields = [
             "State",
             "County",
@@ -60,15 +63,15 @@ class ColumnMap(Entity):
         ]
 
         # The mapping must not be empty
-        if not len(self.mapping):
+        if not len(mapping_dict):
             return False
 
         # The mapping must contain all required fields
-        if not all(field in self.mapping for field in required_fields):
+        if not all(field in mapping_dict for field in required_fields):
             return False
 
         # The mapping must not contain any empty values
-        if not all(self.mapping.values()):
+        if not all(mapping_dict.values()):
             return False
 
         return True
