@@ -7,7 +7,9 @@ from nad_ch.application.view_models import (
 from nad_ch.domain.entities import ColumnMap
 
 
-def add_column_map(ctx: ApplicationContext, user_id: int, name: str, mapping_string: str):
+def add_column_map(
+    ctx: ApplicationContext, user_id: int, name: str, mapping_string: str
+):
     user = ctx.users.get_by_id(user_id)
     if user is None:
         raise ValueError("User not found")
@@ -31,10 +33,12 @@ def get_column_map(ctx: ApplicationContext, id: int) -> ColumnMapViewModel:
     column_map = ctx.column_maps.get_by_id(id)
 
     if column_map is None:
-        return None
+        raise ValueError("Column map not found")
 
     return get_view_model(column_map)
 
 
-def get_column_maps_by_provider(ctx: ApplicationContext, producer_id: int) -> List[ColumnMapViewModel]:
+def get_column_maps_by_producer(
+    ctx: ApplicationContext, producer_id: int
+) -> List[ColumnMapViewModel]:
     pass
