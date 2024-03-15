@@ -39,20 +39,21 @@ page_header("Mappings") }} {% if not column_maps %}
   aria-describedby="mapping-modal-description"
 >
   <div class="usa-modal__content margin-x-0">
-    <div class="usa-modal__main width-full">
+    <div class="usa-modal__main">
+      <h2 class="usa-modal__heading" id="mapping-modal-heading">New mapping</h2>
       <form x-data="MappingForm()" @submit.prevent="createMapping" novalidate>
         <div class="usa-form-group">
-          <h2 class="usa-modal__heading" id="mapping-modal-heading">
-            New mapping
-          </h2>
           <label for="mapping-name">Mapping name</label>
           <br />
           <input
             type="text"
             id="mapping-name"
             name="mapping-name"
+            class="width-full"
             x-model="name"
           />
+          <br />
+          <span class="text-base">No more than 25 letters or numbers</span>
           <br />
           <span
             class="usa-error-message"

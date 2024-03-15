@@ -25,7 +25,7 @@ export default function MappingForm(): MappingFormComponent {
         this.errorMessage = validationError;
       } else {
         navigateTo(
-          `${BASE_URL}/mappings/create?name=${encodeURIComponent(this.name)}`,
+          `${BASE_URL}/column-maps/create?name=${encodeURIComponent(this.name)}`,
         );
       }
     },

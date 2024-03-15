@@ -39,7 +39,7 @@ def create():
         abort(404)
 
     name = request.args.get("name")
-    return render_template("column-maps/create.html", name=name)
+    return render_template("column_maps/create.html", name=name)
 
 
 @column_maps_bp.route("/column-maps", methods=["POST"])

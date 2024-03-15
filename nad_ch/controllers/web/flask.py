@@ -36,7 +36,7 @@ def create_flask_application(ctx: ApplicationContext):
                 "description": "The prefix of the address number",
                 "type": "String",
                 "length": 15,
-                "required": "*",
+                "required": "",
             },
             {
                 "field_name": "Add_Number",
