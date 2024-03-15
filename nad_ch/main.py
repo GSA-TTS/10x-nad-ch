@@ -20,7 +20,6 @@ def serve_flask_app():
 
 
 if __name__ == "__main__":
-    print("RUNNING MAIN")
     parser = argparse.ArgumentParser(description="Call a specific function.")
     parser.add_argument("function", choices=["run_cli", "serve_flask_app"])
 

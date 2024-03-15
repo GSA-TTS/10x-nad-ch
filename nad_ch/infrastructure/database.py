@@ -1,4 +1,6 @@
 import contextlib
+import json
+from typing import List, Optional
 from flask_login import UserMixin
 from nad_ch.domain.entities import DataProducer, DataSubmission, User, ColumnMap
 from nad_ch.domain.repositories import (
@@ -7,7 +9,6 @@ from nad_ch.domain.repositories import (
     UserRepository,
     ColumnMapRepository,
 )
-from typing import List, Optional
 from sqlalchemy import (
     Column,
     Integer,
@@ -423,3 +424,13 @@ class SqlAlchemyColumnMapRepository(ColumnMapRepository):
                 return column_map_model.to_entity()
             else:
                 return None
+
+    def get_by_producer(self, producer: DataProducer) -> List[ColumnMap]:
+        with session_scope(self.session_factory) as session:
+            column_map_models = (
+                session.query(ColumnMapModel)
+                .filter(ColumnMapModel.data_producer_id == producer.id)
+                .all()
+            )
+            column_map_entities = [column_map.to_entity() for column_map in column_map_models]
+            return column_map_entities

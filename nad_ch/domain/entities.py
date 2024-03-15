@@ -46,32 +46,30 @@ class ColumnMap(Entity):
         return f"ColumnMap {self.id}, {self.name})"
 
     def is_valid(self) -> bool:
-        mapping_dict = json.loads(self.mapping)
-
         required_fields = [
-            "State",
-            "County",
-            "Zip_Code",
-            "StreetName",
             "Add_Number",
+            "AddNo_Full",
+            "St_Name",
+            "StNam_Full",
+            "County",
+            "Inc_Muni",
+            "State",
+            "UUID",
             "Longitude",
             "Latitude",
-            "NatGrid_Coord",
-            "GUID",
-            "Source",
-            "LastUpdate",
+            "NatGrid",
+            "AddrPoint",
+            "DateUpdate",
+            "NAD_Source",
+            "DataSet_ID",
         ]
 
         # The mapping must not be empty
-        if not len(mapping_dict):
+        if not len(self.mapping):
             return False
 
         # The mapping must contain all required fields
-        if not all(field in mapping_dict for field in required_fields):
-            return False
-
-        # The mapping must not contain any empty values
-        if not all(mapping_dict.values()):
+        if not all(field in self.mapping for field in required_fields):
             return False
 
         return True

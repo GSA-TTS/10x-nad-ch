@@ -8,14 +8,22 @@ page_header("Create " ~ name) }}
     <p class="margin-top-05">
       Start from a template to indicate which of your area's fields maps to NAD
       fields. Information you need from the data checklist is in the template to
-      help you map fields accurately.
+      help you map fields accurately. Additional information is documented in
+      the
+      <a href="{{ url_for('static', filename='NAD_Schema_202304.pdf') }}">
+        National Address Database Schema</a
+      >.
     </p>
-    <a href="#" class="usa-button usa-button--outline">Download template</a>
+    <a
+      href="{{ url_for('static', filename='mapping_template.csv') }}"
+      class="usa-button usa-button--outline"
+      >Download template</a
+    >
   </li>
   <li class="usa-process-list__item">
     <h4 class="usa-process-list__heading">Upload mapping</h4>
     <p>Next, upload your completed CSV to proceed with your mapping.</p>
-    <form action="/mappings" method="post" enctype="multipart/form-data">
+    <form action="/column-maps" method="post" enctype="multipart/form-data">
       <div class="usa-form-group">
         <label class="usa-label" for="mapping-csv-input"
           >Input accepts a single file</label

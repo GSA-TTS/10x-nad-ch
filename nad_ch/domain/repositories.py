@@ -62,3 +62,6 @@ class ColumnMapRepository(Protocol):
 
     def get_by_name_and_version(self, name: str, version: int) -> Optional[ColumnMap]:
         ...
+
+    def get_by_producer(self, producer: DataProducer) -> Iterable[ColumnMap]:
+        ...

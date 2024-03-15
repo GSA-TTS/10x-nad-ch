@@ -83,5 +83,31 @@ page_header("Mappings") }} {% if not column_maps %}
     </div>
   </div>
 </div>
-{% else %} {# Table displaying column maps goes here #} {% endif %} {% endblock
-%}
+{% else %}
+<div class="usa-table-default width-full">
+  <table class="usa-table usa-table--borderless width-full">
+    <thead class="bg-base-lighter border-bottom-2px border-base-light">
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Version</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cm in column_maps %}
+      <tr>
+        <th class="border-bottom-1px border-base-lightest" scope="row">
+          {{ cm.name }}
+        </th>
+        <td>{{ cm.version_id }}</td>
+        <td>
+          <a href="{{ url_for('column_maps.show', id=cm.id, _external=True) }}"
+            >View</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %} {% endblock %}

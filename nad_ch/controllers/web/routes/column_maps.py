@@ -1,3 +1,4 @@
+import csv
 from flask import (
     Blueprint,
     current_app,
@@ -28,8 +29,11 @@ def before_request():
 @column_maps_bp.route("/column-maps")
 @login_required
 def index():
-    view_models = get_column_maps_by_producer(g.ctx, 1)
-    return render_template("column_maps/index.html", column_maps=view_models)
+    try:
+        view_models = get_column_maps_by_producer(g.ctx, "New Jersey")
+        return render_template("column_maps/index.html", column_maps=view_models)
+    except ValueError:
+        abort(404)
 
 
 @column_maps_bp.route("/column-maps/create")
@@ -47,23 +51,46 @@ def create():
 def store():
     if "mapping-csv-input" not in request.files:
         flash("No file included")
-        return redirect(request.url)
+        return redirect(url_for("column_maps.create"))
+
     file = request.files["mapping-csv-input"]
     if file.filename == "":
         flash("No selected file")
-        return redirect(request.url)
+        return redirect(url_for("column_maps.create"))
+
+    if not file.filename.endswith('.csv'):
+        flash("File is not a CSV")
+        return redirect(url_for("column_maps.create"))
+
     if file:
-        name = request.form.get("name")
-        content = file.read()
-        mapping_string = content.decode("utf-8")
+        csv_dict = {}
 
-        view_model = add_column_map(g.ctx, current_user.id, name, mapping_string)
+        try:
+            file_content = file.read().decode("utf-8").splitlines()
+            csv_reader = csv.reader(file_content)
 
-        return redirect(url_for("column_maps/show.html", column_map=view_model))
+            for row in csv_reader:
+                key, value = row
+                csv_dict[key] = value
+
+        except Exception as e:
+            flash(f"An error occurred while processing the file: {e}")
+            return redirect(url_for("column_maps.create"))
 
 
-@column_maps_bp.route("/column-maps/<mapping_id>")
+        try:
+            name = request.form.get("name")
+            view_model = add_column_map(g.ctx, current_user.id, name, csv_dict)
+            return redirect(url_for("column_maps.show", id=view_model.id))
+        except ValueError:
+            flash("Error: ", str(ValueError))
+            return redirect(url_for("column_maps.create"))
+
+@column_maps_bp.route("/column-maps/<id>")
 @login_required
-def show(mapping_id):
-    view_model = get_column_map(g.ctx, mapping_id)
-    return render_template("column_maps/show.html", column_map=view_model)
+def show(id):
+    try:
+        view_model = get_column_map(g.ctx, id)
+        return render_template("column_maps/show.html", column_map=view_model)
+    except ValueError:
+        abort(404)

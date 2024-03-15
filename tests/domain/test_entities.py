@@ -1,5 +1,4 @@
 import datetime
-import json
 from nad_ch.domain.entities import DataProducer, DataSubmission, ColumnMap
 
 
@@ -29,40 +28,48 @@ def test_data_submission_knows_if_it_does_not_have_a_report():
 
 def test_column_map_is_valid():
     mapping = {
-        "GUID": "guid",
-        "Source": "source",
-        "LastUpdate": "last_update",
-        "State": "state",
-        "County": "county",
-        "Zip_Code": "zip",
-        "StreetName": "street",
         "Add_Number": "address_number",
-        "Longitude": "longitude",
-        "Latitude": "latitude",
-        "NatGrid_Coord": "coord",
+        "AddNo_Full": "address_number_full",
+        "St_Name": "street_name",
+        "StNam_Full": "street_name_full",
+        "County": "county",
+        "Inc_Muni": "city",
+        "State": "state",
+        "UUID": "guid",
+        "Longitude": "long",
+        "Latitude": "lat",
+        "NatGrid": "nat_grid",
+        "AddrPoint": "address_point",
+        "DateUpdate": "updated",
+        "NAD_Source": "source",
+        "DataSet_ID": "123456",
     }
 
     producer = DataProducer("Some producer")
-    column_map = ColumnMap("TestMap", producer, json.dumps(mapping), 1)
+    column_map = ColumnMap("TestMap", producer, mapping, 1)
     assert column_map.is_valid()
 
 
 def test_column_map_is_invalid_if_missing_a_required_field():
     mapping = {
-        "GUID": "guid",
-        "Source": "source",
-        "LastUpdate": "last_update",
-        "State": "state",
-        "County": "county",
-        "Zip_Code": "zip",
-        "StreetName": "street",
         "Add_Number": "address_number",
-        "Longitude": "longitude",
-        "Latitude": "latitude",
+        "AddNo_Full": "address_number_full",
+        "St_Name": "street_name",
+        "StNam_Full": "street_name_full",
+        "County": "county",
+        "Inc_Muni": "city",
+        "State": "state",
+        "UUID": "guid",
+        "Longitude": "long",
+        "Latitude": "lat",
+        "NatGrid": "nat_grid",
+        "AddrPoint": "address_point",
+        "DateUpdate": "updated",
+        "NAD_Source": "source",
     }
 
     producer = DataProducer("Some producer")
-    column_map = ColumnMap("TestMap", producer, json.dumps(mapping), 1)
+    column_map = ColumnMap("TestMap", producer, mapping, 1)
     assert not column_map.is_valid()
 
 
@@ -74,19 +81,23 @@ def test_column_map_is_invalid_if_empty():
 
 def test_column_map_is_invalid_if_empty_values():
     mapping = {
-        "GUID": "guid",
-        "Source": "source",
-        "LastUpdate": "last_update",
-        "State": "state",
-        "County": "county",
-        "Zip_Code": "zip",
-        "StreetName": "street",
         "Add_Number": "address_number",
-        "Longitude": "longitude",
-        "Latitude": "latitude",
-        "NatGrid_Coord": "",
+        "AddNo_Full": "address_number_full",
+        "St_Name": "street_name",
+        "StNam_Full": "street_name_full",
+        "County": "county",
+        "Inc_Muni": "city",
+        "State": "state",
+        "UUID": "guid",
+        "Longitude": "long",
+        "Latitude": "lat",
+        "NatGrid": "nat_grid",
+        "AddrPoint": "address_point",
+        "DateUpdate": "updated",
+        "NAD_Source": "source",
+        "DataSet_ID": "",
     }
 
     producer = DataProducer("Some producer")
-    column_map = ColumnMap("TestMap", producer, json.dumps(mapping), 1)
+    column_map = ColumnMap("TestMap", producer, mapping, 1)
     assert not column_map.is_valid()
