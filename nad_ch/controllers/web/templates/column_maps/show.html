@@ -1,4 +1,11 @@
 {% extends "_layouts/base.html" %} {% block title %}Mapping {{
 column_map.name}}{% endblock %} {% from "components/page-header.html" import
 page_header %} {% block content %} {{ page_header("Mapping: " ~ column_map.name
-) }} {% endblock %}
+) }}
+<p>Version number: {{ column_map.version }}</p>
+<ul>
+  {% for nad_field, mapped_field in column_map.mapping.items() %}
+  <li>{{ nad_field }}: {{ mapped_field }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

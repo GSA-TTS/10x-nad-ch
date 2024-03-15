@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 import json
 import numpy as np
-from typing import Union, List, Tuple, Protocol
+from typing import Union, Dict, List, Tuple, Protocol
 from nad_ch.domain.entities import Entity, ColumnMap, DataProducer, DataSubmission
 
 
@@ -42,6 +42,8 @@ class ColumnMapViewModel(ViewModel):
     id: int
     date_created: str
     name: str
+    mapping: Dict[str, str]
+    version: int
     producer_name: str
 
 
@@ -50,6 +52,8 @@ def create_column_map_view_model(column_map: ColumnMap) -> ColumnMapViewModel:
         id=column_map.id,
         date_created=present_date(column_map.created_at),
         name=column_map.name,
+        mapping=column_map.mapping,
+        version=column_map.version_id,
         producer_name=column_map.producer.name,
     )
 
