@@ -81,7 +81,6 @@ def store():
             flash(f"An error occurred while processing the file: {e}")
             return redirect(url_for("column_maps.create"))
 
-
         try:
             name = request.form.get("name")
             view_model = add_column_map(g.ctx, current_user.id, name, csv_dict)
@@ -92,23 +91,25 @@ def store():
 
 
 def update(request):
+    id = request.form.get('_id')
+
     if request.form.get('_formType') == 'required_field':
         user_field = request.form.get('mappedRequiredField')
         nad_field = request.form.get('_nadField')
     elif request.form.get('_formType') == 'optional_field':
         user_field = request.form.get('mappedOptionalField')
-        nad_field = request.form.get('selectedNadField')
+        nad_field = request.form.get('_nadField')
     elif request.form.get('_formType') == 'new_field':
         user_field = request.form.get('newField')
         nad_field = request.form.get('newNadField')
 
-    if not user_field or not nad_field:
+    if not id or not user_field or not nad_field:
         abort(404)
 
     print(f'user_field: {user_field}, nad_field: {nad_field}')
 
     try:
-        view_model = update_column_mapping(id, user_field, nad_field)
+        view_model = update_column_mapping(g.ctx, id, user_field, nad_field)
         return redirect(url_for("column_maps.show", id=view_model.id))
     except ValueError:
         flash("Error: ", str(ValueError))

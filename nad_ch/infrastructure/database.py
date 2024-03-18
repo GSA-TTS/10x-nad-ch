@@ -434,3 +434,18 @@ class SqlAlchemyColumnMapRepository(ColumnMapRepository):
             )
             column_map_entities = [column_map.to_entity() for column_map in column_map_models]
             return column_map_entities
+
+    def update(self, column_map: ColumnMap) -> ColumnMap:
+        with session_scope(self.session_factory) as session:
+            existing_column_map = (
+                session.query(ColumnMapModel)
+                .filter(ColumnMapModel.id == column_map.id)
+                .first()
+            )
+
+            existing_column_map.name = column_map.name
+            existing_column_map.mapping = column_map.mapping
+            existing_column_map.version_id += 1
+            session.commit()
+            session.refresh(existing_column_map)
+            return existing_column_map.to_entity()

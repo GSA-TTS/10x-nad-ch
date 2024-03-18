@@ -20,7 +20,6 @@ page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
   mapped_field %}
   <div x-data="{ isEditing{{ nad_field }}: false }">
     <div x-show="!isEditing{{ nad_field }}">
-      <input type="hidden" name="_method" value="PUT" />
       <div class="grid-row padding-y-1">
         <div class="grid-col-3">{{ mapped_field }}</div>
         <div class="grid-col-1">{{ arrow_right() }}</div>
@@ -28,7 +27,7 @@ page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
         <div class="grid-col-1 display-flex flex-row">
           <button
             class="usa-button usa-button--outline"
-            @click="isEditing{{ nad_field }} = ! isEditing{{ nad_field }}"
+            @click.prevent="isEditing{{ nad_field }} = ! isEditing{{ nad_field }}"
           >
             Edit
           </button>
@@ -45,6 +44,7 @@ page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
         <input type="hidden" name="_method" value="PUT" />
         <input type="hidden" name="_formType" value="required_field" />
         <input type="hidden" name="_nadField" value="{{ nad_field }}" />
+        <input type="hidden" name="_id" value="{{ column_map.id }}" />
 
         <div class="grid-row padding-y-1">
           <div class="grid-col-3">
@@ -52,7 +52,7 @@ page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
               type="text"
               name="mappedRequiredField"
               class="usa-input padding-right-5"
-              placeholder="Your Field"
+              value="{{ mapped_field }}"
               required
             />
           </div>
@@ -61,7 +61,7 @@ page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
           <div class="grid-col-1 display-flex flex-row">
             <button
               class="usa-button usa-button--outline"
-              @click="isEditing{{ nad_field }} = ! isEditing{{ nad_field }}"
+              @click.prevent="isEditing{{ nad_field }} = ! isEditing{{ nad_field }}"
             >
               Cancel
             </button>
@@ -74,29 +74,25 @@ page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
       <form action="/column-maps" method="post" enctype="multipart/form-data">
         <input type="hidden" name="_method" value="PUT" />
         <input type="hidden" name="_formType" value="optional_field" />
+        <input type="hidden" name="_nadField" value="{{ nad_field }}" />
+        <input type="hidden" name="_id" value="{{ column_map.id }}" />
+
         <div class="grid-row padding-y-1">
           <div class="grid-col-3">
             <input
               type="text"
               name="mappedOptionalField"
               class="usa-input padding-right-5"
-              placeholder="Your Field"
+              value="{{ mapped_field }}"
               required
             />
           </div>
           <div class="grid-col-1">{{ arrow_right() }}</div>
-          <div class="grid-col-3">
-            <select class="usa-select" name="selectedNadField">
-              <option value="">Select a NAD Field</option>
-              {% for field in column_map.available_nad_fields %}
-              <option value="{{ field }}">{{ field }}</option>
-              {% endfor %}
-            </select>
-          </div>
+          <div class="grid-col-3">{{ nad_field }}</div>
           <div class="grid-col-1 display-flex flex-row">
             <button
               class="usa-button usa-button--outline"
-              @click="isEditing{{ nad_field }} = ! isEditing{{ nad_field }}"
+              @click.prevent="isEditing{{ nad_field }} = ! isEditing{{ nad_field }}"
             >
               Cancel
             </button>
@@ -109,26 +105,26 @@ page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
   </div>
   {% endif %} {% endfor %}
   <form
-    id="mappingShowForm"
-    x-data="{ isEditing: false }"
+    x-data="{ isEditingNew: false }"
     action="/column-maps"
     method="post"
     enctype="multipart/form-data"
   >
     <input type="hidden" name="_method" value="PUT" />
     <input type="hidden" name="_formType" value="new_field" />
+    <input type="hidden" name="_id" value="{{ column_map.id }}" />
 
     <div class="grid-row padding-y-1">
       <button
         class="usa-button"
-        @click="isEditing = ! isEditing"
-        x-show="!isEditing"
+        @click.prevent="isEditingNew = ! isEditingNew"
+        x-show="!isEditingNew"
       >
         Add Field
       </button>
     </div>
 
-    <div x-show="isEditing">
+    <div x-show="isEditingNew">
       <div class="grid-row padding-y-1">
         <div class="grid-col-3">
           <input
@@ -157,14 +153,14 @@ page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
         <li class="usa-button-group__item">
           <button
             class="usa-button usa-button--outline"
-            @click="isEditing = ! isEditing"
-            x-show="isEditing"
+            @click.prevent="isEditingNew = ! isEditingNew"
+            x-show="isEditingNew"
           >
             Cancel
           </button>
         </li>
         <li class="usa-button-group__item">
-          <button class="usa-button" type="submit" x-show="isEditing">
+          <button class="usa-button" type="submit" x-show="isEditingNew">
             Save
           </button>
         </li>

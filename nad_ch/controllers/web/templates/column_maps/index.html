@@ -41,11 +41,7 @@ page_header("Mappings") }} {% if not column_maps %}
   <div class="usa-modal__content margin-x-0">
     <div class="usa-modal__main">
       <h2 class="usa-modal__heading" id="mapping-modal-heading">New mapping</h2>
-      <form
-        x-data="MappingModalForm()"
-        @submit.prevent="createMapping"
-        novalidate
-      >
+      <form x-data="MappingForm()" @submit.prevent="createMapping" novalidate>
         <div class="usa-form-group">
           <label for="mapping-name">Mapping name</label>
           <br />

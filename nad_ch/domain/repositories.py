@@ -65,3 +65,6 @@ class ColumnMapRepository(Protocol):
 
     def get_by_producer(self, producer: DataProducer) -> Iterable[ColumnMap]:
         ...
+
+    def update_mapping(self, column_map: ColumnMap) -> ColumnMap:
+        ...

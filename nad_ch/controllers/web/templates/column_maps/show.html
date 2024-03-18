@@ -8,9 +8,9 @@ page_header %} {% block content %} {{ page_header("Mapping: " ~ column_map.name
     <a class="usa-button" href="{{ url_for('column_maps.edit', id=column_map.id) }}">Edit</a>
   </div>
   <div class="grid-row padding-y-1">
-    <div class="grid-col-2">Your Field</div>
+    <div class="grid-col-3">Your Field</div>
     <div class="grid-col-1"></div>
-    <div class="grid-col-2">NAD Field</div>
+    <div class="grid-col-3">NAD Field</div>
   </div>
   {% for nad_field, mapped_field in column_map.mapping.items() %} {% if
   mapped_field %}

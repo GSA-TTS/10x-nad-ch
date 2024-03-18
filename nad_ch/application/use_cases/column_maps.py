@@ -58,11 +58,11 @@ def update_column_mapping(
     if column_map is None:
         raise ValueError("Column map not found")
 
-    column_map.mapping[user_field] = nad_field
+    column_map.mapping[nad_field] = user_field
 
     if not column_map.is_valid():
         raise ValueError("Invalid mapping")
 
-    # ctx.column_maps.update(column_map)
+    ctx.column_maps.update(column_map)
 
     return get_view_model(column_map)
