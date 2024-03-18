@@ -2,10 +2,34 @@
 column_map.name}}{% endblock %} {% from "components/page-header.html" import
 page_header %} {% block content %} {{ page_header("Mapping: " ~ column_map.name
 ) }}
-<p>Version number: {{ column_map.version }}</p>
-<ul>
-  {% for nad_field, mapped_field in column_map.mapping.items() %}
-  <li>{{ nad_field }}: {{ mapped_field }}</li>
-  {% endfor %}
-</ul>
+<div class="grid-container padding-left-0">
+  <div class="">
+    <p>Version number: {{ column_map.version }}</p>
+    <a class="usa-button" href="{{ url_for('column_maps.edit', id=column_map.id) }}">Edit</a>
+  </div>
+  <div class="grid-row padding-y-1">
+    <div class="grid-col-2">Your Field</div>
+    <div class="grid-col-1"></div>
+    <div class="grid-col-2">NAD Field</div>
+  </div>
+  {% for nad_field, mapped_field in column_map.mapping.items() %} {% if
+  mapped_field %}
+  <div class="grid-row padding-y-1">
+    <div class="grid-col-3">{{ mapped_field }}</div>
+    <div class="grid-col-1">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+      >
+        <path d="M0 0h24v24H0z" fill="none" />
+        <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+      </svg>
+    </div>
+    <div class="grid-col-3">{{ nad_field }}</div>
+  </div>
+  {% endif %} {% endfor %}
+  </div>
+</div>
 {% endblock %}

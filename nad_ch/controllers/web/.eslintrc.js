@@ -4,7 +4,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: 'standard-with-typescript',
+  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
   overrides: [
     {
       env: {
@@ -20,11 +20,5 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  rules: {
-    '@typescript-eslint/strict-boolean-expressions': 'off',
-    '@typescript-eslint/comma-dangle': ['error', 'always-multiline'],
-    '@typescript-eslint/member-delimiter-style': ['error', {}],
-    '@typescript-eslint/semi': ['error', 'always'],
-    '@typescript-eslint/space-before-function-paren': ['error', 'never'],
-  },
+  plugins: ['prettier'],
 };

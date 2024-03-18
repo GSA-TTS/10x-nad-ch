@@ -15,6 +15,7 @@ from nad_ch.application.use_cases.column_maps import (
     add_column_map,
     get_column_map,
     get_column_maps_by_producer,
+    update_column_mapping,
 )
 
 
@@ -49,6 +50,9 @@ def create():
 @column_maps_bp.route("/column-maps", methods=["POST"])
 @login_required
 def store():
+    if request.form.get('_method') == 'PUT':
+        return update(request)
+
     if "mapping-csv-input" not in request.files:
         flash("No file included")
         return redirect(url_for("column_maps.create"))
@@ -86,6 +90,31 @@ def store():
             flash("Error: ", str(ValueError))
             return redirect(url_for("column_maps.create"))
 
+
+def update(request):
+    if request.form.get('_formType') == 'required_field':
+        user_field = request.form.get('mappedRequiredField')
+        nad_field = request.form.get('_nadField')
+    elif request.form.get('_formType') == 'optional_field':
+        user_field = request.form.get('mappedOptionalField')
+        nad_field = request.form.get('selectedNadField')
+    elif request.form.get('_formType') == 'new_field':
+        user_field = request.form.get('newField')
+        nad_field = request.form.get('newNadField')
+
+    if not user_field or not nad_field:
+        abort(404)
+
+    print(f'user_field: {user_field}, nad_field: {nad_field}')
+
+    try:
+        view_model = update_column_mapping(id, user_field, nad_field)
+        return redirect(url_for("column_maps.show", id=view_model.id))
+    except ValueError:
+        flash("Error: ", str(ValueError))
+        return redirect(url_for("column_maps.edit", id=id))
+
+
 @column_maps_bp.route("/column-maps/<id>")
 @login_required
 def show(id):
@@ -93,4 +122,14 @@ def show(id):
         view_model = get_column_map(g.ctx, id)
         return render_template("column_maps/show.html", column_map=view_model)
     except ValueError:
+        abort(404)
+
+
+@column_maps_bp.route("/column-maps/edit/<id>")
+@login_required
+def edit(id):
+    try:
+        view_model = get_column_map(g.ctx, id)
+        return render_template("column_maps/edit.html", column_map=view_model)
+    except:
         abort(404)

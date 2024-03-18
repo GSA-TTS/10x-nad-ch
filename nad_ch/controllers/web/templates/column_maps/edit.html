@@ -1,0 +1,175 @@
+{% extends "_layouts/base.html" %} {% block title %}Mapping {{
+column_map.name}}{% endblock %} {% from "components/page-header.html" import
+page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
+{% block content %} {{ page_header("Mapping: " ~ column_map.name ) }}
+<div class="grid-container padding-left-0">
+  <div class="">
+    <p>Version number: {{ column_map.version }}</p>
+    <a
+      class="usa-button usa-button--outline"
+      href="{{ url_for('column_maps.show', id=column_map.id) }}"
+      >Cancel</a
+    >
+  </div>
+  <div class="grid-row padding-y-1">
+    <div class="grid-col-3">Your Field</div>
+    <div class="grid-col-1">{{ arrow_right() }}</div>
+    <div class="grid-col-3">NAD Field</div>
+  </div>
+  {% for nad_field, mapped_field in column_map.mapping.items() %} {% if
+  mapped_field %}
+  <div x-data="{ isEditing{{ nad_field }}: false }">
+    <div x-show="!isEditing{{ nad_field }}">
+      <input type="hidden" name="_method" value="PUT" />
+      <div class="grid-row padding-y-1">
+        <div class="grid-col-3">{{ mapped_field }}</div>
+        <div class="grid-col-1">{{ arrow_right() }}</div>
+        <div class="grid-col-3">{{ nad_field }}</div>
+        <div class="grid-col-1 display-flex flex-row">
+          <button
+            class="usa-button usa-button--outline"
+            @click="isEditing{{ nad_field }} = ! isEditing{{ nad_field }}"
+          >
+            Edit
+          </button>
+          {% if nad_field not in column_map.required_nad_fields %}
+          <button class="usa-button">Delete</button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div x-show="isEditing{{ nad_field }}">
+      {% if nad_field in column_map.required_nad_fields %} {# Form for editing a
+      required mapping #}
+      <form action="/column-maps" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_method" value="PUT" />
+        <input type="hidden" name="_formType" value="required_field" />
+        <input type="hidden" name="_nadField" value="{{ nad_field }}" />
+
+        <div class="grid-row padding-y-1">
+          <div class="grid-col-3">
+            <input
+              type="text"
+              name="mappedRequiredField"
+              class="usa-input padding-right-5"
+              placeholder="Your Field"
+              required
+            />
+          </div>
+          <div class="grid-col-1">{{ arrow_right() }}</div>
+          <div class="grid-col-3">{{ nad_field }}</div>
+          <div class="grid-col-1 display-flex flex-row">
+            <button
+              class="usa-button usa-button--outline"
+              @click="isEditing{{ nad_field }} = ! isEditing{{ nad_field }}"
+            >
+              Cancel
+            </button>
+            <button class="usa-button" type="submit">Save</button>
+          </div>
+        </div>
+      </form>
+
+      {% else %} {# Form for editing an optional mapping #}
+      <form action="/column-maps" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_method" value="PUT" />
+        <input type="hidden" name="_formType" value="optional_field" />
+        <div class="grid-row padding-y-1">
+          <div class="grid-col-3">
+            <input
+              type="text"
+              name="mappedOptionalField"
+              class="usa-input padding-right-5"
+              placeholder="Your Field"
+              required
+            />
+          </div>
+          <div class="grid-col-1">{{ arrow_right() }}</div>
+          <div class="grid-col-3">
+            <select class="usa-select" name="selectedNadField">
+              <option value="">Select a NAD Field</option>
+              {% for field in column_map.available_nad_fields %}
+              <option value="{{ field }}">{{ field }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="grid-col-1 display-flex flex-row">
+            <button
+              class="usa-button usa-button--outline"
+              @click="isEditing{{ nad_field }} = ! isEditing{{ nad_field }}"
+            >
+              Cancel
+            </button>
+            <button class="usa-button" type="submit">Save</button>
+          </div>
+        </div>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %} {% endfor %}
+  <form
+    id="mappingShowForm"
+    x-data="{ isEditing: false }"
+    action="/column-maps"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <input type="hidden" name="_method" value="PUT" />
+    <input type="hidden" name="_formType" value="new_field" />
+
+    <div class="grid-row padding-y-1">
+      <button
+        class="usa-button"
+        @click="isEditing = ! isEditing"
+        x-show="!isEditing"
+      >
+        Add Field
+      </button>
+    </div>
+
+    <div x-show="isEditing">
+      <div class="grid-row padding-y-1">
+        <div class="grid-col-3">
+          <input
+            type="text"
+            name="newField"
+            class="usa-input padding-right-5"
+            placeholder="Your Field"
+            required
+          />
+        </div>
+        <div class="grid-col-1 display-flex flex-column flex-justify-center">
+          {{ arrow_right() }}
+        </div>
+        <div class="grid-col-3">
+          <select class="usa-select" name="newNadField">
+            <option value="">Select a NAD Field</option>
+            {% for field in column_map.available_nad_fields %}
+            <option value="{{ field }}">{{ field }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="grid-row padding-y-1">
+      <ul class="usa-button-group">
+        <li class="usa-button-group__item">
+          <button
+            class="usa-button usa-button--outline"
+            @click="isEditing = ! isEditing"
+            x-show="isEditing"
+          >
+            Cancel
+          </button>
+        </li>
+        <li class="usa-button-group__item">
+          <button class="usa-button" type="submit" x-show="isEditing">
+            Save
+          </button>
+        </li>
+      </ul>
+    </div>
+  </form>
+</div>
+{% endblock %}

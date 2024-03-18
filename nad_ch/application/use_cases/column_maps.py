@@ -48,3 +48,21 @@ def get_column_maps_by_producer(
     column_maps = ctx.column_maps.get_by_producer(producer)
 
     return [get_view_model(column_map) for column_map in column_maps]
+
+
+def update_column_mapping(
+    ctx: ApplicationContext, id: int, user_field: str, nad_field: str
+):
+    column_map = ctx.column_maps.get_by_id(id)
+
+    if column_map is None:
+        raise ValueError("Column map not found")
+
+    column_map.mapping[user_field] = nad_field
+
+    if not column_map.is_valid():
+        raise ValueError("Invalid mapping")
+
+    # ctx.column_maps.update(column_map)
+
+    return get_view_model(column_map)

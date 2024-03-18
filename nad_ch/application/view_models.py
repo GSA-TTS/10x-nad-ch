@@ -45,6 +45,8 @@ class ColumnMapViewModel(ViewModel):
     mapping: Dict[str, str]
     version: int
     producer_name: str
+    available_nad_fields: List[str]
+    required_nad_fields: List[str]
 
 
 def create_column_map_view_model(column_map: ColumnMap) -> ColumnMapViewModel:
@@ -55,6 +57,24 @@ def create_column_map_view_model(column_map: ColumnMap) -> ColumnMapViewModel:
         mapping=column_map.mapping,
         version=column_map.version_id,
         producer_name=column_map.producer.name,
+        available_nad_fields = [key for key, value in column_map.mapping.items() if value == ''],
+        required_nad_fields = [
+            "Add_Number",
+            "AddNo_Full",
+            "St_Name",
+            "StNam_Full",
+            "County",
+            "Inc_Muni",
+            "State",
+            "UUID",
+            "Longitude",
+            "Latitude",
+            "NatGrid",
+            "AddrPoint",
+            "DateUpdate",
+            "NAD_Source",
+            "DataSet_ID",
+        ]
     )
 
 
