@@ -32,14 +32,25 @@ page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
             Edit
           </button>
           {% if nad_field not in column_map.required_nad_fields %}
-          <button class="usa-button">Delete</button>
+          <form
+            form
+            action="/column-maps"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            <input type="hidden" name="_method" value="PUT" />
+            <input type="hidden" name="_formType" value="delete_field" />
+            <input type="hidden" name="_nadField" value="{{ nad_field }}" />
+            <input type="hidden" name="_nullField" value="" />
+            <input type="hidden" name="_id" value="{{ column_map.id }}" />
+
+            <button class="usa-button" type="submit">Delete</button>
+          </form>
           {% endif %}
         </div>
       </div>
     </div>
     <div x-show="isEditing{{ nad_field }}">
-      {% if nad_field in column_map.required_nad_fields %} {# Form for editing a
-      required mapping #}
       <form action="/column-maps" method="post" enctype="multipart/form-data">
         <input type="hidden" name="_method" value="PUT" />
         <input type="hidden" name="_formType" value="required_field" />
@@ -69,38 +80,6 @@ page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
           </div>
         </div>
       </form>
-
-      {% else %} {# Form for editing an optional mapping #}
-      <form action="/column-maps" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="_method" value="PUT" />
-        <input type="hidden" name="_formType" value="optional_field" />
-        <input type="hidden" name="_nadField" value="{{ nad_field }}" />
-        <input type="hidden" name="_id" value="{{ column_map.id }}" />
-
-        <div class="grid-row padding-y-1">
-          <div class="grid-col-3">
-            <input
-              type="text"
-              name="mappedOptionalField"
-              class="usa-input padding-right-5"
-              value="{{ mapped_field }}"
-              required
-            />
-          </div>
-          <div class="grid-col-1">{{ arrow_right() }}</div>
-          <div class="grid-col-3">{{ nad_field }}</div>
-          <div class="grid-col-1 display-flex flex-row">
-            <button
-              class="usa-button usa-button--outline"
-              @click.prevent="isEditing{{ nad_field }} = ! isEditing{{ nad_field }}"
-            >
-              Cancel
-            </button>
-            <button class="usa-button" type="submit">Save</button>
-          </div>
-        </div>
-      </form>
-      {% endif %}
     </div>
   </div>
   {% endif %} {% endfor %}

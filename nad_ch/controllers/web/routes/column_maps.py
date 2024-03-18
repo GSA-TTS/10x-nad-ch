@@ -96,14 +96,13 @@ def update(request):
     if request.form.get('_formType') == 'required_field':
         user_field = request.form.get('mappedRequiredField')
         nad_field = request.form.get('_nadField')
-    elif request.form.get('_formType') == 'optional_field':
-        user_field = request.form.get('mappedOptionalField')
+    elif request.form.get('_formType') == 'delete_field':
+        user_field = request.form.get('_nullField')
         nad_field = request.form.get('_nadField')
     elif request.form.get('_formType') == 'new_field':
         user_field = request.form.get('newField')
         nad_field = request.form.get('newNadField')
-
-    if not id or not user_field or not nad_field:
+    else:
         abort(404)
 
     print(f'user_field: {user_field}, nad_field: {nad_field}')
