@@ -3,14 +3,16 @@ column_map.name}}{% endblock %} {% from "components/page-header.html" import
 page_header %} {% block content %} {{ page_header("Mapping: " ~ column_map.name
 ) }}
 <div class="grid-container padding-left-0">
-  <div class="">
-    <p>Version number: {{ column_map.version }}</p>
-    <a class="usa-button" href="{{ url_for('column_maps.edit', id=column_map.id) }}">Edit</a>
+  <div class="display-flex flex-row flex-align-start padding-top-2">
+    <div class="display-flex flex-align-center padding-right-2 padding-top-1">Version number: <span class="font-mono-md padding-left-1">{{ column_map.version }}</span></div>
+    <div class="display-flex flex-column flex-align-center">
+        <a class="usa-button" href="{{ url_for('column_maps.edit', id=column_map.id) }}">Edit</a>
+    </div>
   </div>
   <div class="grid-row padding-y-1">
-    <div class="grid-col-3">Your Field</div>
+    <div class="grid-col-3 text-bold">Your Field</div>
     <div class="grid-col-1"></div>
-    <div class="grid-col-3">NAD Field</div>
+    <div class="grid-col-3 text-bold">NAD Field</div>
   </div>
   {% for nad_field, mapped_field in column_map.mapping.items() %} {% if
   mapped_field %}
