@@ -1,6 +1,7 @@
 {% extends "_layouts/base.html" %} {% block title %}Mapping {{
 column_map.name}}{% endblock %} {% from "components/page-header.html" import
-page_header %} {% block content %} {{ page_header("Mapping: " ~ column_map.name
+page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
+{% block content %} {{ page_header("Mapping: " ~ column_map.name
 ) }}
 <div class="grid-container padding-left-0">
   <div class="display-flex flex-row flex-align-start padding-top-2">
@@ -9,25 +10,17 @@ page_header %} {% block content %} {{ page_header("Mapping: " ~ column_map.name
         <a class="usa-button" href="{{ url_for('column_maps.edit', id=column_map.id) }}">Edit</a>
     </div>
   </div>
-  <div class="grid-row padding-y-1">
+  <div class="grid-row mapping-row">
     <div class="grid-col-3 text-bold">Your Field</div>
     <div class="grid-col-1"></div>
     <div class="grid-col-3 text-bold">NAD Field</div>
   </div>
   {% for nad_field, mapped_field in column_map.mapping.items() %} {% if
   mapped_field %}
-  <div class="grid-row padding-y-1">
+  <div class="grid-row mapping-row">
     <div class="grid-col-3">{{ mapped_field }}</div>
     <div class="grid-col-1">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="24"
-        viewBox="0 0 24 24"
-        width="24"
-      >
-        <path d="M0 0h24v24H0z" fill="none" />
-        <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
-      </svg>
+      {{ arrow_right() }}
     </div>
     <div class="grid-col-3">{{ nad_field }}</div>
   </div>
