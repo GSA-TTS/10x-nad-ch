@@ -136,8 +136,9 @@ page_header("Mapping: " ~ column_map.name ~ edit()) }}
         </div>
         <div class="grid-col-3 flex-align-center">
           <select
-            class="usa-select usa-select--small margin-top-0"
+            class="usa-select usa-select--small"
             name="newNadField"
+            required
           >
             <option value="">Select a NAD Field</option>
             {% for field in column_map.available_nad_fields %}
@@ -146,24 +147,20 @@ page_header("Mapping: " ~ column_map.name ~ edit()) }}
           </select>
         </div>
         <div class="grid-col-1 display-flex flex-row">
-          <div class="usa-button-group__item">
-            <button
-              class="usa-button usa-button--outline usa-button--small"
-              @click.prevent="isEditingNew = ! isEditingNew"
-              x-show="isEditingNew"
-            >
-              Cancel
-            </button>
-          </div>
-          <div class="usa-button-group__item">
-            <button
-              class="usa-button usa-button--small"
-              type="submit"
-              x-show="isEditingNew"
-            >
-              Save
-            </button>
-          </div>
+          <button
+            class="usa-button usa-button--outline usa-button--small"
+            @click.prevent="isEditingNew = ! isEditingNew"
+            x-show="isEditingNew"
+          >
+            Cancel
+          </button>
+          <button
+            class="usa-button usa-button--small"
+            type="submit"
+            x-show="isEditingNew"
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>
