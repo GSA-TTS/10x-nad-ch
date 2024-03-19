@@ -432,7 +432,9 @@ class SqlAlchemyColumnMapRepository(ColumnMapRepository):
                 .filter(ColumnMapModel.data_producer_id == producer.id)
                 .all()
             )
-            column_map_entities = [column_map.to_entity() for column_map in column_map_models]
+            column_map_entities = [
+                column_map.to_entity() for column_map in column_map_models
+            ]
             return column_map_entities
 
     def update(self, column_map: ColumnMap) -> ColumnMap:

@@ -48,7 +48,11 @@ class S3Storage(Storage):
             with ZipFile(zip_file_path, "r") as zip_ref:
                 zip_ref.extractall(extracted_dir)
 
-            gdb_dirs = [d for d in glob.glob(os.path.join(extracted_dir, '*')) if os.path.isdir(d) and d.endswith('.gdb')]
+            gdb_dirs = [
+                d
+                for d in glob.glob(os.path.join(extracted_dir, "*"))
+                if os.path.isdir(d) and d.endswith(".gdb")
+            ]
             gdb_dir = gdb_dirs[0] if gdb_dirs else None
 
             return DownloadResult(temp_dir=temp_dir, extracted_dir=gdb_dir)

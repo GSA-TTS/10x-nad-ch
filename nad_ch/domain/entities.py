@@ -68,8 +68,10 @@ class ColumnMap(Entity):
         if not len(self.mapping):
             return False
 
-        # The mapping must contain all required fields
-        if not all(field in self.mapping for field in required_fields):
+        # The mapping must contain all required fields and they must not be empty
+        if not all(
+            field in self.mapping and self.mapping[field] for field in required_fields
+        ):
             return False
 
         return True

@@ -50,7 +50,7 @@ def create():
 @column_maps_bp.route("/column-maps", methods=["POST"])
 @login_required
 def store():
-    if request.form.get('_method') == 'PUT':
+    if request.form.get("_method") == "PUT":
         return update(request)
 
     if "mapping-csv-input" not in request.files:
@@ -62,7 +62,7 @@ def store():
         flash("No selected file")
         return redirect(url_for("column_maps.create"))
 
-    if not file.filename.endswith('.csv'):
+    if not file.filename.endswith(".csv"):
         flash("File is not a CSV")
         return redirect(url_for("column_maps.create"))
 
@@ -91,21 +91,21 @@ def store():
 
 
 def update(request):
-    id = request.form.get('_id')
+    id = request.form.get("_id")
 
-    if request.form.get('_formType') == 'required_field':
-        user_field = request.form.get('mappedRequiredField')
-        nad_field = request.form.get('_nadField')
-    elif request.form.get('_formType') == 'delete_field':
-        user_field = request.form.get('_nullField')
-        nad_field = request.form.get('_nadField')
-    elif request.form.get('_formType') == 'new_field':
-        user_field = request.form.get('newField')
-        nad_field = request.form.get('newNadField')
+    if request.form.get("_formType") == "required_field":
+        user_field = request.form.get("mappedRequiredField")
+        nad_field = request.form.get("_nadField")
+    elif request.form.get("_formType") == "delete_field":
+        user_field = request.form.get("_nullField")
+        nad_field = request.form.get("_nadField")
+    elif request.form.get("_formType") == "new_field":
+        user_field = request.form.get("newField")
+        nad_field = request.form.get("newNadField")
     else:
         abort(404)
 
-    print(f'user_field: {user_field}, nad_field: {nad_field}')
+    print(f"user_field: {user_field}, nad_field: {nad_field}")
 
     try:
         view_model = update_column_mapping(g.ctx, id, user_field, nad_field)
@@ -131,5 +131,5 @@ def edit(id):
     try:
         view_model = get_column_map(g.ctx, id)
         return render_template("column_maps/edit.html", column_map=view_model)
-    except:
+    except Exception:
         abort(404)

@@ -32,7 +32,9 @@ def main():
     )
     ctx.users.add(new_user)
 
-    new_column_map = ColumnMap(name="NewJerseyMapping", producer=saved_producer, version_id=1)
+    new_column_map = ColumnMap(
+        name="NewJerseyMapping", producer=saved_producer, version_id=1
+    )
     # TODO save column map once ApplicationContext can provide a repository
     new_column_map.mapping = {
         "AddNum_Pre": "",
@@ -70,17 +72,17 @@ def main():
         "State": "state",
         "Zip_Code": "",
         "Plus_4": "",
-        "UUID":"guid",
+        "UUID": "guid",
         "AddAuth": "",
         "AddrRefSys": "",
         "Longitude": "long",
         "Latitude": "lat",
         "NatGrid": "nat_grid",
-        'Elevation': "",
-        'Placement': "",
+        "Elevation": "",
+        "Placement": "",
         "AddrPoint": "address_point",
-        'Related_ID': "",
-        'RelateType': "",
+        "Related_ID": "",
+        "RelateType": "",
         "ParcelSrc": "",
         "Parcel_ID": "",
         "AddrClass": "",

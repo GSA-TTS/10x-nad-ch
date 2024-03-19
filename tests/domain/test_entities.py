@@ -79,7 +79,7 @@ def test_column_map_is_invalid_if_empty():
     assert not column_map.is_valid()
 
 
-def test_column_map_is_invalid_if_empty_values():
+def test_column_map_is_invalid_if_empty_values_for_required_field():
     mapping = {
         "Add_Number": "address_number",
         "AddNo_Full": "address_number_full",

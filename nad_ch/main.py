@@ -21,12 +21,16 @@ def serve_flask_app():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Call a specific function.")
-    subparsers = parser.add_subparsers(dest='function', required=True)
+    subparsers = parser.add_subparsers(dest="function", required=True)
 
-    parser_run_cli = subparsers.add_parser('run_cli', help='Run the CLI application')
-    parser_run_cli.add_argument('cli_args', nargs=argparse.REMAINDER, help='Arguments for the CLI application')
+    parser_run_cli = subparsers.add_parser("run_cli", help="Run the CLI application")
+    parser_run_cli.add_argument(
+        "cli_args", nargs=argparse.REMAINDER, help="Arguments for the CLI application"
+    )
 
-    parser_serve_flask_app = subparsers.add_parser('serve_flask_app', help='Serve the Flask application')
+    parser_serve_flask_app = subparsers.add_parser(
+        "serve_flask_app", help="Serve the Flask application"
+    )
 
     args = parser.parse_args()
 
