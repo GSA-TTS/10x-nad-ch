@@ -1,4 +1,5 @@
 import os
+import glob
 import shutil
 import tempfile
 from typing import Optional
@@ -42,12 +43,15 @@ class S3Storage(Storage):
 
             zip_file_path = os.path.join(temp_dir, key)
             self.client.download_file(self.bucket_name, key, zip_file_path)
-            extracted_dir = f"{temp_dir}.gdb"
+            extracted_dir = f"{temp_dir}_extraced"
 
             with ZipFile(zip_file_path, "r") as zip_ref:
                 zip_ref.extractall(extracted_dir)
 
-            return DownloadResult(temp_dir=temp_dir, extracted_dir=extracted_dir)
+            gdb_dirs = [d for d in glob.glob(os.path.join(extracted_dir, '*')) if os.path.isdir(d) and d.endswith('.gdb')]
+            gdb_dir = gdb_dirs[0] if gdb_dirs else None
+
+            return DownloadResult(temp_dir=temp_dir, extracted_dir=gdb_dir)
         except Exception:
             return None
 
