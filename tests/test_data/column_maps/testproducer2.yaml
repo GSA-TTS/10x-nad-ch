@@ -1,11 +1,10 @@
-data_column_mapping:
-  COL_0:
-    - NAME
-  COL_1:
-    - ST
-  COL_2:
-    - ZIP
-  COL_3:
-    - RuleID
-  COL_4:
-    - geometry
+COL_0:
+  - NAME
+COL_1:
+  - ST
+COL_2:
+  - ZIP
+COL_3:
+  - RuleID
+COL_4:
+  - geometry

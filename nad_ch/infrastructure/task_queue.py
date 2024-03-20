@@ -6,12 +6,7 @@ from nad_ch.application.dtos import (
 )
 from nad_ch.application.data_reader import DataReader
 from nad_ch.application.interfaces import TaskQueue
-from nad_ch.application.validation import (
-    update_feature_details,
-    initialize_overview_details,
-    update_overview_details,
-    finalize_overview_details,
-)
+from nad_ch.application.validation import DataValidator
 from nad_ch.config import QUEUE_BROKER_URL, QUEUE_BACKEND_URL
 from nad_ch.domain.repositories import DataSubmissionRepository
 from typing import Dict
@@ -43,14 +38,13 @@ def load_and_validate(gdb_file_path: str, column_map: Dict[str, str]) -> dict:
     first_batch = True
     for gdf in data_reader.read_file_in_batches(path=gdb_file_path):
         if first_batch:
-            overview, feature_details = initialize_overview_details(
-                gdf, data_reader.valid_renames
-            )
-        feature_details = update_feature_details(gdf, feature_details)
-        overview = update_overview_details(gdf, overview)
+            data_validator = DataValidator(data_reader.valid_renames)
+        data_validator.run(gdf)
         first_batch = False
-    overview = finalize_overview_details(overview, feature_details)
-    report = DataSubmissionReport(overview, list(feature_details.values()))
+    data_validator.finalize_overview_details()
+    report = DataSubmissionReport(
+        data_validator.report_overview, list(data_validator.report_features.values())
+    )
     return report_to_dict(report)
 
 

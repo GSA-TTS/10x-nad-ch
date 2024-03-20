@@ -1,0 +1,78 @@
+Source,Destination
+,Unknown
+ ,Unknown
+  ,Unknown
+a,Property Access
+acc,Property Access
+access,Property Access
+addbld,Structure - Rooftop
+added,Site
+aerial imagery,Other
+bldrelate,Structure - Entrance
+building,Structure - Rooftop
+building entrance,Structure - Entrance
+cell tower,Other
+center of area,Other
+center of foundation,Other
+center of lot,Other
+center of parcel,Parcel - Centroid
+center of structure,Structure - Rooftop
+center of tanks,Other
+center of unit,Structure - Interior
+county map,Site
+driveway,Property Access
+dup,Unknown
+geocode,Linear Geocode
+geocoded,Linear Geocode
+geocoding,Linear Geocode
+gps,Other
+issue,Unknown
+lat/long,Unknown
+linear geocode,Linear Geocode
+linear geocoding,Linear Geocode
+manual,Parcel - Other
+manually.,Parcel - Other
+o,Other
+original placement,Unknown
+other,Other
+par,Parcel - Other
+parcel,Parcel - Other
+parcel - centroid,Parcel - Centroid
+parcel - centroids,Parcel - Centroid
+parcel - manual placement,Parcel - Other
+parcel - other,Parcel - Other
+parcel - other/manual pla,Parcel - Other
+parcel centroid,Parcel - Centroid
+parcel other,Parcel - Other
+parcel-centroid,Parcel - Centroid
+parcel-other/manual,Parcel - Other
+parcels,Parcel - Other
+placed on map,Parcel - Other
+property access,Property Access
+property access point,Property Access
+propertyaccess,Property Access
+road centerline,Linear Geocode
+s,Structure - Rooftop
+service entrance,Property Access
+site,Site
+site placement,Site
+site visit,Other
+str,Structure - Rooftop
+structure,Structure - Rooftop
+structure - entrance,Structure - Entrance
+structure - interior,Structure - Interior
+structure - interior unit,Structure - Interior
+structure - rooftop,Structure - Rooftop
+structure entrance,Structure - Entrance
+structure interior,Structure - Interior
+structure rooftop,Structure - Rooftop
+structure-entrance,Structure - Entrance
+structure-rooftop,Structure - Rooftop
+subaddress,Structure - Interior
+"unit, condo, office or suite",Structure - Rooftop
+unknown,Unknown
+utility asset,Site
+vacac,Site
+vacpa,Parcel - Other
+web resource,Other
+x,Unknown
