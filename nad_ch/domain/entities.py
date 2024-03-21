@@ -28,6 +28,27 @@ class DataProducer(Entity):
 
 
 class ColumnMap(Entity):
+    required_fields = [
+        "Add_Number",
+        "AddNo_Full",
+        "St_Name",
+        "StNam_Full",
+        "County",
+        "Inc_Muni",
+        "Post_City",
+        "State",
+        "UUID",
+        "AddAuth",
+        "Longitude",
+        "Latitude",
+        "NatGrid",
+        "Placement",
+        "AddrPoint",
+        "DateUpdate",
+        "NAD_Source",
+        "DataSet_ID",
+    ]
+
     def __init__(
         self,
         name: str,
@@ -46,31 +67,13 @@ class ColumnMap(Entity):
         return f"ColumnMap {self.id}, {self.name})"
 
     def is_valid(self) -> bool:
-        required_fields = [
-            "Add_Number",
-            "AddNo_Full",
-            "St_Name",
-            "StNam_Full",
-            "County",
-            "Inc_Muni",
-            "State",
-            "UUID",
-            "Longitude",
-            "Latitude",
-            "NatGrid",
-            "AddrPoint",
-            "DateUpdate",
-            "NAD_Source",
-            "DataSet_ID",
-        ]
-
         # The mapping must not be empty
         if not len(self.mapping):
             return False
 
         # The mapping must contain all required fields and they must not be empty
         if not all(
-            field in self.mapping and self.mapping[field] for field in required_fields
+            field in self.mapping and self.mapping[field] for field in ColumnMap.required_fields
         ):
             return False
 
