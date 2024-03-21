@@ -27,6 +27,27 @@ class DataProducer(Entity):
 
 
 class ColumnMap(Entity):
+    required_fields = [
+        "Add_Number",
+        "AddNo_Full",
+        "St_Name",
+        "StNam_Full",
+        "County",
+        "Inc_Muni",
+        "Post_City",
+        "State",
+        "UUID",
+        "AddAuth",
+        "Longitude",
+        "Latitude",
+        "NatGrid",
+        "Placement",
+        "AddrPoint",
+        "DateUpdate",
+        "NAD_Source",
+        "DataSet_ID",
+    ]
+
     def __init__(
         self,
         name: str,

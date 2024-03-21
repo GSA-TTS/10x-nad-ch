@@ -1,0 +1,1109 @@
+Source,Destination
+0,<Null>
+,<Null>
+ ,<Null>
+  ,<Null>
+<Null>,<Null>
+1/2 st,Street
+abbey,Abbey
+ac,Access
+acc,Access
+access,Access
+access rd,Access Road
+access road,[PosMod: Access Road]
+accs,Access
+acre,Acres
+acres,Acres
+acrs,Acres
+al,Alley
+alabama highway,State Highway
+alc,Alcove
+alcove,Alcove
+alcv,Alcove
+allee,Alley
+alley,Alley
+ally,Alley
+aly,Alley
+an county road,County Road
+anex,Annex
+annex,Annex
+annx,Annex
+anx,Annex
+app,Approach
+appr,Approach
+apprch,Approach
+approach,Approach
+apr,Approach
+arc,Arcade
+arcade,Arcade
+arch,Arch
+arizona highway,State Highway
+arizona state route,State Route
+arroyo,Arroyo
+ary,Arroyo
+av,Avenue
+avct,Avenue Court
+avdr,Avenue Drive
+ave,Avenue
+ave (cob),Avenue
+ave (cs),Avenue
+ave cir,Avenue Circle
+ave ln,Avenue Lane
+ave s,Avenue
+ave*,Avenue
+ave.,Avenue
+avea,Avenue
+aven,Avenue
+avenida,Avenida
+avenu,Avenue
+avenua,Avenue
+avenue,Avenue
+avenue circle,Avenue Circle
+avenue court,Avenue Court
+avenue drive,Avenue Drive
+avenue extension,"[PreTyp: Avenue], [PosMod: Extension]"
+avenue footway,Avenue Footway
+avenue lane,Avenue Lane
+avenue loop,Avenue Loop
+avenue place,Avenue Place
+avenue terrace,Avenue Terrace
+avenue way,Avenue Way
+avenune,Avenue
+avienda,Avenida
+avln,Avenue Lane
+avn,Avenue
+avnue,Avenue
+avpl,Avenue Place
+avwy,Avenue Way
+bah,Bahia
+bahia,Bahia
+bank,Bank
+bay,Bay
+bayo,Bayou
+bayoo,Bayou
+bayou,Bayou
+bayway,Bayway
+bch,Beach
+beach,Beach
+bend,Bend
+bg,Burg
+bgs,Burgs
+bia,Bureau Of Indian Affairs Route
+bia road,Bureau Of Indian Affairs Route
+bia route,Bureau Of Indian Affairs Route
+biar,Bureau Of Indian Affairs Route
+bl,Boulevard
+bldv,Boulevard
+blf,Bluff
+blfs,Bluffs
+bluf,Bluff
+bluff,Bluff
+bluffs,Bluffs
+blvd,Boulevard
+blvd n,Boulevard
+blvd.,Boulevard
+bnd,Bend
+boardwalk,Boardwalk
+bot,Bottom
+bottm,Bottom
+bottom,Bottom
+boul,Boulevard
+boulevard,Boulevard
+boulevard extension,"[PreTyp: Boulevard], [PosMod: Extension]"
+boulv,Boulevard
+br,Branch
+branch,Branch
+brdge,Bridge
+brg,Bridge
+bridge,Bridge
+brk,Brook
+brks,Brooks
+brnch,Branch
+brook,Brook
+brooks,Brooks
+brown county road,County Road
+btm,Bottom
+bureau of indian affairs,Bureau of Indian Affairs Route
+bureau of indian affairs road,Bureau Of Indian Affairs Route
+bureau of indian affairs route,Bureau Of Indian Affairs Route
+burg,Burg
+burgs,Burgs
+bus,[PosMod: Business]
+business,[PosMod: Business]
+business highway,Highway
+business interstate,"[PosMod: Business], [PreTyp: Interstate]"
+business loop,"[PosMod: Business], [PosType: Loop]"
+business spur,"[PosMod: Business], [PreTyp: Spur]"
+business united states highway,"[PosMod: Business], [PreTyp: United States Highway]"
+busn hwy,Highway
+by,Bay
+byp,Bypass
+bypa,Bypass
+bypas,Bypass
+bypass,Bypass
+byps,Bypass
+byu,Bayou
+byway,Byway
+c r,County Road
+calle,Calle
+cam,Camino
+caminito,Caminito
+camino,Camino
+camp,Camp
+canyn,Canyon
+canyon,Canyon
+cape,Cape
+carbon co rd,County Road
+cartway,Cartway
+causeway,Causeway
+causwa,Causeway
+cen,Center
+cent,Center
+center,Center
+centers,Centers
+centr,Center
+centre,Centre
+cer,Cerrada
+cerrada,Cerrada
+cfr,County Forest Road
+chas,Chase
+chase,Chase
+chemin,Chemin
+chse,Chase
+ci,Circle
+cir,Circle
+cir (bz),Circle
+cir (cob),Circle
+cir n,Circle
+cir s,Circle
+cir.,Circle
+circ,Circle
+circl,Circle
+circle,Circle
+circle drive,Circle Drive
+circles,Circles
+circuit,Circuit
+circulo,Circulo
+circus,Circus
+cire,"[PosTyp: Circle], [PosDir: East]"
+cirn,"[PosTyp: Circle], [PosDir: North]"
+cirs,Circles
+cirw,"[PosTyp: Circle], [PosDir: West]"
+clb,Club
+clf,Cliff
+clfs,Cliffs
+cliff,Cliff
+cliffs,Cliffs
+cll,Calle
+clle,Calle
+clos,Close
+close,Close
+club,Club
+cluster,Cluster
+cmn,Common
+cmns,Commons
+cmp,Camp
+cmt,Caminito
+cnctr,Connector
+cnrd,County Road
+cnrt,County Route
+cnter,Center
+cntr,Center
+cnyn,Canyon
+co hwy,County Highway
+co rd,County Road
+coast highway,Coast Highway
+comanche county road,County Road
+common,Common
+commons,Commons
+con,Connector
+conc,Concourse
+concession road,Concession Road
+concourse,Concourse
+concrs,Concourse
+conn,Connector
+connect,Connect
+connector,Connector
+cor,Corner
+cord,County Road
+corner,Corner
+corners,Corners
+corridor,Corridor
+cors,Corners
+corso,Corso
+corta,Corta
+corte,Corte
+county  road,County Road
+county forest road,County Forest Road
+county highway,County Highway
+county hwy,County Highway
+county rd,County Road
+county road,County Road
+county route,County Route
+county state aid highway,County State Aid Highway
+countyroad,County Road
+course,Course
+court,Court
+court circle,Court Circle
+court place,Court Place
+court street,Court Street
+court terrace,Court Terrace
+court way,Court Way
+courts,Courts
+cove,Cove
+coves,Coves
+cp,Camp
+cpe,Cape
+cr,County Road
+cr 651,County Road
+cr4,County Road
+crcl,Circle
+crcle,Circle
+crdr,Circle Drive
+creek,Creek
+cres,Crescent
+crescent,Crescent
+crest,Crest
+crk,Creek
+cross,Cross
+cross road,Crossroad
+crossing,Crossing
+crossings,Crossings
+crossover,Crossover
+crossroad,Crossroad
+crossroads,Crossroads
+crossway,Crossway
+crse,Course
+crsent,Crescent
+crsg,Crossing
+crsnt,Crescent
+crssng,Crossing
+crst,Crest
+crt,Court
+crte,Corte
+cswy,Causeway
+ct,Court
+ct (pvt),Court
+ct n,Court
+ct s,Court
+ct.,Court
+cte,"[PosTyp: Court], [PosDir: East]"
+ctf,Cutoff
+ctr,Center
+ctrs,Centers
+cts,Courts
+ctw,"[PosTyp: Court], [PosDir: West]"
+cty hwy,County Highway
+curv,Curve
+curve,Curve
+custer county road,County Road
+cutoff,Cutoff
+cutoff road,Cutoff Road
+cutting,Cutting
+cv,Cove
+cve,Cove
+cvs,Coves
+cyn,Canyon
+dale,Dale
+dam,Dam
+dawson county road,County Road
+dell,Dell
+div,Divide
+divide,Divide
+dl,Dale
+dm,Dam
+dns,Downs
+down,Down
+downs,Downs
+dr,Drive
+dr (bz),Drive
+dr (cob),Drive
+dr (cs),Drive
+dr (tamu),Drive
+dr e,Drive
+dr n,Drive
+dr s,Drive
+dr w,Drive
+dr.,Drive
+draw,Draw
+drc,Drive
+drd,Drive
+drift,Drift
+driv,Drive
+drive,Drive
+drive circle,Drive Circle
+drive extension,"[PreTyp: Drive], [PosMod: Extension]"
+drive lane,Drive Lane
+drive road,Drive Road
+drives,Drives
+driveway,Driveway
+drn,"[PosTyp: Drive], [PosDir: North]"
+drs,Drives
+drv,Drive
+drw,Draw
+drwy,Driveway
+dv,Divide
+dvd,Divide
+dvwy,Driveway
+dwcr,County Road
+dwns,Downs
+echo,Echo
+edge,Edge
+end,End
+ent,Entrada
+entrada,Entrada
+entrance,Entrance
+entry,Entry
+esp,Esplanade
+espl,Esplanade
+esplanade,Esplanade
+esplnd,Esplanade
+est,Estate
+estate,Estate
+estates,Estates
+ests,Estates
+exc,Exchange
+exch,Exchange
+exchange,Exchange
+exchg,Exchange
+exit,Exit
+exp,Expressway
+expr,Expressway
+express,Expressway
+expressway,Expressway
+exprwy,Expressway
+expw,Expressway
+expwy,Expressway
+expy,Expressway
+ext,Extension
+extension,Extension
+extensions,Extensions
+extn,Extension
+extnsn,Extension
+exts,Extensions
+f m,Farm to Market
+f.m.,Farm to Market
+fairway,Fairway
+fall,Fall
+falls,Falls
+fare,Fare
+farm,Farm
+farm to market,Farm to Market
+farm to market highway,Farm to Market
+farm to market rd,Farm to Market
+farm to market road,Farm to Market
+fash,Federal-Aid Secondary Highway
+federal-aid secondary highway,Federal-Aid Secondary Highway
+ferry,Ferry
+field,Field
+fields,Fields
+fire road,Fire Road
+flat,Flat
+flats,Flats
+fld,Field
+flds,Fields
+fll,Fall
+fls,Falls
+flt,Flat
+flts,Flats
+flyway,Flyway
+fm,Farm to Market
+ford,Ford
+fords,Fords
+fordway,Fordway
+forest,Forest
+forest road,Forest Road
+forest service,United States Forest Service Road
+forest service road,United States Forest Service Road
+forests,Forest
+forg,Forge
+forge,Forge
+forges,Forges
+fork,Fork
+forks,Forks
+fort,Fort
+frd,Ford
+frds,Fords
+freeway,Freeway
+freewy,Freeway
+frg,Forge
+frgs,Forges
+frk,Fork
+frks,Forks
+frnt,Front
+front,Front
+frontage,[PosMod: Frontage Road]
+frontage road,[PosMod: Frontage Road]
+frry,Ferry
+frst,Forest
+frt,Fort
+frway,Freeway
+frwy,Freeway
+fry,Ferry
+fs rd,United States Forest Service Road
+fsr,United States Forest Service Road
+ft,Fort
+furlong,Furlong
+fw,Fairway
+fway,Fairway
+fwy,Freeway
+gables,Gables
+gar,Garth
+garden,Garden
+gardens,Gardens
+gardn,Garden
+garth,Garth
+gate,Gate
+gates,Gates
+gateway,Gateway
+gatewy,Gateway
+gatway,Gateway
+gdn,Garden
+gdns,Gardens
+gl,Glen
+glade,Glade
+glen,Glen
+glens,Glens
+gln,Glen
+glns,Glens
+gorge,Gorge
+gr,Green
+grade,Grade
+grden,Garden
+grdn,Garden
+grdns,Gardens
+green,Green
+greens,Greens
+greenway,Greenway
+grn,Green
+grns,Greens
+grov,Grove
+grove,Grove
+groves,Groves
+grv,Grove
+grvs,Groves
+gtway,Gateway
+gtwy,Gateway
+h,Highway
+harb,Harbor
+harbor,Harbor
+harbors,Harbors
+harbour,Harbour
+harbr,Harbor
+haven,Haven
+hayway,Hayway
+hbr,Harbor
+hbrs,Harbors
+heath,Heath
+heights,Heights
+hghts,Heights
+hgts,Heights
+hideaway,Hideaway
+highlands,Highlands
+highway,Highway
+highwy,Highway
+hill,Hill
+hills,Hills
+hillway,Hillway
+hiway,Highway
+hiwy,Highway
+hl,Hill
+hllw,Hollow
+hls,Hills
+hlw,Hollow
+ho county road,County Road
+hollow,Hollow
+hollows,Hollow
+holw,Hollow
+holws,Hollow
+horn,Horn
+horseshoe,Horseshoe
+hrbor,Harbor
+ht,Heights
+hts,Heights
+hvn,Haven
+hw,Highway
+hway,Highway
+hwy,Highway
+hwy 90,Highway
+hy,Highway
+hyw,Highway
+i,Interstate
+i h,Interstate
+ih,Interstate
+indian service road,Indian Service Road
+inlet,Inlet
+inlt,Inlet
+inst,Interstate
+int,Interstate
+interstate,Interstate
+interstate highway,Interstate
+interval,Interval
+intv,Interval
+iowa,State Highway
+iowa state highway,State Highway
+iowa state highway w,State Highway
+is,Island
+isl,Isle
+island,Island
+islands,Islands
+isle,Isle
+isles,Isle
+islnd,Island
+islnds,Islands
+iss,Islands
+ist,Interstate
+itvl,Interval
+jct,Junction
+jction,Junction
+jctn,Junction
+jctns,Junctions
+jcts,Junctions
+junction,Junction
+junctions,Junctions
+junctn,Junction
+juncton,Junction
+ka county road,County Road
+keep,Keep
+key,Key
+keys,Keys
+knl,Knoll
+knls,Knolls
+knob,Knob
+knol,Knoll
+knoll,Knoll
+knolls,Knolls
+ky,Key
+kys,Keys
+lair,Lair
+lake,Lake
+lake county road,County Road
+lakes,Lakes
+land,Land
+landing,Landing
+lane,Lane
+lane avenue,Lane Avenue
+lane circle,Lane Circle
+lane court,Lane Court
+lane drive,Lane Drive
+lane road,Lane Road
+lane way,Lane Way
+lateral,Lateral
+lck,Lock
+lcks,Locks
+ldg,Lodge
+ldge,Lodge
+ledge,Ledge
+lf,Loaf
+lgt,Light
+lgts,Lights
+light,Light
+lights,Lights
+line,Line
+lk,Lake
+lks,Lakes
+ln,Lane
+ln (bz),Lane
+ln (cob),Lane
+ln (cs),Lane
+ln.,Lane
+lnd,Land
+lndg,Landing
+lndng,Landing
+loaf,Loaf
+lock,Lock
+locks,Locks
+lodg,Lodge
+lodge,Lodge
+lookout,Lookout
+loop,Loop
+loop road,Loop Road
+loops,Loop
+lp,Loop
+ma county road,County Road
+mall,Mall
+manor,Manor
+manors,Manors
+market,Market
+md state rt,State Route
+mdw,Meadow
+mdws,Meadows
+meadow,Meadow
+meadows,Meadows
+medows,Meadows
+mews,Mews
+mill,Mill
+mills,Mills
+mission,Mission
+missn,Mission
+mkt,Market
+ml,Mill
+mll,Mall
+mls,Mills
+mnhw,State Highway
+mnr,Manor
+mnrs,Manors
+mnt,Mount
+mntain,Mountain
+mntn,Mountain
+mntns,Mountains
+moffat co rd,County Road
+montana highway,State Highway
+motorway,Motorway
+mount,Mount
+mountain,Mountain
+mountains,Mountains
+mountin,Mountain
+msn,Mission
+mssn,Mission
+mt,Mount
+mtin,Mountain
+mtn,Mountain
+mtns,Mountains
+mtwy,Motorway
+narrows,Narrows
+national forest development road,National Forest Development Road
+nck,Neck
+neck,Neck
+new mexico hwy,State Highway
+new york city highway,Highway
+new york state route,State Route
+nm highway,State Highway
+nook,Nook
+north carolina highway,State Highway
+null,<Null>
+nys route,State Route
+old,[PreMod: Old]
+old county,"[PreMod: Old], [PreTyp: County Road]"
+old county highway,"[PreMod: Old], [PreTyp: County Highway]"
+old county rd,"[PreMod: Old], [PreTyp: County Road]"
+old county road,"[PreMod: Old], [PreTyp: County Road]"
+old highway,"[PreMod: Old], [PreTyp: Highway]"
+old hwy,"[PreMod: Old], [PreTyp: Highway]"
+old route,"[PreMod: Old], [PreTyp: Route]"
+old state highway,"[PreMod: Old], [PreTyp: State Highway]"
+old state hwy,"[PreMod: Old], [PreTyp: State Highway]"
+old state road,"[PreMod: Old], [PreTyp: State Road]"
+old state route,"[PreMod: Old], [PreTyp: State Route]"
+old united state highway,"[PreMod: Old], [PreTyp: United States Highway]"
+old united states highway,"[PreMod: Old], [PreTyp: United States Highway]"
+old us,"[PreMod: Old], [PreTyp: United States Highway]"
+old us highway,"[PreMod: Old], [PreTyp: United States Highway]"
+opas,Overpass
+orch,Orchard
+orchard,Orchard
+orchrd,Orchard
+oval,Oval
+overlook,Overlook
+overpass,Overpass
+ovi,Oval
+ovl,Oval
+ovlk,Overlook
+park,Park
+park drive,Park Drive
+parke,Parke
+parks,Parks
+parkway,Parkway
+parkways,Parkways
+parkwy,Parkway
+pas,Pass
+paseo,Paseo
+pass,Pass
+passage,Passage
+passway,Passway
+path,Path
+paths,Path
+pathway,Pathway
+pen,Peninsula
+ph,Path
+pike,Pike
+pikes,Pike
+pine,Pine
+pines,Pines
+pk,Park
+pke,Pike
+pkway,Parkway
+pkwy,Parkway
+pkwy n,"[PosTyp: Parkway], [PosDir: North]"
+pkwyn,"[PosTyp: Parkway], [PosDir: North]"
+pkwys,Parkways
+pky,Parkway
+pky e,Parkway
+pky s,Parkway
+pl,Place
+pla,Placita
+place,Place
+placita,Placita
+plain,Plain
+plains,Plains
+plaza,Plaza
+pln,Plain
+plns,Plains
+plz,Plaza
+plza,Plaza
+pne,Pine
+pnes,Pines
+point,Point
+pointe,Pointe
+points,Points
+port,Port
+ports,Ports
+pr,Prairie
+pr rd,[PosMod: Private Road]
+prairie,Prairie
+private,[PosMod: Private Road]
+private road,[PosMod: Private Road]
+prk,Park
+prkwy,Parkway
+prky,Parkway
+prm,Promenade
+prom,Promenade
+promenade,Promenade
+prr,Prairie
+prt,Port
+prts,Ports
+ps,Pass
+psg,Passage
+psge,Passage
+pso,Paseo
+pt,Point
+pts,Points
+ptwy,Pathway
+public access,Public Access
+pvt,[PosMod: Private Road]
+pw,Parkway
+pwky,Parkway
+pwy,Parkway
+py,Parkway
+pz,Plaza
+quarter,Quarter
+quay,Quay
+rad,Radial
+radial,Radial
+radiel,Radial
+radl,Radial
+ramp,Ramp
+ranch,Ranch
+ranch road,Ranch Road
+ranches,Ranch
+rancho,Rancho
+raod,Road
+rapid,Rapid
+rapids,Rapids
+rch,Rancho
+rcho,Rancho
+rd,Road
+rd (bz),Road
+rd (cob),Road
+rd (cs),Road
+rd w,Road
+rd.,Road
+rd<comma>,Road
+rdf,Road
+rdg,Ridge
+rdge,Ridge
+rdgs,Ridges
+rds,Roads
+reach,Reach
+recreation road,Recreational Road
+recreational rd,Recreational Road
+recreational road,Recreational Road
+rest,Rest
+retreat,Retreat
+rg,Ridge
+ridge,Ridge
+ridges,Ridges
+rio blanco co rd,County Road
+rird,River Road
+rise,Rise
+riv,River
+river,River
+river road,River Road
+rivr,River
+rm,Ramp
+rmp,Ramp
+rn,Run
+rnch,Ranch
+rnchs,Ranch
+road,Road
+road avenue,Road Avenue
+road branch,Road Branch
+road bypass,Road Bypass
+road circle,Road Circle
+road court,Road Court
+road cutoff,Road Cutoff
+road drive,Road Drive
+road estates,Road Estates
+road extension,"[PreTyp: Road], [PosMod: Extension]"
+road landing,Road Landing
+road lane,Road Lane
+road place,Road Place
+road terrace,Road Terrace
+road way,Road Way
+roads,Roads
+roadway,Roadway
+round,Round
+route,Route
+row,Row
+rpd,Rapid
+rpds,Rapids
+rr,Rural Route
+rs  county road,County Road
+rs county road,County Road
+rst,Rest
+rt,Route
+rte,Route
+rue,Rue
+run,Run
+runway,Runway
+rvr,River
+rw,Row
+rway,Runway
+sd highway,State Highway
+sd hwy,State Highway
+sh,State Highway
+shl,Shoal
+shls,Shoals
+shoal,Shoal
+shoals,Shoals
+shoar,Shore
+shoars,Shores
+shore,Shore
+shores,Shores
+shr,Shore
+shrs,Shores
+shwy,State Highway
+sideroad,Sideroad
+skies,Skies
+skwy,Skyway
+skyway,Skyway
+slip,Slip
+smt,Summit
+sp,Spur
+spg,Spring
+spgs,Springs
+spng,Spring
+spngs,Springs
+spr,Spring
+sprg,Springs
+spring,Spring
+springs,Springs
+sprng,Spring
+sprngs,Springs
+spur,Spur
+spurs,Spurs
+sq,Square
+sqr,Square
+sqre,Square
+sqrs,Squares
+sqs,Squares
+squ,Square
+square,Square
+squares,Squares
+sr,State Route
+srte,State Route
+st,Street
+st (bz),Street
+st (cob),Street
+st (cs),Street
+st (tamu),Street
+st extension,"[PreTyp: Street], [PosMod: Extension]"
+st hwy,State Highway
+st n,"[PosTyp: Street], [PosDir: North]"
+st w,Street
+st.,Street
+st<comma>,Street
+sta,Station
+stat,Station
+state  highway,State Highway
+state highway,State Highway
+state hwy,State Highway
+state parkway,State Parkway
+state rd,State Road
+state road,State Road
+state route,State Route
+state secondary,State Secondary
+station,Station
+statn,Station
+stcr,Street Circle
+stct,Street Court
+stdr,Street Drive
+sthy,State Highway
+stln,Street Lane
+stn,Station
+stpkwy,State Parkway
+stpl,Street Place
+str,Street
+stra,Stravenue
+strand,Strand
+strasse,Strasse
+strav,Stravenue
+straven,Stravenue
+stravenue,Stravenue
+stravn,Stravenue
+strd,Street Road
+stream,Stream
+streeet,Street
+street,Street
+street annex,Street Annex
+street avenue,Street Avenue
+street bypass,Street Bypass
+street circle,Street Circle
+street court,Street Court
+street crossing,Street Crossing
+street drive,Street Drive
+street lane,Street Lane
+street loop,Street Loop
+street park,Street Park
+street parkway,Street Parkway
+street passway,Street Passway
+street pkwy,Street Parkway
+street place,Street Place
+street road,Street Road
+street terrace,Street Terrace
+street way,Street Way
+streets,Streets
+streme,Stream
+strip,Strip
+strm,Stream
+strp,Strip
+strt,Street
+strvn,Stravenue
+strvnue,Stravenue
+sts,Streets
+stwy,Street Way
+sumit,Summit
+sumitt,Summit
+summit,Summit
+sv,Stravenue
+taxiway,Taxiway
+te,Terrace
+ter,Terrace
+tern,Tern
+terr,Terrace
+terrace,Terrace
+terrr,Terrace
+texas highway,State Highway
+throughway,Throughway
+thruway,Thruway
+thwy,Thruway
+tl,Trail
+tnpk,Turnpike
+townline,Townline
+township road,Township Road
+tpke,Turnpike
+tr,Trail
+trace,Trace
+traces,Trace
+track,Track
+tracks,Track
+trafficway,Trafficway
+trail,Trail
+trailer,Trailer
+traill,Trail
+trails,Trail
+trak,Track
+trc,Trace
+trce,Trace
+trfy,Trafficway
+triangle,Triangle
+trk,Track
+trks,Track
+trl,Trail
+trlr,Trailer
+trlrs,Trailer
+trls,Trail
+trn,Turn
+trnpk,Turnpike
+trwy,Throughway
+tunel,Tunnel
+tunl,Tunnel
+tunls,Tunnel
+tunnel,Tunnel
+tunnels,Tunnel
+tunnl,Tunnel
+turn,Turn
+turnpike,Turnpike
+turnpk,Turnpike
+tway,Taxiway
+un,Union
+underpass,Underpass
+union,Union
+unions,Unions
+united state highway,United States Highway
+united states,United States Highway
+united states forest service road,United States Forest Service Road
+united states highway,United States Highway
+united states hwy,United States Highway
+united states route,United States Route
+uns,Unions
+upas,Underpass
+us,United States Highway
+us highway,United States Highway
+us hwy,United States Highway
+us hy,United States Highway
+usfr,United States Forest Service Road
+ushw,United States Highway
+ushy,United States Highway
+valley,Valley
+valleys,Valleys
+vally,Valley
+vdct,Viaduct
+ver,Vereda
+vereda,Vereda
+via,Via
+viadct,Viaduct
+viaduct,Viaduct
+view,View
+views,Views
+vila,Villa
+vill,Village
+villa,Villa
+villag,Village
+village,Village
+villages,Villages
+ville,Ville
+villg,Village
+villiage,Village
+vis,Vista
+vist,Vista
+vista,Vista
+vl,Ville
+vlg,Village
+vlge,Village
+vlgs,Villages
+vlly,Valley
+vly,Valley
+vlys,Valleys
+vr,Vereda
+vst,Vista
+vsta,Vista
+vw,View
+vws,Views
+vz county road,County Road
+waddy,Waddy
+walk,Walk
+walks,Walks
+wall,Wall
+way,Way
+way loop,Way Loop
+way terrace,Way Terrace
+ways,Ways
+weeg,Weeg
+well,Well
+wells,Wells
+wharf,Wharf
+whf,Wharf
+whrf,Wharf
+wk,Walk
+wl,Well
+wlk,Walk
+wls,Wells
+woods,Woods
+wy,Way
+wye,Wye
+wynd,Wynd
+xg,Crossing
+xing,Crossing
+xrd,Crossroad
+xrds,Crossroads

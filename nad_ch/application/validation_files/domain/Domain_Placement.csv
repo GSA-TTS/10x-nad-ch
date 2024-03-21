@@ -1,0 +1,11 @@
+Source,Destination
+Linear Geocode,Linear Geocode
+Other,Other
+Parcel - Centroid,Parcel - Centroid
+Parcel - Other,Parcel - Other/Manual Placement
+Property Access,Property Access Point
+Site,Site Placement
+Structure - Entrance,Structure - Entrance
+Structure - Interior,Structure - Interior Unit Location
+Structure - Rooftop,Structure - Rooftop
+Unknown,Unknown
