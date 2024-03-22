@@ -79,6 +79,9 @@ class FakeColumnMapRepository(ColumnMapRepository):
         self._column_maps = set()
         self._next_id = 1
 
+    def get_by_id(self, id: int) -> Optional[ColumnMap]:
+        return next((cm for cm in self._column_maps if cm.id == id), None)
+
     def add(self, column_map: ColumnMap) -> ColumnMap:
         column_map.id = self._next_id
         column_map.set_created_at(datetime.now())
@@ -104,6 +107,22 @@ class FakeColumnMapRepository(ColumnMapRepository):
             ),
             None,
         )
+
+    def get_by_producer(self, producer: DataProducer) -> Iterable[ColumnMap]:
+        return [cm for cm in self._column_maps if cm.producer.name == producer.name]
+
+    def update(self, column_map: ColumnMap) -> ColumnMap:
+        self._column_maps.remove(
+            next(
+                (cm for cm in self._column_maps if cm.name == column_map.name),
+                None,
+            )
+        )
+        self._column_maps.add(column_map)
+        return column_map
+
+    def remove(self, column_map: ColumnMap) -> None:
+        self._column_maps.remove(column_map)
 
 
 class FakeStorage:

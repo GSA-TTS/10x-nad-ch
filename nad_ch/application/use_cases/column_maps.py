@@ -14,6 +14,7 @@ def add_column_map(
     if user is None:
         raise ValueError("User not found")
 
+    # TODO get the producer name from the user's producer property
     producer = ctx.producers.get_by_name("New Jersey")
     if producer is None:
         raise ValueError("Producer not found")
