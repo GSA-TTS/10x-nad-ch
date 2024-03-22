@@ -59,7 +59,7 @@ def update_column_mapping(
         raise ValueError("Column map not found")
 
     column_map.mapping[nad_field] = user_field
-
+    print(column_map.mapping)
     if not column_map.is_valid():
         raise ValueError("Invalid mapping")
 

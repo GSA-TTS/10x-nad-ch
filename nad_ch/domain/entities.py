@@ -67,17 +67,10 @@ class ColumnMap(Entity):
         return f"ColumnMap {self.id}, {self.name})"
 
     def is_valid(self) -> bool:
-        # The mapping must not be empty
-        if not len(self.mapping):
-            return False
-
-        # The mapping must contain all required fields and they must not be empty
-        if not all(
-            field in self.mapping and self.mapping[field] for field in ColumnMap.required_fields
-        ):
-            return False
-
-        return True
+        return all(
+            field in self.mapping and self.mapping[field] not in (None, '')
+            for field in ColumnMap.required_fields
+        )
 
 
 class DataSubmission(Entity):

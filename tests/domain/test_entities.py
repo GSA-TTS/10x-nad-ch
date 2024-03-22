@@ -34,6 +34,7 @@ def test_column_map_is_valid():
         "StNam_Full": "street_name_full",
         "County": "county",
         "Inc_Muni": "city",
+        "Post_City": "post_city",
         "State": "state",
         "UUID": "guid",
         "Longitude": "long",
@@ -43,6 +44,8 @@ def test_column_map_is_valid():
         "DateUpdate": "updated",
         "NAD_Source": "source",
         "DataSet_ID": "123456",
+        "Placement": "placement",
+        "AddAuth": "auth",
     }
 
     producer = DataProducer("Some producer")
@@ -58,6 +61,7 @@ def test_column_map_is_invalid_if_missing_a_required_field():
         "StNam_Full": "street_name_full",
         "County": "county",
         "Inc_Muni": "city",
+        "Post_City": "post_city",
         "State": "state",
         "UUID": "guid",
         "Longitude": "long",
@@ -66,6 +70,9 @@ def test_column_map_is_invalid_if_missing_a_required_field():
         "AddrPoint": "address_point",
         "DateUpdate": "updated",
         "NAD_Source": "source",
+        "DataSet_ID": "123456",
+        "Placement": "placement",
+        # "AddAuth": "auth",
     }
 
     producer = DataProducer("Some producer")
@@ -87,6 +94,7 @@ def test_column_map_is_invalid_if_empty_values_for_required_field():
         "StNam_Full": "street_name_full",
         "County": "county",
         "Inc_Muni": "city",
+        "Post_City": "post_city",
         "State": "state",
         "UUID": "guid",
         "Longitude": "long",
@@ -96,6 +104,8 @@ def test_column_map_is_invalid_if_empty_values_for_required_field():
         "DateUpdate": "updated",
         "NAD_Source": "source",
         "DataSet_ID": "",
+        "Placement": "placement",
+        "AddAuth": "",
     }
 
     producer = DataProducer("Some producer")
