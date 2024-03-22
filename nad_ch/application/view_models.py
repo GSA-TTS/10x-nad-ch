@@ -32,7 +32,6 @@ def get_view_model(
     entity_type = type(entity)
     if entity_type in entity_to_vm_function_map:
         mapping_function = entity_to_vm_function_map[entity_type]
-        print(mapping_function(entity))
         return mapping_function(entity)  # Call the mapping function for the entity
     else:
         raise ValueError(f"No mapping function defined for entity type: {entity_type}")
@@ -51,7 +50,10 @@ class ColumnMapViewModel(ViewModel):
 
 
 def create_column_map_view_model(column_map: ColumnMap) -> ColumnMapViewModel:
-    available_nad_fields = [key for key in ColumnMap.all_fields if key not in column_map.mapping]
+    available_nad_fields = [
+        key for key in ColumnMap.all_fields
+        if key not in column_map.mapping or column_map.mapping.get(key) in ["", None]
+    ]
 
     return ColumnMapViewModel(
         id=column_map.id,
