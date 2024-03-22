@@ -51,7 +51,8 @@ class ColumnMapViewModel(ViewModel):
 
 def create_column_map_view_model(column_map: ColumnMap) -> ColumnMapViewModel:
     available_nad_fields = [
-        key for key in ColumnMap.all_fields
+        key
+        for key in ColumnMap.all_fields
         if key not in column_map.mapping or column_map.mapping.get(key) in ["", None]
     ]
 

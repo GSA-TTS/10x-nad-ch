@@ -57,7 +57,9 @@ def update_column_mapping(
     if column_map is None:
         raise ValueError("Column map not found")
 
-    column_map.mapping = {key: new_mapping[key] for key in ColumnMap.all_fields if key in new_mapping}
+    column_map.mapping = {
+        key: new_mapping[key] for key in ColumnMap.all_fields if key in new_mapping
+    }
 
     if not column_map.is_valid():
         raise ValueError("Invalid mapping")
@@ -77,7 +79,11 @@ def update_column_mapping_field(
 
     column_map.mapping[nad_field] = user_field
 
-    column_map.mapping = {key: column_map.mapping[key] for key in ColumnMap.all_fields if key in column_map.mapping}
+    column_map.mapping = {
+        key: column_map.mapping[key]
+        for key in ColumnMap.all_fields
+        if key in column_map.mapping
+    }
 
     if not column_map.is_valid():
         raise ValueError("Invalid mapping")
