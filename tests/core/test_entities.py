@@ -1,5 +1,5 @@
 import datetime
-from nad_ch.domain.entities import DataProducer, DataSubmission, ColumnMap
+from nad_ch.core.entities import DataProducer, DataSubmission, ColumnMap
 
 
 def test_data_submission_generates_filename():

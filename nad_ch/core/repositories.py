@@ -1,6 +1,6 @@
 from typing import Optional, Protocol
 from collections.abc import Iterable
-from nad_ch.domain.entities import DataProducer, DataSubmission, User, ColumnMap
+from nad_ch.core.entities import DataProducer, DataSubmission, User, ColumnMap
 
 
 class DataProducerRepository(Protocol):

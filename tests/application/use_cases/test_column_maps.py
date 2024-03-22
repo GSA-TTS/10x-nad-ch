@@ -7,7 +7,7 @@ from nad_ch.application.use_cases.column_maps import (
     update_column_mapping_field,
 )
 from nad_ch.application.view_models import ColumnMapViewModel
-from nad_ch.domain.entities import ColumnMap, DataProducer, User
+from nad_ch.core.entities import ColumnMap, DataProducer, User
 from nad_ch.config import create_app_context
 
 

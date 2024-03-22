@@ -4,7 +4,7 @@ from nad_ch.application.view_models import (
     get_view_model,
     ColumnMapViewModel,
 )
-from nad_ch.domain.entities import ColumnMap
+from nad_ch.core.entities import ColumnMap
 
 
 def add_column_map(

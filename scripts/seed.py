@@ -1,7 +1,7 @@
 import os
 import zipfile
 from nad_ch.config import create_app_context, OAUTH2_CONFIG
-from nad_ch.domain.entities import ColumnMap, DataProducer, DataSubmission, User
+from nad_ch.core.entities import ColumnMap, DataProducer, DataSubmission, User
 
 
 def zip_directory(folder_path, zip_path):

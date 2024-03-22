@@ -13,7 +13,7 @@ from nad_ch.application.validation import (
     finalize_overview_details,
 )
 from nad_ch.config import QUEUE_BROKER_URL, QUEUE_BACKEND_URL
-from nad_ch.domain.repositories import DataSubmissionRepository
+from nad_ch.core.repositories import DataSubmissionRepository
 from typing import Dict
 
 

@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Optional, Iterable
 from nad_ch.application.dtos import DownloadResult
-from nad_ch.domain.entities import DataProducer, DataSubmission, User, ColumnMap
-from nad_ch.domain.repositories import (
+from nad_ch.core.entities import DataProducer, DataSubmission, User, ColumnMap
+from nad_ch.core.repositories import (
     DataProducerRepository,
     DataSubmissionRepository,
     UserRepository,

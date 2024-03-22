@@ -2,8 +2,8 @@ import contextlib
 import json
 from typing import List, Optional
 from flask_login import UserMixin
-from nad_ch.domain.entities import DataProducer, DataSubmission, User, ColumnMap
-from nad_ch.domain.repositories import (
+from nad_ch.core.entities import DataProducer, DataSubmission, User, ColumnMap
+from nad_ch.core.repositories import (
     DataProducerRepository,
     DataSubmissionRepository,
     UserRepository,

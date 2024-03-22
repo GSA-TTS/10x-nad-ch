@@ -2,7 +2,7 @@ from flask_login import login_user, logout_user, current_user
 import pytest
 from nad_ch.config import create_app_context
 from nad_ch.controllers.web.flask import create_flask_application
-from nad_ch.domain.entities import User
+from nad_ch.core.entities import User
 
 
 @pytest.fixture

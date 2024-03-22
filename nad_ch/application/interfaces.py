@@ -1,6 +1,6 @@
 from typing import Optional, Protocol, Dict
 from nad_ch.application.dtos import DownloadResult
-from nad_ch.domain.repositories import (
+from nad_ch.core.repositories import (
     DataProducerRepository,
     DataSubmissionRepository,
     UserRepository,

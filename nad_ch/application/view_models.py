@@ -3,7 +3,7 @@ from datetime import datetime
 import json
 import numpy as np
 from typing import Union, Dict, List, Tuple, Protocol
-from nad_ch.domain.entities import Entity, ColumnMap, DataProducer, DataSubmission
+from nad_ch.core.entities import Entity, ColumnMap, DataProducer, DataSubmission
 
 
 class ViewModel(Protocol):

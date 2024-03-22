@@ -6,7 +6,7 @@ from nad_ch.application.view_models import (
     get_view_model,
     DataSubmissionViewModel,
 )
-from nad_ch.domain.entities import DataSubmission, ColumnMap
+from nad_ch.core.entities import DataSubmission, ColumnMap
 
 
 def ingest_data_submission(
