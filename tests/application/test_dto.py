@@ -51,6 +51,8 @@ def test_to_dict_with_numpy_types():
         "valid_domain_count": 90,
         "invalid_domain_count": 10,
         "invalid_domains": [],
+        "domain_frequency": {},
+        "high_domain_cardinality": False,
     }
     assert isinstance(feature_dict["populated_count"], int)
     assert isinstance(feature_dict["null_count"], float)
