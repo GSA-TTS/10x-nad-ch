@@ -19,6 +19,10 @@ def add_column_map(
     if producer is None:
         raise ValueError("Producer not found")
 
+    # Note: will need to account for admin permissions to update any DataProducer's
+    # column mapping, and for users associated with the DataProducer to update ONLY
+    # their own column mapping
+
     column_map = ColumnMap(name, producer, mapping, 1)
 
     if not column_map.is_valid():

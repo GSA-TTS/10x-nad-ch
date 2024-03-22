@@ -35,7 +35,6 @@ def main():
     new_column_map = ColumnMap(
         name="NewJerseyMapping", producer=saved_producer, version_id=1
     )
-    # TODO save column map once ApplicationContext can provide a repository
     new_column_map.mapping = {
         "AddNum_Pre": "",
         "Add_Number": "address_number",

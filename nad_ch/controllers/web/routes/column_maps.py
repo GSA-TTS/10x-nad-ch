@@ -63,6 +63,8 @@ def store():
         flash("No selected file")
         return redirect(url_for("column_maps.create"))
 
+    # TODO instead of validating the file extension, validate the file by trying to open
+    # it as a CSV and reading in the headers
     if not file.filename.endswith(".csv"):
         flash("File is not a CSV")
         return redirect(url_for("column_maps.create"))
@@ -70,6 +72,7 @@ def store():
     if file:
         csv_dict = {}
 
+        # TODO: also test with CSV files from a Windows machine (look up the differences)
         try:
             file_content = file.read().decode("utf-8").splitlines()
             csv_reader = csv.reader(file_content)
@@ -91,6 +94,8 @@ def store():
             return redirect(url_for("column_maps.create"))
 
 
+# Note: get ID from route, not hidden field in form.
+# Make this its own POST route to /column-maps/update/<id>
 def update(request):
     id = request.form.get("_id")
 
