@@ -28,6 +28,68 @@ class DataProducer(Entity):
 
 
 class ColumnMap(Entity):
+    all_fields = [
+        "AddNum_Pre",
+        "Add_Number",
+        "AddNum_Suf",
+        "AddNo_Full",
+        "St_PreMod",
+        "St_PreDir",
+        "St_PreTyp",
+        "St_PreSep",
+        "St_Name",
+        "St_PosTyp",
+        "St_PosDir",
+        "St_PosMod",
+        "StNam_Full",
+        "Building",
+        "Floor",
+        "Unit",
+        "Room",
+        "Seat",
+        "Addtl_Loc",
+        "SubAddress",
+        "LandmkName",
+        "County",
+        "Inc_Muni",
+        "Post_City",
+        "Census_Plc",
+        "Uninc_Comm",
+        "Nbrhd_Comm",
+        "NatAmArea",
+        "NatAmSub",
+        "Urbnztn_PR",
+        "PlaceOther",
+        "PlaceNmTyp",
+        "State",
+        "Zip_Code",
+        "Plus_4",
+        "UUID",
+        "AddAuth",
+        "AddrRefSys",
+        "Longitude",
+        "Latitude",
+        "NatGrid",
+        "Elevation",
+        "Placement",
+        "AddrPoint",
+        "Related_ID",
+        "RelateType",
+        "ParcelSrc",
+        "Parcel_ID",
+        "AddrClass",
+        "Lifecycle",
+        "Effective",
+        "Expire",
+        "DateUpdate",
+        "AnomStatus",
+        "LocatnDesc",
+        "Addr_Type",
+        "DeliverTyp",
+        "NAD_Source",
+        "DataSet_ID",
+    ]
+
     required_fields = [
         "Add_Number",
         "AddNo_Full",
@@ -68,7 +130,7 @@ class ColumnMap(Entity):
 
     def is_valid(self) -> bool:
         return all(
-            field in self.mapping and self.mapping[field] not in (None, '')
+            field in self.mapping and self.mapping[field] not in (None, "")
             for field in ColumnMap.required_fields
         )
 

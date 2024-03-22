@@ -1,100 +1,78 @@
 {% extends "_layouts/base.html" %} {% block title %}Mapping {{
-column_map.name}}{% endblock %} {% from "components/page-header.html" import
-page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
-{% from "components/icons/edit.html" import edit %} {% block content %} {{
-page_header("Mapping: " ~ column_map.name ~ edit()) }}
-<div class="grid-container padding-left-0">
-  <div class="display-flex flex-row flex-align-start padding-top-2">
-    <div class="display-flex flex-align-center padding-right-2 padding-top-1">
-      Version number:
-      <span class="font-mono-md padding-left-1">{{ column_map.version }}</span>
-    </div>
-    <div class="display-flex flex-align-center">
-      <a
-        class="usa-button usa-button--outline"
-        href="{{ url_for('column_maps.show', id=column_map.id) }}"
-        >Cancel</a
-      >
-    </div>
-  </div>
-  <div class="grid-row mapping-row">
-    <div class="grid-col-3 text-bold">Your Field</div>
-    <div class="grid-col-1"></div>
-    <div class="grid-col-3 text-bold">NAD Field</div>
-  </div>
-  {% for nad_field, mapped_field in column_map.mapping.items() %} {% if
-  mapped_field %}
-  <div x-data="{ isEditing{{ nad_field }}: false }">
-    <div x-show="!isEditing{{ nad_field }}">
-      <div class="grid-row mapping-row">
-        <div class="grid-col-3">{{ mapped_field }}</div>
-        <div class="grid-col-1">{{ arrow_right() }}</div>
-        <div class="grid-col-3">{{ nad_field }}</div>
-        <div class="grid-col-1 display-flex flex-row">
-          <button
-            class="usa-button usa-button--outline usa-button--small"
-            @click.prevent="isEditing{{ nad_field }} = ! isEditing{{ nad_field }}"
-          >
-            Edit
-          </button>
-          {% if nad_field not in column_map.required_nad_fields %}
-          <form
-            form
-            action="/column-maps"
-            method="post"
-            enctype="multipart/form-data"
-          >
-            <input type="hidden" name="_method" value="PUT" />
-            <input type="hidden" name="_formType" value="delete_field" />
-            <input type="hidden" name="_nadField" value="{{ nad_field }}" />
-            <input type="hidden" name="_nullField" value="" />
-            <input type="hidden" name="_id" value="{{ column_map.id }}" />
+column_map.name}}{% endblock %} {% from "components/icons/arrow_right.html"
+import arrow_right %} {% from "components/icons/edit.html" import edit %} {%
+block content %}
 
-            <button
-              class="usa-button usa-button usa-button--small"
-              type="submit"
-            >
-              Delete
-            </button>
-          </form>
-          {% endif %}
+<form action="/column-maps" method="post" enctype="multipart/form-data">
+  <input type="hidden" name="_method" value="PUT" />
+  <input type="hidden" name="_id" value="{{ column_map.id }}" />
+  <input type="hidden" name="_formType" value="existing_fields" />
+
+  <header class="usa-header usa-header--basic">
+    <div class="usa-nav-container">
+      <div class="usa-navbar">
+        <div class="usa-logo">
+          <em class="usa-logo__text"
+            >{{ "Mapping: " ~ column_map.name ~ edit() }}</em
+          >
         </div>
+        <a
+          class="usa-button usa-button--outline"
+          href="{{ url_for('column_maps.show', id=column_map.id) }}"
+          >Cancel</a
+        >
+        <button class="usa-button" type="submit">Save</button>
       </div>
     </div>
-    <div x-show="isEditing{{ nad_field }}">
-      <form action="/column-maps" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="_method" value="PUT" />
-        <input type="hidden" name="_formType" value="required_field" />
-        <input type="hidden" name="_nadField" value="{{ nad_field }}" />
-        <input type="hidden" name="_id" value="{{ column_map.id }}" />
+  </header>
 
-        <div class="grid-row mapping-row">
-          <div class="grid-col-3 display-flex flex-align-center">
-            <input
-              type="text"
-              name="mappedRequiredField"
-              class="usa-input usa-input--small margin-top-0"
-              value="{{ mapped_field }}"
-              required
-            />
-          </div>
-          <div class="grid-col-1">{{ arrow_right() }}</div>
-          <div class="grid-col-3">{{ nad_field }}</div>
-          <div class="grid-col-1 display-flex flex-row">
-            <button
-              class="usa-button usa-button--outline usa-button--small"
-              @click.prevent="isEditing{{ nad_field }} = ! isEditing{{ nad_field }}"
-            >
-              Cancel
-            </button>
-            <button class="usa-button usa-button--small" type="submit">
-              Save
-            </button>
-          </div>
-        </div>
-      </form>
+  <div class="grid-container padding-left-0">
+    <div class="grid-row mapping-row">
+      <div class="grid-col-3 text-bold">Your Field</div>
+      <div class="grid-col-1"></div>
+      <div class="grid-col-3 text-bold">NAD Field</div>
     </div>
+    {% for nad_field, mapped_field in column_map.mapping.items() %} {% if
+    mapped_field %}
+    <div
+      x-data="{ show{{ nad_field}}: true }"
+      x-show="show{{ nad_field}}"
+      class="grid-row mapping-row"
+    >
+      <div class="grid-col-3 display-flex flex-align-center">
+        <input
+          type="text"
+          id="{{ nad_field }}"
+          name="{{ nad_field }}"
+          class="usa-input usa-input--small margin-top-0"
+          value="{{ mapped_field }}"
+          {%
+          if
+          nad_field
+          in
+          column_map.required_nad_fields
+          %}required{%
+          endif
+          %}
+        />
+      </div>
+      <div class="grid-col-1">{{ arrow_right() }}</div>
+      <div class="grid-col-3">{{ nad_field }}</div>
+      <div class="grid-col-1 display-flex flex-row">
+        {% if nad_field not in column_map.required_nad_fields %}
+        <button
+          class="usa-button usa-button--small"
+          @click.prevent="() => {
+            document.getElementById('{{ nad_field }}'). value = '';
+            show{{ nad_field}} = false;
+          }"
+        >
+          Delete
+        </button>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %} {% endfor %}
   </div>
-  {% endif %} {% endfor %}
-</div>
+</form>
 {% endblock %}

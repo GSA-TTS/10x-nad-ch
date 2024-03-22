@@ -44,13 +44,31 @@ def get_column_maps_by_producer(
     producer = ctx.producers.get_by_name(producer_name)
     if not producer:
         raise ValueError("Producer not found")
-
     column_maps = ctx.column_maps.get_by_producer(producer)
-
+    print(get_view_model(column_maps[0]))
+    print([get_view_model(column_map) for column_map in column_maps])
     return [get_view_model(column_map) for column_map in column_maps]
 
 
 def update_column_mapping(
+    ctx: ApplicationContext, id: int, new_mapping: Dict[str, str]
+):
+    column_map = ctx.column_maps.get_by_id(id)
+
+    if column_map is None:
+        raise ValueError("Column map not found")
+
+    column_map.mapping = new_mapping
+
+    if not column_map.is_valid():
+        raise ValueError("Invalid mapping")
+
+    ctx.column_maps.update(column_map)
+
+    return get_view_model(column_map)
+
+
+def update_column_mapping_field(
     ctx: ApplicationContext, id: int, user_field: str, nad_field: str
 ):
     column_map = ctx.column_maps.get_by_id(id)

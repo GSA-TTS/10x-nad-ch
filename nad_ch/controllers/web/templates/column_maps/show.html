@@ -1,13 +1,23 @@
 {% extends "_layouts/base.html" %} {% block title %}Mapping {{
-column_map.name}}{% endblock %} {% from "components/page-header.html" import
-page_header %} {% from "components/icons/arrow_right.html" import arrow_right %}
-{% block content %} {{ page_header("Mapping: " ~ column_map.name
-) }}
+column_map.name}} {% endblock %} {% from "components/icons/arrow_right.html" import arrow_right %}
+{% block content %}
+<header class="usa-header usa-header--basic">
+  <div class="usa-nav-container">
+    <div class="usa-navbar">
+      <div class="usa-logo">
+        <em class="usa-logo__text"
+          >{{ "Mapping: " ~ column_map.name }}</em
+        >
+      </div>
+        <a class="usa-button" href="{{ url_for('column_maps.edit', id=column_map.id) }}">Edit</a>
+    </div>
+  </div>
+</header>
+
 <div class="grid-container padding-left-0">
   <div class="display-flex flex-row flex-align-start padding-top-2">
     <div class="display-flex flex-align-center padding-right-2 padding-top-1">Version number: <span class="font-mono-md padding-left-1">{{ column_map.version }}</span></div>
     <div class="display-flex flex-column flex-align-center">
-        <a class="usa-button" href="{{ url_for('column_maps.edit', id=column_map.id) }}">Edit</a>
     </div>
   </div>
   <div class="grid-row mapping-row">

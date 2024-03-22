@@ -16,6 +16,7 @@ from nad_ch.application.use_cases.column_maps import (
     get_column_map,
     get_column_maps_by_producer,
     update_column_mapping,
+    update_column_mapping_field,
 )
 
 
@@ -93,26 +94,32 @@ def store():
 def update(request):
     id = request.form.get("_id")
 
-    if request.form.get("_formType") == "required_field":
-        user_field = request.form.get("mappedRequiredField")
-        nad_field = request.form.get("_nadField")
-    elif request.form.get("_formType") == "delete_field":
-        user_field = request.form.get("_nullField")
-        nad_field = request.form.get("_nadField")
+    if request.form.get("_formType") == "existing_fields":
+        excluded_form_keys = ("_method", "_formType", "_id")
+
+        mapping = {
+            key: value
+            for key, value in request.form.items()
+            if key not in excluded_form_keys
+        }
+
+        try:
+            view_model = update_column_mapping(g.ctx, id, mapping)
+            return redirect(url_for("column_maps.show", id=view_model.id))
+        except ValueError:
+            flash("Error: ", str(ValueError))
+            return redirect(url_for("column_maps.edit", id=id))
     elif request.form.get("_formType") == "new_field":
         user_field = request.form.get("newField")
         nad_field = request.form.get("newNadField")
+        try:
+            view_model = update_column_mapping_field(g.ctx, id, user_field, nad_field)
+            return redirect(url_for("column_maps.show", id=view_model.id))
+        except ValueError:
+            flash("Error: ", str(ValueError))
+            return redirect(url_for("column_maps.edit", id=id))
     else:
         abort(404)
-
-    print(f"user_field: {user_field}, nad_field: {nad_field}")
-
-    try:
-        view_model = update_column_mapping(g.ctx, id, user_field, nad_field)
-        return redirect(url_for("column_maps.show", id=view_model.id))
-    except ValueError:
-        flash("Error: ", str(ValueError))
-        return redirect(url_for("column_maps.edit", id=id))
 
 
 @column_maps_bp.route("/column-maps/<id>")

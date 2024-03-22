@@ -32,6 +32,7 @@ def get_view_model(
     entity_type = type(entity)
     if entity_type in entity_to_vm_function_map:
         mapping_function = entity_to_vm_function_map[entity_type]
+        print(mapping_function(entity))
         return mapping_function(entity)  # Call the mapping function for the entity
     else:
         raise ValueError(f"No mapping function defined for entity type: {entity_type}")
@@ -50,6 +51,8 @@ class ColumnMapViewModel(ViewModel):
 
 
 def create_column_map_view_model(column_map: ColumnMap) -> ColumnMapViewModel:
+    available_nad_fields = [key for key in ColumnMap.all_fields if key not in column_map.mapping]
+
     return ColumnMapViewModel(
         id=column_map.id,
         date_created=present_date(column_map.created_at),
@@ -57,26 +60,8 @@ def create_column_map_view_model(column_map: ColumnMap) -> ColumnMapViewModel:
         mapping=column_map.mapping,
         version=column_map.version_id,
         producer_name=column_map.producer.name,
-        available_nad_fields=[
-            key for key, value in column_map.mapping.items() if value == ""
-        ],
-        required_nad_fields=[
-            "Add_Number",
-            "AddNo_Full",
-            "St_Name",
-            "StNam_Full",
-            "County",
-            "Inc_Muni",
-            "State",
-            "UUID",
-            "Longitude",
-            "Latitude",
-            "NatGrid",
-            "AddrPoint",
-            "DateUpdate",
-            "NAD_Source",
-            "DataSet_ID",
-        ],
+        available_nad_fields=available_nad_fields,
+        required_nad_fields=ColumnMap.required_fields,
     )
 
 
