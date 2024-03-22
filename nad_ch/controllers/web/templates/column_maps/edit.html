@@ -11,17 +11,21 @@ block content %}
   <header class="usa-header usa-header--basic">
     <div class="usa-nav-container">
       <div class="usa-navbar">
-        <div class="usa-logo">
-          <em class="usa-logo__text"
-            >{{ "Mapping: " ~ column_map.name ~ edit() }}</em
-          >
+        <div class="display-flex flex-justify flex-align-end">
+          <div class="usa-logo">
+            <em class="usa-logo__text"
+              >{{ "Mapping: " ~ column_map.name ~ edit() }}</em
+            >
+          </div>
+          <div class="padding-bottom-2">
+            <button class="usa-button" type="submit">Save</button>
+            <a
+              class="usa-button usa-button--outline"
+              href="{{ url_for('column_maps.show', id=column_map.id) }}"
+              >Cancel</a
+            >
+          </div>
         </div>
-        <a
-          class="usa-button usa-button--outline"
-          href="{{ url_for('column_maps.show', id=column_map.id) }}"
-          >Cancel</a
-        >
-        <button class="usa-button" type="submit">Save</button>
       </div>
     </div>
   </header>
