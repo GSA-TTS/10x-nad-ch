@@ -1,5 +1,5 @@
 from dataclasses import dataclass, asdict, field, is_dataclass
-from typing import List
+from typing import List, Dict
 import numpy as np
 
 
@@ -17,6 +17,7 @@ class DataSubmissionReportOverview:
     records_flagged: int = 0
     etl_update_required: bool = False
     data_update_required: bool = False
+    missing_required_fields: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -28,6 +29,12 @@ class DataSubmissionReportFeature:
     invalid_domain_count: int = 0
     valid_domain_count: int = 0
     invalid_domains: List[str] = field(default_factory=list)
+    # TODO: Add frequency charts for each field and only take the top 10 if
+    # more than 10 values exist
+    # invalid_domain_frequencies: Dict[str, int]
+    # Set to True if invalid_domains & invalid_domain_frequencies doesn't contain
+    # a full list of unique domains found in source data
+    # invalid_domain_list_truncated: bool = False
 
 
 @dataclass

@@ -1,0 +1,55 @@
+Source,Destination
+,<Null>
+ ,<Null>
+  ,<Null>
+<null>,<Null>
+e,East
+e.,East
+ea,East
+east,East
+eastbound,[PosMod: eastbound]
+eb,[PosMod: eastbound]
+est,Est
+n,North
+n.,North
+n.e.,Northeast
+n.w.,Northwest
+na,<Null>
+nb,[PosMod: northbound]
+ne,Northeast
+no,North
+nord,Nord
+nord-est,Nord-Est
+nord-ouest,Nord-Ouest
+north,North
+north east,Northeast
+north west,Northwest
+northbound,[PosMod: northbound]
+northeast,Northeast
+northwest,Northwest
+null,<Null>
+nw,Northwest
+ouest,Ouest
+s,South
+s.,South
+s.e.,Southeast
+s.w.,Southwest
+sb,[PosMod: southbound]
+se,Southeast
+so,South
+south,South
+south east,Southeast
+south west,Southwest
+southbound,[PosMod: southbound]
+southeast,Southeast
+southwest,Southwest
+sud,Sud
+sud-est,Sud-Est
+sud-ouest,Sud-Ouest
+sw,Southwest
+w,West
+w.,West
+wb,[PosMod: westbound]
+we,West
+west,West
+westbound,[PosMod: westbound]

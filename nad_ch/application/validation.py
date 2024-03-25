@@ -1,68 +1,147 @@
-from typing import Dict, Tuple
+from typing import Dict, Optional
 from geopandas import GeoDataFrame
+import pandas as pd
 from nad_ch.application.dtos import (
     DataSubmissionReportFeature,
     DataSubmissionReportOverview,
 )
+import glob
+from pathlib import Path
+from nad_ch.domain.entities import ColumnMap
 
 
-def get_feature_count(gdf: GeoDataFrame) -> int:
-    return len(gdf.columns)
+class DataValidator:
+    def __init__(self, valid_mappings: Dict[str, str]):
+        self.valid_mappings = valid_mappings
+        self.domains = {}
+        self.required_fields = ColumnMap.required_fields
+        self.load_domain_values()
+        self.missing_fields = set()
+        self.report_overview: Optional[DataSubmissionReportFeature] = None
+        self.report_features: Optional[Dict[str, DataSubmissionReportFeature]] = None
 
+    def load_domain_values(self):
+        for type in ("domain", "mapper"):
+            self.domains[type] = {}
+            path = f"nad_ch/application/validation_files/{type}/*.csv"
+            file_paths = glob.glob(path)
+            for file_path in file_paths:
+                field = "_".join(Path(file_path).stem.split("_")[1:])
+                df = pd.read_csv(file_path, sep=",", encoding="utf-8")
+                df["Source"] = df["Source"].astype(str)
+                df["Destination"] = df["Destination"].astype(str)
+                self.domains[type][field] = dict(zip(df.Source, df.Destination))
 
-def get_record_count(gdf: GeoDataFrame, null_rows_only: bool = False) -> int:
-    if null_rows_only:
-        return len(gdf[gdf.isnull().any(axis=1)])
-    return len(gdf)
+    @staticmethod
+    def get_feature_count(gdf: GeoDataFrame) -> int:
+        return len(gdf.columns)
 
+    @staticmethod
+    def get_record_count(gdf: GeoDataFrame, invalid_rows: bool = False) -> int:
+        if invalid_rows:
+            return len(gdf[gdf.isnull().any(axis=1)])
+        return len(gdf)
 
-def get_features_flagged(features: Dict[str, DataSubmissionReportFeature]) -> int:
-    return len(
-        [k for k, v in features.items() if v.null_count + v.invalid_domain_count > 0]
-    )
-
-
-def initialize_overview_details(
-    gdf: GeoDataFrame, column_map: Dict[str, str]
-) -> Tuple[DataSubmissionReportOverview, Dict[str, DataSubmissionReportFeature]]:
-    report_overview = DataSubmissionReportOverview(feature_count=get_feature_count(gdf))
-    report_features = {
-        nad_name: DataSubmissionReportFeature(
-            provided_feature_name=provided_name, nad_feature_name=nad_name
+    @staticmethod
+    def get_features_flagged(features: Dict[str, DataSubmissionReportFeature]) -> int:
+        return len(
+            [
+                k
+                for k, v in features.items()
+                if v.null_count + v.invalid_domain_count > 0
+            ]
         )
-        for provided_name, nad_name in column_map.items()
-    }
-    return report_overview, report_features
 
+    def get_invalid_record_count(self, gdf: GeoDataFrame) -> int:
+        existing_required_fields = list(self.valid_mappings.values())
+        filters = [
+            f"(gdf['{field}'].isin({self.report_features[field].invalid_domains}))"
+            for field in existing_required_fields
+            if self.report_features[field].invalid_domains
+        ]
+        filters.append(f"(gdf[{existing_required_fields}].isna().any(axis=1))")
+        return len(gdf[eval("|".join(filters))])
 
-def update_feature_details(
-    gdf: GeoDataFrame, features: Dict[str, DataSubmissionReportFeature]
-) -> Dict[str, DataSubmissionReportFeature]:
-    for column in gdf.columns:
-        populated_count = gdf[column].notna().sum()
-        null_count = gdf[column].isna().sum()
+    def initialize_overview_details(
+        self, gdf: GeoDataFrame, column_map: Dict[str, str]
+    ):
+        if not self.report_features and not self.report_overview:
+            self.report_overview = DataSubmissionReportOverview(
+                feature_count=self.get_feature_count(gdf)
+            )
+            missing_fields = [
+                column for column in self.required_fields if column not in gdf.columns
+            ]
+            self.report_overview.missing_required_fields = missing_fields
+            self.report_features = {
+                nad_name: DataSubmissionReportFeature(
+                    provided_feature_name=provided_name, nad_feature_name=nad_name
+                )
+                for provided_name, nad_name in column_map.items()
+            }
 
-        feature_submission = features.get(column)
-        if feature_submission:
-            feature_submission.populated_count += populated_count
-            feature_submission.null_count += null_count
-            # TODO: Add logic for domain specific features such as
-            # valid_domain_count, invalid_domain_count, & invalid_domains
-    return features
+    def update_feature_details(self, gdf: GeoDataFrame):
+        for column in gdf.columns:
+            feature_submission = self.report_features.get(column)
+            if feature_submission:
+                # Update null and populated counts
+                populated_count = gdf[column].notna().sum()
+                null_count = gdf[column].isna().sum()
+                feature_submission.populated_count += populated_count
+                feature_submission.null_count += null_count
 
+                # Update domain specific metrics
+                column_domain_dict = self.domains["domain"].get(column)
+                column_mapper_dict = self.domains["mapper"].get(column)
+                if column_domain_dict and column_mapper_dict:
+                    filter = ~(
+                        (gdf[column].isin(column_domain_dict.keys()))
+                        | (
+                            (gdf[column].isin(column_mapper_dict.keys()))
+                            | (gdf[column].str.lower().isin(column_mapper_dict.keys()))
+                        )
+                    )
+                elif column_domain_dict:
+                    filter = ~(gdf[column].isin(column_domain_dict.keys()))
+                elif column_mapper_dict:
+                    filter = ~(
+                        (gdf[column].isin(column_mapper_dict.keys()))
+                        | (gdf[column].str.lower().isin(column_mapper_dict.keys()))
+                    )
+                else:
+                    filter = None
+                invalid_domain_count, invalid_domains = 0, []
+                if filter is not None:
+                    gdf_invalid_domains = gdf[filter & (gdf[column].notna())]
+                    invalid_domain_count = gdf_invalid_domains.shape[0]
+                    invalid_domains = [
+                        domain
+                        for domain in list(gdf_invalid_domains[column].unique())
+                        if domain not in feature_submission.invalid_domains
+                    ]
+                    valid_domain_count = (
+                        gdf.shape[0] - invalid_domain_count - null_count
+                    )
+                    feature_submission.invalid_domain_count += invalid_domain_count
+                    feature_submission.valid_domain_count += valid_domain_count
+                    # Can only store up to 10 invalid domains per nad field
+                    invalid_domain_unique_count = len(invalid_domains)
+                    remaining_slots = 10 - len(feature_submission.invalid_domains)
+                    if invalid_domain_unique_count and remaining_slots > 0:
+                        invalid_domains = invalid_domains[:remaining_slots]
+                    feature_submission.invalid_domains.extend(invalid_domains)
 
-def update_overview_details(
-    gdf: GeoDataFrame, overview: DataSubmissionReportOverview
-) -> DataSubmissionReportOverview:
-    overview.records_count += get_record_count(gdf)
-    overview.records_flagged += get_record_count(gdf, True)
-    return overview
+    def update_overview_details(self, gdf: GeoDataFrame):
+        self.report_overview.records_count += self.get_record_count(gdf)
+        self.report_overview.records_flagged += self.get_invalid_record_count(gdf)
 
+    def finalize_overview_details(self):
+        self.report_overview.features_flagged += self.get_features_flagged(
+            self.report_features
+        )
+        # TODO: Add logic for etl_update_required & data_update_required
 
-def finalize_overview_details(
-    overview: DataSubmissionReportOverview,
-    features: Dict[str, DataSubmissionReportFeature],
-) -> DataSubmissionReportOverview:
-    overview.features_flagged += get_features_flagged(features)
-    # TODO: Add logic for etl_update_required & data_update_required
-    return overview
+    def run(self, gdf_batch: GeoDataFrame):
+        self.initialize_overview_details(gdf_batch, self.valid_mappings)
+        self.update_feature_details(gdf_batch)
+        self.update_overview_details(gdf_batch)

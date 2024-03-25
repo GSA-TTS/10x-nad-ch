@@ -10,7 +10,11 @@ from nad_ch.application.dtos import (
 
 def test_to_dict_simple():
     overview = DataSubmissionReportOverview(
-        feature_count=100, features_flagged=5, records_count=100, records_flagged=50
+        feature_count=100,
+        features_flagged=5,
+        records_count=100,
+        records_flagged=50,
+        missing_required_fields=["field1"],
     )
 
     overview_dict = report_to_dict(overview)
@@ -22,6 +26,7 @@ def test_to_dict_simple():
         "records_flagged": 50,
         "etl_update_required": False,
         "data_update_required": False,
+        "missing_required_fields": ["field1"],
     }
 
 
