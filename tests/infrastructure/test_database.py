@@ -1,6 +1,6 @@
 from conftest import TEST_COLUMN_MAPS_PATH
 import yaml
-from nad_ch.domain.entities import DataProducer, DataSubmission, ColumnMap, User
+from nad_ch.core.entities import DataProducer, DataSubmission, ColumnMap, User
 
 
 def test_add_producer(producers):

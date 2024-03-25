@@ -1,7 +1,7 @@
 import os
 import zipfile
 from nad_ch.config import create_app_context, OAUTH2_CONFIG
-from nad_ch.domain.entities import ColumnMap, DataProducer, DataSubmission, User
+from nad_ch.core.entities import ColumnMap, DataProducer, DataSubmission, User
 
 
 def zip_directory(folder_path, zip_path):
@@ -32,9 +32,71 @@ def main():
     )
     ctx.users.add(new_user)
 
-    # new_column_map = ColumnMap(name="New Jersey Mapping v1", producer=saved_producer)
-    # TODO save column map once ApplicationContext can provide a repository
-    # saved_column_map = ctx.column_maps.add(new_column_map)
+    new_column_map = ColumnMap(
+        name="NewJerseyMapping", producer=saved_producer, version_id=1
+    )
+    new_column_map.mapping = {
+        "AddNum_Pre": "",
+        "Add_Number": "address_number",
+        "AddNum_Suf": "",
+        "AddNo_Full": "address_number_full",
+        "St_PreMod": "",
+        "St_PreDir": "",
+        "St_PreTyp": "",
+        "St_PreSep": "",
+        "St_Name": "street_name",
+        "St_PosTyp": "",
+        "St_PosDir": "",
+        "St_PosMod": "",
+        "StNam_Full": "street_name_full",
+        "Building": "",
+        "Floor": "",
+        "Unit": "unit",
+        "Room": "room",
+        "Seat": "",
+        "Addtl_Loc": "",
+        "SubAddress": "",
+        "LandmkName": "",
+        "County": "county",
+        "Inc_Muni": "city",
+        "Post_City": "",
+        "Census_Plc": "",
+        "Uninc_Comm": "",
+        "Nbrhd_Comm": "",
+        "NatAmArea": "",
+        "NatAmSub": "",
+        "Urbnztn_PR": "",
+        "PlaceOther": "",
+        "PlaceNmTyp": "",
+        "State": "state",
+        "Zip_Code": "",
+        "Plus_4": "",
+        "UUID": "guid",
+        "AddAuth": "",
+        "AddrRefSys": "",
+        "Longitude": "long",
+        "Latitude": "lat",
+        "NatGrid": "nat_grid",
+        "Elevation": "",
+        "Placement": "",
+        "AddrPoint": "address_point",
+        "Related_ID": "",
+        "RelateType": "",
+        "ParcelSrc": "",
+        "Parcel_ID": "",
+        "AddrClass": "",
+        "Lifecycle": "",
+        "Effective": "",
+        "Expire": "",
+        "DateUpdate": "updated",
+        "AnomStatus": "",
+        "LocatnDesc": "",
+        "Addr_Type": "",
+        "DeliverTyp": "",
+        "NAD_Source": "source",
+        "DataSet_ID": "123456",
+    }
+    saved_column_map = ctx.column_maps.add(new_column_map)
 
     current_script_path = os.path.abspath(__file__)
     project_root = os.path.dirname(os.path.dirname(current_script_path))
@@ -48,9 +110,8 @@ def main():
 
     filename = DataSubmission.generate_filename(zipped_gdb_path, saved_producer)
     ctx.storage.upload(zipped_gdb_path, filename)
-    # TODO save submission once column map has been saved to disk
-    # new_submission = DataSubmission(filename, saved_producer, saved_column_map)
-    # ctx.submissions.add(new_submission)
+    new_submission = DataSubmission(filename, saved_producer, saved_column_map)
+    ctx.submissions.add(new_submission)
 
     os.remove(zipped_gdb_path)
 

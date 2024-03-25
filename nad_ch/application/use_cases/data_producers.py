@@ -4,7 +4,7 @@ from nad_ch.application.view_models import (
     get_view_model,
     DataProducerViewModel,
 )
-from nad_ch.domain.entities import DataProducer
+from nad_ch.core.entities import DataProducer
 
 
 def add_data_producer(

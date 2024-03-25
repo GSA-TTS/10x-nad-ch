@@ -5,7 +5,7 @@ import glob
 import pathlib
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from nad_ch.domain.entities import DataProducer, DataSubmission, ColumnMap, User
+from nad_ch.core.entities import DataProducer, DataSubmission, ColumnMap, User
 from nad_ch.infrastructure.database import (
     ModelBase,
     SqlAlchemyDataProducerRepository,

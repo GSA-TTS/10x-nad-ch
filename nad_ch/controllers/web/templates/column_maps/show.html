@@ -1,0 +1,102 @@
+{% extends "_layouts/base.html" %} {% block title %}Mapping {{
+column_map.name}} {% endblock %} {% from "components/icons/arrow_right.html" import arrow_right %}
+{% block content %}
+<header class="usa-header usa-header--basic">
+  <div class="usa-nav-container">
+    <div class="usa-navbar">
+      <div class="display-flex flex-justify flex-align-end">
+
+        <div class="usa-logo">
+          <em class="usa-logo__text"
+            >{{ "Mapping: " ~ column_map.name }}</em
+          >
+        </div>
+        <div class="padding-bottom-2">
+          <a class="usa-button" href="{{ url_for('column_maps.edit', id=column_map.id) }}">Edit</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div x-data="{ isEditingNew: false }" class="grid-container padding-left-0">
+  <div class="grid-row mapping-row">
+    <div class="grid-col-3 text-bold">Your Field</div>
+    <div class="grid-col-1"></div>
+    <div class="grid-col-2 text-bold">NAD Field</div>
+    <div class="grid-col">
+        <button
+            x-show="!isEditingNew"
+          class="usa-button usa-button--small"
+          @click.prevent="isEditingNew = ! isEditingNew"
+        >
+          Add Field
+        </button>
+    </div>
+  </div>
+    <form
+    action="/column-maps/update/{{ column_map.id }}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <input type="hidden" name="_formType" value="new_field" />
+
+    <div x-show="isEditingNew">
+      <div class="grid-row mapping-row">
+        <div class="grid-col-3 display-flex flex-align-center">
+          <input
+            type="text"
+            name="newField"
+            class="usa-input usa-input--small"
+            placeholder="Your Field"
+            required
+          />
+        </div>
+        <div class="grid-col-1 display-flex flex-column flex-justify-center">
+          {{ arrow_right() }}
+        </div>
+        <div class="grid-col-3 flex-align-center">
+          <select
+            class="usa-select usa-select--small"
+            name="newNadField"
+            required
+          >
+            <option value="">Select a NAD Field</option>
+            {% for field in column_map.available_nad_fields %}
+            <option value="{{ field }}">{{ field }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="grid-col">
+          <button
+            class="usa-button usa-button--outline usa-button--small"
+            @click.prevent="isEditingNew = ! isEditingNew"
+            x-show="isEditingNew"
+          >
+            Cancel
+          </button>
+          <button
+            class="usa-button usa-button--small"
+            type="submit"
+            x-show="isEditingNew"
+          >
+            Save
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </form>
+  {% for nad_field, mapped_field in column_map.mapping.items() %} {% if
+  mapped_field %}
+  <div class="grid-row mapping-row">
+    <div class="grid-col-3">{{ mapped_field }}</div>
+    <div class="grid-col-1">
+      {{ arrow_right() }}
+    </div>
+    <div class="grid-col-3">{{ nad_field }}</div>
+  </div>
+  {% endif %} {% endfor %}
+  </div>
+</div>
+{% endblock %}

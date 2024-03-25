@@ -12,7 +12,7 @@ from nad_ch.application.use_cases.auth import (
     get_user_email,
     get_user_email_domain_status,
 )
-from nad_ch.domain.entities import User
+from nad_ch.core.entities import User
 from nad_ch.config import create_app_context
 
 

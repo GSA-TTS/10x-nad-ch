@@ -1,6 +1,6 @@
 from typing import Optional, Protocol, Dict
 from nad_ch.application.dtos import DownloadResult
-from nad_ch.domain.repositories import (
+from nad_ch.core.repositories import (
     DataProducerRepository,
     DataSubmissionRepository,
     UserRepository,
@@ -106,6 +106,8 @@ class ApplicationContext:
             return self.submissions
         elif key == "users":
             return self.users
+        elif key == "column_maps":
+            return self.column_maps
         elif key == "logger":
             return self.logger
         elif key == "storage":

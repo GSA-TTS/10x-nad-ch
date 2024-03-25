@@ -1,0 +1,10 @@
+{% macro card(title) %}
+<div
+  class="usa-card usa-card--container border-radius-4 border border-solid radius-md border-info bg-info-lighter"
+>
+  <header class="usa-card__header">
+    <h2 class="usa-card__heading">{{ title }}</h2>
+  </header>
+  <div class="usa-card__body">{{ caller() }}</div>
+</div>
+{% endmacro %}

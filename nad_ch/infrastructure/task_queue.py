@@ -8,7 +8,7 @@ from nad_ch.application.data_reader import DataReader
 from nad_ch.application.interfaces import TaskQueue
 from nad_ch.application.validation import DataValidator
 from nad_ch.config import QUEUE_BROKER_URL, QUEUE_BACKEND_URL
-from nad_ch.domain.repositories import DataSubmissionRepository
+from nad_ch.core.repositories import DataSubmissionRepository
 from typing import Dict
 
 

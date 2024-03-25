@@ -13,12 +13,16 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - name: Read .python-version
+        run: echo "##[set-output name=PYTHON_VERSION;]$(cat .python-version)"
+        id: python-version
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: "${{ steps.python-version.outputs.PYTHON_VERSION }}"
 
       - name: Install poetry
         shell: bash
@@ -26,14 +30,30 @@ jobs:
           curl -sSL https://install.python-poetry.org | python3 -
           echo "/root/.local/bin" >> $GITHUB_PATH
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         shell: bash
         run: poetry install
 
-      - name: Lint
+      - name: Lint backend code
         shell: bash
         run: poetry run flake8
 
-      - name: Test
+      - name: Test backend code
         shell: bash
         run: poetry run pytest
+
+      - name: Read .nvmrc
+        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+        id: nvm
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "${{ steps.nvm.outputs.NVMRC }}"
+
+      - name: Install npm dependencies, lint, and test frontend code
+        run: |
+          cd nad_ch/controllers/web
+          npm install
+          npm run lint
+          npm test

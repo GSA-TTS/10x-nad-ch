@@ -1,16 +1,6 @@
-{% extends "_layouts/base.html" %} {% block title %}Home Page{% endblock %}
-{%block content %}
-<header class="usa-header usa-header--basic">
-  <div class="usa-nav-container">
-    <div class="usa-navbar">
-      <div class="usa-logo">
-        <em class="usa-logo__text">Reports</em>
-      </div>
-    </div>
-  </div>
-</header>
-
-{% if submissions %}
+{% extends "_layouts/base.html" %} {% block title %}Home Page{% endblock %} {%
+block content %} {% from "components/page-header.html" import page_header %} {{
+page_header("Reports") }} {% if submissions %}
 <div class="usa-table-default width-full">
   <table class="usa-table usa-table--borderless width-full">
     <thead class="bg-base-lighter border-bottom-2px border-base-light">

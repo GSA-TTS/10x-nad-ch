@@ -1,8 +1,8 @@
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user
 import pytest
 from nad_ch.config import create_app_context
 from nad_ch.controllers.web.flask import create_flask_application
-from nad_ch.domain.entities import User
+from nad_ch.core.entities import User
 
 
 @pytest.fixture
@@ -29,12 +29,6 @@ def logged_in_client(client, app):
         yield client
 
         logout_user()
-
-
-def test_home_route(client):
-    response = client.get("/")
-    assert response.status_code == 200
-    assert "Login" in response.data.decode("utf-8")
 
 
 def test_reports_route_should_be_protected_by_auth(client):

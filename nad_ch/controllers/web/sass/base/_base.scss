@@ -1,3 +1,11 @@
 html {
   overflow-y: scroll;
 }
+
+.mapping-row {
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}

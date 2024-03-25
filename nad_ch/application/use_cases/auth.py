@@ -5,7 +5,7 @@ from nad_ch.application.exceptions import (
     OAuth2TokenError,
 )
 from nad_ch.application.interfaces import ApplicationContext
-from nad_ch.domain.entities import User
+from nad_ch.core.entities import User
 
 
 def get_or_create_user(ctx: ApplicationContext, provider_name: str, email: str) -> User:

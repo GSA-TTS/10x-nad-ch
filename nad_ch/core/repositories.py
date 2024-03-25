@@ -1,6 +1,6 @@
 from typing import Optional, Protocol
 from collections.abc import Iterable
-from nad_ch.domain.entities import DataProducer, DataSubmission, User, ColumnMap
+from nad_ch.core.entities import DataProducer, DataSubmission, User, ColumnMap
 
 
 class DataProducerRepository(Protocol):
@@ -57,5 +57,14 @@ class ColumnMapRepository(Protocol):
     ) -> Optional[ColumnMap]:
         ...
 
+    def get_by_id(self, id: int) -> Optional[ColumnMap]:
+        ...
+
     def get_by_name_and_version(self, name: str, version: int) -> Optional[ColumnMap]:
+        ...
+
+    def get_by_producer(self, producer: DataProducer) -> Iterable[ColumnMap]:
+        ...
+
+    def update_mapping(self, column_map: ColumnMap) -> ColumnMap:
         ...

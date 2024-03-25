@@ -34,3 +34,15 @@
 .usa-accordion__button.usa-nav__link {
   text-align: center;
 }
+
+.usa-nav__primary {
+  padding: 0;
+}
+
+.usa-nav__primary-item {
+  list-style-type: none;
+}
+
+.usa-nav__link {
+  cursor: pointer;
+}

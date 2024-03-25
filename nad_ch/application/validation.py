@@ -7,7 +7,7 @@ from nad_ch.application.dtos import (
 )
 import glob
 from pathlib import Path
-from nad_ch.domain.entities import ColumnMap
+from nad_ch.core.entities import ColumnMap
 
 
 class DataValidator:

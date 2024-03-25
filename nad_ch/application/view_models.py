@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from datetime import datetime
 import json
 import numpy as np
-from typing import Union, List, Tuple, TypeVar, Protocol
-from nad_ch.domain.entities import Entity, DataProducer, DataSubmission
+from typing import Union, Dict, List, Tuple, Protocol
+from nad_ch.core.entities import Entity, ColumnMap, DataProducer, DataSubmission
 
 
 class ViewModel(Protocol):
@@ -18,6 +18,7 @@ def get_view_model(
     get a static view model object that it can return to its caller.
     """
     entity_to_vm_function_map = {
+        ColumnMap: create_column_map_view_model,
         DataProducer: create_data_producer_vm,
         DataSubmission: create_data_submission_vm,
     }
@@ -34,6 +35,46 @@ def get_view_model(
         return mapping_function(entity)  # Call the mapping function for the entity
     else:
         raise ValueError(f"No mapping function defined for entity type: {entity_type}")
+
+
+@dataclass
+class ColumnMapViewModel(ViewModel):
+    id: int
+    date_created: str
+    date_updated: str
+    name: str
+    mapping: Dict[str, str]
+    version: int
+    producer_name: str
+    available_nad_fields: List[str]
+    required_nad_fields: List[str]
+
+
+def create_column_map_view_model(column_map: ColumnMap) -> ColumnMapViewModel:
+    available_nad_fields = [
+        key
+        for key in ColumnMap.all_fields
+        if key not in column_map.mapping or column_map.mapping.get(key) in ["", None]
+    ]
+
+    date_updated = (
+        "-"
+        if column_map.updated_at == column_map.created_at
+        and column_map.updated_at is not None
+        else present_date(column_map.updated_at)
+    )
+
+    return ColumnMapViewModel(
+        id=column_map.id,
+        date_created=present_date(column_map.created_at),
+        date_updated=date_updated,
+        name=column_map.name,
+        mapping=column_map.mapping,
+        version=column_map.version_id,
+        producer_name=column_map.producer.name,
+        available_nad_fields=available_nad_fields,
+        required_nad_fields=ColumnMap.required_fields,
+    )
 
 
 @dataclass
@@ -61,8 +102,7 @@ class DataSubmissionViewModel(ViewModel):
 
 
 def create_data_submission_vm(submission: DataSubmission) -> DataSubmissionViewModel:
-    # TODO make this be an empty array so the frontend doesn't have to check for None
-    report_json = None
+    report_json = []
     if submission.report is not None:
         enriched_report = enrich_report(submission.report)
         report_json = json.dumps(enriched_report)

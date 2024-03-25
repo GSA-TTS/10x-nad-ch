@@ -1,32 +1,54 @@
 {% block sidebar %}
 <nav aria-label="Side navigation,">
-  <ul class="usa-sidenav height-viewport">
+  <ul class="usa-sidenav height-viewport display-flex flex-column flex-justify">
     <div>
       <div class="usa-sidenav__logo">
         <a href="{{ url_for('index') }}">
-          <div class="logo-top">National Address Database</div>
-          <div class="logo-bottom">Collaboration Hub</div>
+          <span class="logo-top">National Address Database</span>
+          <span class="logo-bottom">Collaboration Hub</span>
         </a>
       </div>
       {% if current_user.is_authenticated %}
       <li class="usa-sidenav__item">
-        {% if request.path.startswith('/reports') %}
-        <a href="{{ url_for('submissions.reports') }}" class="usa-current"
+        <a
+          href="{{ url_for('data_checklist') }}"
+          class="{{ 'usa-current' if request.path.startswith('/data-checklist') else '' }}"
+          >Data Checklist</a
+        >
+      </li>
+      <li class="usa-sidenav__item">
+        <a
+          href="{{ url_for('column_maps.index') }}"
+          class="{{ 'usa-current' if request.path.startswith('/column-maps') else '' }}"
+          >Mappings</a
+        >
+      </li>
+      <li class="usa-sidenav__item">
+        <a
+          href="{{ url_for('submissions.reports') }}"
+          class="{{ 'usa-current' if request.path.startswith('/reports') else '' }}"
           >Reports</a
         >
-        {% else %}
-        <a href="{{ url_for('submissions.reports') }}">Reports</a>
-        {% endif %}
       </li>
+      {% endif %}
     </div>
-    <div>
+
+    <div class="padding-bottom-4">
+      <li class="usa-sidenav__item">
+        <a
+          href="{{ url_for('about') }}"
+          class="{{ 'usa-current' if request.path.startswith('/about') else '' }}"
+          >About</a
+        >
+      </li>
+      {% if current_user.is_authenticated %}
       <li class="usa-sidenav__item">
         <a href="{{ url_for('auth.logout_provider', provider='cloudgov') }}"
           >Logout</a
         >
       </li>
+      {% endif %}
     </div>
-    {% endif %}
   </ul>
 </nav>
 {% endblock %}

@@ -1,0 +1,88 @@
+{% extends "_layouts/base.html" %} {% block title %}Mapping {{
+column_map.name}}{% endblock %} {% from "components/icons/arrow_right.html"
+import arrow_right %} {% from "components/icons/edit.html" import edit %} {%
+block content %}
+
+<form
+  action="/column-maps/update/{{ column_map.id }}"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <input type="hidden" name="_id" value="{{ column_map.id }}" />
+  <input type="hidden" name="_formType" value="existing_fields" />
+
+  <header class="usa-header usa-header--basic">
+    <div class="usa-nav-container">
+      <div class="usa-navbar">
+        <div class="display-flex flex-justify flex-align-end">
+          <div class="usa-logo">
+            <em class="usa-logo__text"
+              >{{ "Mapping: " ~ column_map.name ~ edit() }}</em
+            >
+          </div>
+          <div class="padding-bottom-2">
+            <button class="usa-button" type="submit">Save</button>
+            <a
+              class="usa-button usa-button--outline"
+              href="{{ url_for('column_maps.show', id=column_map.id) }}"
+              >Cancel</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="grid-container padding-left-0">
+    <div class="grid-row mapping-row">
+      <div class="grid-col-3 text-bold">Your Field</div>
+      <div class="grid-col-1"></div>
+      <div class="grid-col-3 text-bold">NAD Field</div>
+    </div>
+    {% for nad_field, mapped_field in column_map.mapping.items() %} {% if
+    mapped_field %}
+    <div
+      x-data="{ show{{ nad_field}}: true }"
+      x-show="show{{ nad_field}}"
+      class="grid-row mapping-row"
+    >
+      <div class="grid-col-3 display-flex flex-align-center">
+        <input
+          type="text"
+          id="{{ nad_field }}"
+          name="{{ nad_field }}"
+          class="usa-input usa-input--small margin-top-0"
+          value="{{ mapped_field }}"
+          {%
+          if
+          nad_field
+          in
+          column_map.required_nad_fields
+          %}required{%
+          endif
+          %}
+        />
+      </div>
+      <div class="grid-col-1">{{ arrow_right() }}</div>
+      <div class="grid-col-3">
+        {{ nad_field }} {% if nad_field in column_map.required_nad_fields %}*{%
+        endif %}
+      </div>
+      <div class="grid-col-1 display-flex flex-row">
+        {% if nad_field not in column_map.required_nad_fields %}
+        <button
+          class="usa-button usa-button--small"
+          @click.prevent="() => {
+            document.getElementById('{{ nad_field }}'). value = '';
+            show{{ nad_field}} = false;
+          }"
+        >
+          Delete
+        </button>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %} {% endfor %}
+  </div>
+</form>
+{% endblock %}

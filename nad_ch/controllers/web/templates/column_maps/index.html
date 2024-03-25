@@ -1,0 +1,115 @@
+{% extends "_layouts/base.html" %} {% block title %}Mappings{% endblock %} {%
+from "components/page-header.html" import page_header %} {% block content %} {{
+page_header("Mappings") }} {% if not column_maps %}
+<div class="usa-card padding-top-2 grid-col-4">
+  <div class="usa-card__container">
+    <div class="usa-card__header">
+      <h2 class="usa-card__heading">Create Your First Mapping</h2>
+    </div>
+    <div class="usa-card__media">
+      <div class="usa-card__img">
+        <img
+          src="{{ url_for('static', filename='mapping.png') }}"
+          alt="A placeholder mapping image"
+        />
+      </div>
+    </div>
+    <div class="usa-card__body">
+      <p>
+        Tell NAD which of your fields maps to NAD's so you can crosswalk your
+        address data seamlessly.
+      </p>
+    </div>
+    <div class="usa-card__footer">
+      <a
+        href="#mapping-modal"
+        class="usa-button"
+        aria-controls="mapping-modal"
+        data-open-modal
+        >Create mapping</a
+      >
+    </div>
+  </div>
+</div>
+
+<div
+  class="usa-modal"
+  id="mapping-modal"
+  aria-labelledby="mapping-modal-heading"
+  aria-describedby="mapping-modal-description"
+>
+  <div class="usa-modal__content margin-x-0">
+    <div class="usa-modal__main">
+      <h2 class="usa-modal__heading" id="mapping-modal-heading">New mapping</h2>
+      <form x-data="MappingForm()" @submit.prevent="createMapping" novalidate>
+        <div class="usa-form-group">
+          <label for="mapping-name">Mapping name</label>
+          <br />
+          <input
+            type="text"
+            id="mapping-name"
+            name="mapping-name"
+            class="width-full"
+            x-model="name"
+          />
+          <br />
+          <span class="text-base">No more than 25 letters or numbers</span>
+          <br />
+          <span
+            class="usa-error-message"
+            role="alert"
+            x-show="hasError"
+            x-text="errorMessage"
+          ></span>
+          <div class="usa-modal__footer">
+            <ul class="usa-button-group">
+              <li class="usa-button-group__item">
+                <button type="submit" class="usa-button">Create</button>
+              </li>
+              <li class="usa-button-group__item">
+                <button
+                  id="cancel-button"
+                  type="button"
+                  class="usa-button usa-button--unstyled padding-105 text-center"
+                  @click="closeModal"
+                >
+                  Cancel
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="usa-table-default width-full">
+  <table class="usa-table usa-table--borderless width-full">
+    <thead class="bg-base-lighter border-bottom-2px border-base-light">
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Created</th>
+        <th scope="col">Updated</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cm in column_maps %}
+      <tr>
+        <th class="border-bottom-1px border-base-lightest" scope="row">
+          {{ cm.name }}
+        </th>
+        <td>{{ cm.date_created }}</td>
+        <td>{{ cm.date_updated }}</td>
+        <td>
+          <a href="{{ url_for('column_maps.show', id=cm.id, _external=True) }}"
+            >View</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %} {% endblock %}

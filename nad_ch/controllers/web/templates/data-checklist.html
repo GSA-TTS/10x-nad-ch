@@ -1,0 +1,162 @@
+{% extends "_layouts/base.html" %} {% from "components/card.html" import card %}
+{% block title %}Data Checklist{% endblock %} {% block content %}
+<div x-data="{ showAddressPoints: true, showDomains: false }">
+  <header class="usa-header usa-header--basic">
+    <div class="usa-nav-container">
+      <div class="usa-navbar">
+        <div class="usa-logo">
+          <em class="usa-logo__text">Data Checklist</em>
+        </div>
+        <nav aria-label="Primary navigation" class="usa-nav usa-nav-section">
+          <div class="usa-nav__inner">
+            <ul class="usa-nav__primary">
+              <li class="usa-nav__primary-item">
+                <button
+                  id="summary-button"
+                  type="button"
+                  class="usa-nav__link"
+                  :class="showAddressPoints ? 'usa-current' : ''"
+                  @click="showAddressPoints = true; showDomains = false"
+                >
+                  Address points
+                </button>
+              </li>
+              <li class="usa-nav__primary-item">
+                <button
+                  id="domains-button"
+                  type="button"
+                  class="usa-nav__link"
+                  :class="showDomains ? 'usa-current' : ''"
+                  @click="showAddressPoints = false; showDomains = true"
+                >
+                  Domains
+                </button>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div id="address-points-section" x-show="showAddressPoints">
+    <div class="usa-table-default width-full">
+      <table class="usa-table usa-table--borderless width-full">
+        <thead class="bg-base-lighter border-bottom-2px border-base-light">
+          <tr>
+            <th scope="col">*</th>
+            <th scope="col">NAD field</th>
+            <th scope="col">
+              Alias <br />
+              Description
+            </th>
+            <th scope="col">Type</th>
+            <th scope="col">Length</th>
+            <th scope="col">Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for field in data_checklist %}
+          <tr>
+            <th class="border-bottom-1px border-base-lightest" scope="row">
+              {{ field.required }}
+            </th>
+            <td>{{ field.field_name }}</td>
+            <td>
+              {{ field.alias }} <br />
+              {{ field.description }}
+            </td>
+            <td><span class="font-mono-md">{{ field.type}}</span></td>
+            <td>{{ field.length }}</td>
+            <td></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="domains-section" x-show="showDomains" class="padding-top-2">
+    <div
+      class="usa-accordion usa-accordion--multiselectable"
+      data-allow-multiple
+    >
+      <h4 class="usa-accordion__heading">
+        <button
+          type="button"
+          class="usa-accordion__button"
+          aria-expanded="false"
+          aria-controls="address-number"
+        >
+          AddressNumber
+        </button>
+      </h4>
+      <div id="address-number" class="usa-accordion__content usa-prose">
+        <p><span class="text-bold">DomainName:</span> AddressNumber</p>
+        <p>
+          <span class="text-bold">Description:</span> The numeric identifier of
+          a location along a thoroughfare or within a defined community.
+        </p>
+        <p><span class="text-bold">FieldType:</span> Integer</p>
+        <p><span class="text-bold">Domain Type:</span> Range</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Minimum Value</th>
+              <th>Maximum Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0</td>
+              <td>999999</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="usa-accordion__heading">
+        <button
+          type="button"
+          class="usa-accordion__button"
+          aria-expanded="false"
+          aria-controls="delivery-type"
+        >
+          Delivery_Type
+        </button>
+      </h4>
+      <div id="delivery-type" class="usa-accordion__content usa-prose">
+        <p><span class="text-bold">DomainName:</span> Delivery_Type</p>
+        <p>
+          <span class="text-bold">Description:</span> Flag to separate address
+          records with no subaddress information from address records that
+          include subaddress information.
+        </p>
+        <p><span class="text-bold">FieldType:</span> String</p>
+        <p><span class="text-bold">Domain Type:</span> CodedValue</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Subaddress Included</td>
+              <td>Subaddress Included</td>
+            </tr>
+            <tr>
+              <td>Subaddress Excluded</td>
+              <td>Subaddress Excluded</td>
+            </tr>
+            <tr>
+              <td>Unstated</td>
+              <td>Unstated</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

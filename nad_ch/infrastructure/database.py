@@ -1,13 +1,14 @@
 import contextlib
+import json
+from typing import List, Optional
 from flask_login import UserMixin
-from nad_ch.domain.entities import DataProducer, DataSubmission, User, ColumnMap
-from nad_ch.domain.repositories import (
+from nad_ch.core.entities import DataProducer, DataSubmission, User, ColumnMap
+from nad_ch.core.repositories import (
     DataProducerRepository,
     DataSubmissionRepository,
     UserRepository,
     ColumnMapRepository,
 )
-from typing import List, Optional
 from sqlalchemy import (
     Column,
     Integer,
@@ -398,6 +399,16 @@ class SqlAlchemyColumnMapRepository(ColumnMapRepository):
             else:
                 return None
 
+    def get_by_id(self, id: int) -> Optional[ColumnMap]:
+        with session_scope(self.session_factory) as session:
+            column_map_model = (
+                session.query(ColumnMapModel).filter(ColumnMapModel.id == id).first()
+            )
+            if column_map_model:
+                return column_map_model.to_entity()
+            else:
+                return None
+
     def get_by_name_and_version(
         self, name: str, version: int = 1
     ) -> Optional[ColumnMap]:
@@ -413,3 +424,30 @@ class SqlAlchemyColumnMapRepository(ColumnMapRepository):
                 return column_map_model.to_entity()
             else:
                 return None
+
+    def get_by_producer(self, producer: DataProducer) -> List[ColumnMap]:
+        with session_scope(self.session_factory) as session:
+            column_map_models = (
+                session.query(ColumnMapModel)
+                .filter(ColumnMapModel.data_producer_id == producer.id)
+                .all()
+            )
+            column_map_entities = [
+                column_map.to_entity() for column_map in column_map_models
+            ]
+            return column_map_entities
+
+    def update(self, column_map: ColumnMap) -> ColumnMap:
+        with session_scope(self.session_factory) as session:
+            existing_column_map = (
+                session.query(ColumnMapModel)
+                .filter(ColumnMapModel.id == column_map.id)
+                .first()
+            )
+
+            existing_column_map.name = column_map.name
+            existing_column_map.mapping = column_map.mapping
+            existing_column_map.version_id += 1
+            session.commit()
+            session.refresh(existing_column_map)
+            return existing_column_map.to_entity()

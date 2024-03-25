@@ -51,6 +51,7 @@ def list_submissions_by_producer(ctx, producer):
 @cli.command()
 @click.pass_context
 @click.argument("filename")
-def validate_submission(ctx, filename):
+@click.argument("mapping_name")
+def validate_submission(ctx, filename, mapping_name):
     context = ctx.obj
-    validate_data_submission(context, filename)
+    validate_data_submission(context, filename, mapping_name)

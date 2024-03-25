@@ -4,7 +4,7 @@ from nad_ch.application.view_models import (
     DataProducerViewModel,
     DataSubmissionViewModel,
 )
-from nad_ch.domain.entities import DataProducer, DataSubmission, ColumnMap
+from nad_ch.core.entities import DataProducer, DataSubmission, ColumnMap
 
 
 def test_get_a_single_data_producer_view_model():

@@ -79,11 +79,11 @@ content %}
         </div>
         <div class="grid-col"></div>
       </div>
-      <div class="grid-row">
-        <div class="grid-col">
-          <h3>Need support? Contact NAD</h3>
-          <p><a href="mailto:nad@dot.gov">nad@dot.gov</a></p>
-        </div>
+      <div class="grid-row padding-top-2">
+        {% from "components/card.html" import card %} {% call card("Need
+        support? Contact NAD") %}
+        <p><a href="mailto:nad@dot.gov">nad@dot.gov</a></p>
+        {% endcall %}
       </div>
     </div>
   </div>

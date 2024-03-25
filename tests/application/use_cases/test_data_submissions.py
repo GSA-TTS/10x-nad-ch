@@ -11,7 +11,7 @@ from nad_ch.application.view_models import (
     DataSubmissionViewModel,
 )
 from nad_ch.config import create_app_context
-from nad_ch.domain.repositories import DataSubmissionRepository
+from nad_ch.core.repositories import DataSubmissionRepository
 from typing import Dict
 
 
