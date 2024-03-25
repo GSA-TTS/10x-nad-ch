@@ -3,7 +3,11 @@ column_map.name}}{% endblock %} {% from "components/icons/arrow_right.html"
 import arrow_right %} {% from "components/icons/edit.html" import edit %} {%
 block content %}
 
-<form action="/column-maps" method="post" enctype="multipart/form-data">
+<form
+  action="/column-maps/update/{{ column_map.id }}"
+  method="post"
+  enctype="multipart/form-data"
+>
   <input type="hidden" name="_method" value="PUT" />
   <input type="hidden" name="_id" value="{{ column_map.id }}" />
   <input type="hidden" name="_formType" value="existing_fields" />

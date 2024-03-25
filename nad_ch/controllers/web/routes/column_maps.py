@@ -1,4 +1,5 @@
 import csv
+import io
 from flask import (
     Blueprint,
     current_app,
@@ -63,42 +64,40 @@ def store():
         flash("No selected file")
         return redirect(url_for("column_maps.create"))
 
-    # TODO instead of validating the file extension, validate the file by trying to open
-    # it as a CSV and reading in the headers
-    if not file.filename.endswith(".csv"):
-        flash("File is not a CSV")
-        return redirect(url_for("column_maps.create"))
+    try:
+        file_content = file.read().decode("utf-8-sig")
+        stream = io.StringIO(file_content)
+        csv_reader = csv.reader(stream, dialect="excel")
 
-    if file:
+        headers = next(csv_reader)
+        if not headers:
+            flash("CSV file seems to be empty or invalid")
+            return redirect(url_for("column_maps.create"))
+
         csv_dict = {}
 
-        # TODO: also test with CSV files from a Windows machine (look up the differences)
-        try:
-            file_content = file.read().decode("utf-8").splitlines()
-            csv_reader = csv.reader(file_content)
+        for row in csv_reader:
+            if len(row) < 2:
+                continue
+            key, value = row[:2]
+            csv_dict[key] = value
 
-            for row in csv_reader:
-                key, value = row
-                csv_dict[key] = value
+    except Exception as e:
+        flash(f"An error occurred while processing the file: {e}")
+        return redirect(url_for("column_maps.create"))
 
-        except Exception as e:
-            flash(f"An error occurred while processing the file: {e}")
-            return redirect(url_for("column_maps.create"))
-
-        try:
-            name = request.form.get("name")
-            view_model = add_column_map(g.ctx, current_user.id, name, csv_dict)
-            return redirect(url_for("column_maps.show", id=view_model.id))
-        except ValueError:
-            flash("Error: ", str(ValueError))
-            return redirect(url_for("column_maps.create"))
+    try:
+        name = request.form.get("name")
+        view_model = add_column_map(g.ctx, current_user.id, name, csv_dict)
+        return redirect(url_for("column_maps.show", id=view_model.id))
+    except ValueError as e:
+        flash(f"Error: {e}")
+        return redirect(url_for("column_maps.create"))
 
 
-# Note: get ID from route, not hidden field in form.
-# Make this its own POST route to /column-maps/update/<id>
-def update(request):
-    id = request.form.get("_id")
-
+@column_maps_bp.route("/column-maps/update/<id>", methods=["POST"])
+@login_required
+def update(id):
     if request.form.get("_formType") == "existing_fields":
         excluded_form_keys = ("_method", "_formType", "_id")
 
