@@ -1,4 +1,6 @@
-from typing import Dict, List
+import csv
+from io import StringIO
+from typing import Dict, List, IO
 from nad_ch.application.interfaces import ApplicationContext
 from nad_ch.application.view_models import (
     get_view_model,
@@ -96,3 +98,23 @@ def update_column_mapping_field(
     ctx.column_maps.update(column_map)
 
     return get_view_model(column_map)
+
+
+def get_column_map_from_csv_file(file: IO[bytes]) -> Dict[str, str]:
+    file_content = file.read().decode("utf-8-sig")
+    stream = StringIO(file_content)
+    csv_reader = csv.reader(stream, dialect="excel")
+
+    headers = next(csv_reader)
+    if not headers:
+        raise Exception("CSV file is empty or invalid")
+
+    csv_dict = {}
+
+    for row in csv_reader:
+        if len(row) < 2:
+            continue
+        key, value = row[:2]
+        csv_dict[key] = value
+
+    return csv_dict

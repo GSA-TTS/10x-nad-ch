@@ -1,5 +1,4 @@
 import csv
-import io
 from flask import (
     Blueprint,
     current_app,
@@ -18,6 +17,7 @@ from nad_ch.application.use_cases.column_maps import (
     get_column_maps_by_producer,
     update_column_mapping,
     update_column_mapping_field,
+    get_column_map_from_csv_file,
 )
 
 
@@ -67,23 +67,7 @@ def store():
         return redirect(url_for("column_maps.create", name=name))
 
     try:
-        file_content = file.read().decode("utf-8-sig")
-        stream = io.StringIO(file_content)
-        csv_reader = csv.reader(stream, dialect="excel")
-
-        headers = next(csv_reader)
-        if not headers:
-            flash("CSV file seems to be empty or invalid")
-            return redirect(url_for("column_maps.create", name=name))
-
-        csv_dict = {}
-
-        for row in csv_reader:
-            if len(row) < 2:
-                continue
-            key, value = row[:2]
-            csv_dict[key] = value
-
+        csv_dict = get_column_map_from_csv_file(file)
     except Exception as e:
         flash(f"An error occurred while processing the file: {e}")
         return redirect(url_for("column_maps.create", name=name))
