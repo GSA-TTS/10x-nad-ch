@@ -97,8 +97,7 @@ class DataSubmissionViewModel(ViewModel):
 
 
 def create_data_submission_vm(submission: DataSubmission) -> DataSubmissionViewModel:
-    # TODO make this be an empty array so the frontend doesn't have to check for None
-    report_json = None
+    report_json = []
     if submission.report is not None:
         enriched_report = enrich_report(submission.report)
         report_json = json.dumps(enriched_report)
