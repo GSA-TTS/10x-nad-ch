@@ -52,14 +52,19 @@ def create():
 @column_maps_bp.route("/column-maps", methods=["POST"])
 @login_required
 def store():
+    name = request.form.get("name")
+    if not name:
+        flash("Name is required")
+        return redirect(url_for("column_maps.create"))
+
     if "mapping-csv-input" not in request.files:
         flash("No file included")
-        return redirect(url_for("column_maps.create"))
+        return redirect(url_for("column_maps.create", name=name))
 
     file = request.files["mapping-csv-input"]
     if file.filename == "":
         flash("No selected file")
-        return redirect(url_for("column_maps.create"))
+        return redirect(url_for("column_maps.create", name=name))
 
     try:
         file_content = file.read().decode("utf-8-sig")
@@ -69,7 +74,7 @@ def store():
         headers = next(csv_reader)
         if not headers:
             flash("CSV file seems to be empty or invalid")
-            return redirect(url_for("column_maps.create"))
+            return redirect(url_for("column_maps.create", name=name))
 
         csv_dict = {}
 
@@ -81,15 +86,14 @@ def store():
 
     except Exception as e:
         flash(f"An error occurred while processing the file: {e}")
-        return redirect(url_for("column_maps.create"))
+        return redirect(url_for("column_maps.create", name=name))
 
     try:
-        name = request.form.get("name")
         view_model = add_column_map(g.ctx, current_user.id, name, csv_dict)
         return redirect(url_for("column_maps.show", id=view_model.id))
     except ValueError as e:
         flash(f"Error: {e}")
-        return redirect(url_for("column_maps.create"))
+        return redirect(url_for("column_maps.create", name=name))
 
 
 @column_maps_bp.route("/column-maps/update/<id>", methods=["POST"])
