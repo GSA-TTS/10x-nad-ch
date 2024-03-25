@@ -60,6 +60,7 @@ def create_column_map_view_model(column_map: ColumnMap) -> ColumnMapViewModel:
     date_updated = (
         "-"
         if column_map.updated_at == column_map.created_at
+        and column_map.updated_at is not None
         else present_date(column_map.updated_at)
     )
 

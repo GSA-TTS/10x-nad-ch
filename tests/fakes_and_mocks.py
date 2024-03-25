@@ -85,6 +85,7 @@ class FakeColumnMapRepository(ColumnMapRepository):
     def add(self, column_map: ColumnMap) -> ColumnMap:
         column_map.id = self._next_id
         column_map.set_created_at(datetime.now())
+        column_map.set_updated_at(datetime.now())
         self._column_maps.add(column_map)
         self._next_id += 1
         return column_map
