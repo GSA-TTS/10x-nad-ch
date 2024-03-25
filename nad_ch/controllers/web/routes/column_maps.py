@@ -52,9 +52,6 @@ def create():
 @column_maps_bp.route("/column-maps", methods=["POST"])
 @login_required
 def store():
-    if request.form.get("_method") == "PUT":
-        return update(request)
-
     if "mapping-csv-input" not in request.files:
         flash("No file included")
         return redirect(url_for("column_maps.create"))
