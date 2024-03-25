@@ -3,7 +3,7 @@ import { BASE_URL } from '../config';
 import { getMappingNameValidationError } from '../formValidation';
 import { navigateTo } from '../utilities';
 
-interface MappingFormComponent {
+export interface MappingFormComponent {
   hasError: boolean;
   errorMessage: string;
   name: string;
@@ -11,7 +11,7 @@ interface MappingFormComponent {
   closeModal: () => void;
 }
 
-export default function MappingForm(): AlpineComponent<MappingFormComponent> {
+export function MappingForm(): AlpineComponent<MappingFormComponent> {
   return {
     hasError: false,
     errorMessage: '',

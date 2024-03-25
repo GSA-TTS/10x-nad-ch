@@ -55,5 +55,5 @@ jobs:
         run: |
           cd nad_ch/controllers/web
           npm install
-          npm run lint # Make sure your package.json has a "lint" script
+          npm run lint
           npm test
