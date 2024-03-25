@@ -8,6 +8,7 @@ from nad_ch.application.dtos import (
 import glob
 from pathlib import Path
 from nad_ch.core.entities import ColumnMap
+from collections import Counter
 
 
 class DataValidator:
@@ -90,7 +91,7 @@ class DataValidator:
                 feature_submission.populated_count += populated_count
                 feature_submission.null_count += null_count
 
-                # Update domain specific metrics
+                # Update invalid domain metrics
                 column_domain_dict = self.domains["domain"].get(column)
                 column_mapper_dict = self.domains["mapper"].get(column)
                 if column_domain_dict and column_mapper_dict:
@@ -124,12 +125,28 @@ class DataValidator:
                     )
                     feature_submission.invalid_domain_count += invalid_domain_count
                     feature_submission.valid_domain_count += valid_domain_count
-                    # Can only store up to 10 invalid domains per nad field
-                    invalid_domain_unique_count = len(invalid_domains)
-                    remaining_slots = 10 - len(feature_submission.invalid_domains)
-                    if invalid_domain_unique_count and remaining_slots > 0:
-                        invalid_domains = invalid_domains[:remaining_slots]
-                    feature_submission.invalid_domains.extend(invalid_domains)
+                    # Can only store up to 100 invalid domains per nad field
+                    remaining_slots = 100 - len(feature_submission.invalid_domains)
+                    if invalid_domains and remaining_slots > 0:
+                        feature_submission.invalid_domains.extend(
+                            invalid_domains[:remaining_slots]
+                        )
+
+                # Generate frequency table of fields that are domain specific only
+                if column_domain_dict:
+                    domain_freq = gdf[column].value_counts().to_dict()
+                    if feature_submission.domain_frequency:
+                        domain_freq = dict(
+                            Counter(feature_submission.domain_frequency)
+                            + Counter(domain_freq)
+                        )
+                    # Check if the number of unique domains in frequency dictionary
+                    # is 2x greater than maximum expected unique domains
+                    if len(domain_freq.keys()) > 2 * len(column_domain_dict.keys()):
+                        feature_submission.high_domain_cardinality = True
+                        # Reset domain frequency
+                        domain_freq = {}
+                    feature_submission.domain_frequency = domain_freq
 
     def update_overview_details(self, gdf: GeoDataFrame):
         self.report_overview.records_count += self.get_record_count(gdf)

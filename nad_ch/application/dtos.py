@@ -29,12 +29,9 @@ class DataSubmissionReportFeature:
     invalid_domain_count: int = 0
     valid_domain_count: int = 0
     invalid_domains: List[str] = field(default_factory=list)
-    # TODO: Add frequency charts for each field and only take the top 10 if
-    # more than 10 values exist
-    # invalid_domain_frequencies: Dict[str, int]
-    # Set to True if invalid_domains & invalid_domain_frequencies doesn't contain
-    # a full list of unique domains found in source data
-    # invalid_domain_list_truncated: bool = False
+    domain_frequency: Dict[str, Dict[str, int]] = field(default_factory=dict)
+    # Set to true when there is too many unexpected domain values found for a field
+    high_domain_cardinality: bool = False
 
 
 @dataclass
