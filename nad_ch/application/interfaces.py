@@ -106,6 +106,8 @@ class ApplicationContext:
             return self.submissions
         elif key == "users":
             return self.users
+        elif key == "column_maps":
+            return self.column_maps
         elif key == "logger":
             return self.logger
         elif key == "storage":
