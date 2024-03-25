@@ -57,7 +57,11 @@ def create_column_map_view_model(column_map: ColumnMap) -> ColumnMapViewModel:
         if key not in column_map.mapping or column_map.mapping.get(key) in ["", None]
     ]
 
-    date_updated = "-" if column_map.updated_at == column_map.created_at else present_date(column_map.updated_at)
+    date_updated = (
+        "-"
+        if column_map.updated_at == column_map.created_at
+        else present_date(column_map.updated_at)
+    )
 
     return ColumnMapViewModel(
         id=column_map.id,
