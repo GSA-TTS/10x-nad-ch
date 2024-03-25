@@ -41,6 +41,7 @@ def get_view_model(
 class ColumnMapViewModel(ViewModel):
     id: int
     date_created: str
+    date_updated: str
     name: str
     mapping: Dict[str, str]
     version: int
@@ -56,9 +57,12 @@ def create_column_map_view_model(column_map: ColumnMap) -> ColumnMapViewModel:
         if key not in column_map.mapping or column_map.mapping.get(key) in ["", None]
     ]
 
+    date_updated = "-" if column_map.updated_at == column_map.created_at else present_date(column_map.updated_at)
+
     return ColumnMapViewModel(
         id=column_map.id,
         date_created=present_date(column_map.created_at),
+        date_updated=date_updated,
         name=column_map.name,
         mapping=column_map.mapping,
         version=column_map.version_id,

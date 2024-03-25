@@ -90,7 +90,7 @@ page_header("Mappings") }} {% if not column_maps %}
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Created</th>
-        <th scope="col">Version</th>
+        <th scope="col">Updated</th>
         <th scope="col"></th>
       </tr>
     </thead>
@@ -101,7 +101,7 @@ page_header("Mappings") }} {% if not column_maps %}
           {{ cm.name }}
         </th>
         <td>{{ cm.date_created }}</td>
-        <td>{{ cm.version }}</td>
+        <td>{{ cm.date_updated }}</td>
         <td>
           <a href="{{ url_for('column_maps.show', id=cm.id, _external=True) }}"
             >View</a
