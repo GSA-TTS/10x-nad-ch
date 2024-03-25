@@ -312,6 +312,8 @@ MAJOR_CITIES_SHP_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "ST",
@@ -321,6 +323,8 @@ MAJOR_CITIES_SHP_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "ZIP",
@@ -330,6 +334,8 @@ MAJOR_CITIES_SHP_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "RuleID",
@@ -339,6 +345,8 @@ MAJOR_CITIES_SHP_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "geometry",
@@ -348,6 +356,8 @@ MAJOR_CITIES_SHP_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
     ],
 }
@@ -384,6 +394,8 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "ADD_SUFFIX",
@@ -393,6 +405,8 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "STR_DIR",
@@ -402,6 +416,15 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 6,
             "valid_domain_count": 154,
             "invalid_domains": ["northerns", "southerns"],
+            "domain_frequency": {
+                "N": 50,
+                "W": 36,
+                "S": 35,
+                "E": 33,
+                "northerns": 3,
+                "southerns": 3,
+            },
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "STR_PRETYP",
@@ -411,6 +434,13 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 10,
             "invalid_domains": [],
+            "domain_frequency": {
+                "STHY": 5,
+                "CALLE": 2,
+                "CAMINO": 2,
+                "NEW MEXICO HWY": 1,
+            },
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "STR_NAME",
@@ -420,6 +450,8 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "STR_SUFFIX",
@@ -429,6 +461,27 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 8,
             "valid_domain_count": 831,
             "invalid_domains": ["Drive Parkway", "Crossings Drive", "Unknown Drive"],
+            "domain_frequency": {
+                "RD": 178,
+                "ST": 167,
+                "DR": 164,
+                "AVE": 126,
+                "LN": 46,
+                "CT": 36,
+                "PL": 25,
+                "BLVD": 22,
+                "TRL": 18,
+                "WAY": 18,
+                "CIR": 14,
+                "LOOP": 12,
+                "Crossings Drive": 3,
+                "Drive Parkway": 3,
+                "PKWY": 3,
+                "Unknown Drive": 2,
+                "HWY": 1,
+                "RD.": 1,
+            },
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "POST_DIR",
@@ -438,6 +491,17 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 328,
             "invalid_domains": [],
+            "domain_frequency": {
+                "NE": 159,
+                "NW": 64,
+                "SE": 51,
+                "SW": 48,
+                "N": 2,
+                "S": 2,
+                "E": 1,
+                "W": 1,
+            },
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "ROAD_LABEL",
@@ -447,6 +511,8 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "COMNAME",
@@ -456,6 +522,8 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "MSAG_COM",
@@ -465,6 +533,8 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "ZIPCODE",
@@ -474,6 +544,8 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "DPID",
@@ -483,6 +555,8 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "DATE_UPD",
@@ -492,6 +566,8 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "last_edi_1",
@@ -501,6 +577,8 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
         {
             "provided_feature_name": "EXCEPTION",
@@ -510,6 +588,8 @@ NM911_ADDRESS_202310_REPORT = {
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
         },
     ],
 }
