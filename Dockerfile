@@ -45,4 +45,4 @@ RUN useradd --create-home --shell /bin/bash appuser
 USER appuser
 
 # Start application
-CMD ["/bin/sh", "./scripts/start_local.sh"]
+CMD ["/bin/sh", "./scripts/start.sh"]
