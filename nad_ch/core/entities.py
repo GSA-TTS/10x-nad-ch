@@ -174,17 +174,19 @@ class DataSubmission(Entity):
 
 
 class User(Entity):
-    def __init__(self, email, login_provider, logout_url, id: int = None):
+    def __init__(self, email, login_provider, logout_url, activated = False, producer: DataProducer = None, id: int = None):
         super().__init__(id)
         self.email = email
         self.login_provider = login_provider
         self.logout_url = logout_url
+        self.activated = activated
+        self.producer = producer
 
     # The following property definitions and get_id method are required in order for the
     # Flask-Login library to be able to handle instances of the User domain entity.
     @property
     def is_active(self):
-        return True
+        return isinstance(self.producer, DataProducer) and self.activated
 
     @property
     def is_authenticated(self):
@@ -202,3 +204,7 @@ class User(Entity):
 
     def __repr__(self):
         return f"User {self.id}, {self.email})"
+
+    def associate_with_data_producer(self, producer: DataProducer):
+        self.producer = producer
+        return self
