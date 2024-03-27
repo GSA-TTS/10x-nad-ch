@@ -16,6 +16,7 @@ from tests.fakes_and_mocks import (
 DATABASE_URL = os.getenv("DATABASE_URL")
 QUEUE_BROKER_URL = os.getenv("QUEUE_BROKER_URL")
 QUEUE_BACKEND_URL = os.getenv("QUEUE_BACKEND_URL")
+LANDING_ZONE = os.path.join(os.getcwd(), "data/landing_zone")
 
 
 class TestApplicationContext(ApplicationContext):
@@ -45,7 +46,8 @@ class TestApplicationContext(ApplicationContext):
     def create_logger(self):
         return BasicLogger(__name__, logging.DEBUG)
 
-    def create_storage(self):
+    @staticmethod
+    def create_storage():
         return FakeStorage()
 
     def create_task_queue(self):

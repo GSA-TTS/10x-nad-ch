@@ -58,6 +58,8 @@ docker exec nad-ch-dev-local poetry run alembic downgrade <enter down_revision i
 
 ## Testing
 
+Some tests in the test suite are dependent on Minio operations and access key is required. To Create a Minio access key, visit the Minio webui at [minio-webui](localhost:9001) and under User/Access Keys, click Create access key. Save the credentials to your .env file under S3_ACCESS_KEY and S3_SECRET_ACCESS_KEY.
+
 Run the test suite as follows:
 
 ```bash

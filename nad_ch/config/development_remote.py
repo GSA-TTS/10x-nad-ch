@@ -14,6 +14,9 @@ from nad_ch.infrastructure.logger import BasicLogger
 from nad_ch.infrastructure.storage import S3Storage
 
 
+LANDING_ZONE = os.path.join(os.getcwd(), "data/landing_zone")
+
+
 def get_credentials(service_name, default={}):
     service = vcap_services.get(service_name, [default])
     return service[0].get("credentials", default) if service else default
@@ -67,7 +70,8 @@ class DevRemoteApplicationContext(ApplicationContext):
     def create_logger(self):
         return BasicLogger(__name__)
 
-    def create_storage(self):
+    @staticmethod
+    def create_storage():
         return S3Storage(
             S3_ACCESS_KEY,
             S3_SECRET_ACCESS_KEY,

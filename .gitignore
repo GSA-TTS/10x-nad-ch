@@ -182,3 +182,7 @@ node_modules/
 
 # Mac Desktop Services Store
 *.DS_Store
+
+# Landing zone data storage
+data/landing_zone/*
+!data/landing_zone/README.md
