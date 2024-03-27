@@ -24,8 +24,11 @@ def logged_in_client(client, app):
         saved_producer = app.extensions["ctx"]["producers"].add(producer)
 
         user = User(
-            "test_user@test.org", "test_provider", "test_logout_url", True,
-            saved_producer
+            "test_user@test.org",
+            "test_provider",
+            "test_logout_url",
+            True,
+            saved_producer,
         )
         saved_user = app.extensions["ctx"]["users"].add(user)
         login_user(saved_user)

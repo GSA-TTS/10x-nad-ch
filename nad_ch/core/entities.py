@@ -179,7 +179,7 @@ class User(Entity):
         email,
         login_provider,
         logout_url,
-        activated = False,
+        activated=False,
         producer: DataProducer = None,
         id: int = None,
     ):
