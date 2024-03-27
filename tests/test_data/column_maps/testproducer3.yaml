@@ -1,26 +1,18 @@
 AddNum_Pre:
-Add_Number:
-  - ADD_NUMBER
-AddNum_Suf:
-  - ADD_SUFFIX
+Add_Number: ADD_NUMBER
+AddNum_Suf: ADD_SUFFIX
 AddNo_Full:
 St_PreMod:
-St_PreDir:
-  - STR_DIR
-St_PreTyp:
-  - STR_PRETYP
+St_PreDir: STR_DIR
+St_PreTyp: STR_PRETYP
 St_PreSep:
-St_Name:
-  - STR_NAME
-St_PosTyp:
-  - STR_SUFFIX
-St_PosDir:
-  - POST_DIR
+St_Name: STR_NAME
+St_PosTyp: STR_SUFFIX
+St_PosDir: POST_DIR
 St_PosMod:
 St_PosSep:
 St_PosMod:
-StNam_Full:
-  - ROAD_LABEL
+StNam_Full: ROAD_LABEL
 Building:
 Floor:
 Unit:
@@ -31,23 +23,19 @@ SubAddress:
 LandmkName:
 County:
 Inc_Muni:
-Post_City:
-  - COMNAME
+Post_City: COMNAME
 Census_Plc:
-Uninc_Comm:
-  - MSAG_COM
+Uninc_Comm: MSAG_COM
 Nbrhd_Comm:
 NatAmArea:
 NatAmSub:
 Urbnztn_PR:
 PlaceOther:
 State:
-Zip_Code:
-  - ZIPCODE
+Zip_Code: ZIPCODE
 Plus_4:
 UUID:
-AddAuth:
-  - DPID
+AddAuth: DPID
 AddrRefSys:
 Longitude:
 Latitude:
@@ -61,17 +49,13 @@ ParcelSrc:
 Parcel_ID:
 AddrClass:
 Lifecycle:
-Effective:
-  - DATE_UPD
+Effective: DATE_UPD
 Expire:
-DateUpdate:
-  - last_edi_1
-AnomStatus:
-  - EXCEPTION
+DateUpdate: last_edi_1
+AnomStatus: EXCEPTION
 LocatnDesc:
 Addr_Type:
 PlaceNmTyp:
 DeliverTyp:
 NAD_Source:
-DataSet_ID:
-  - FID
+DataSet_ID: FID

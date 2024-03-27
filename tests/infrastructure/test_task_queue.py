@@ -9,7 +9,7 @@ def test_load_and_validate_testprovider1(
     celery_worker, celery_app, producer_column_maps
 ):
     column_map = producer_column_maps.get_by_name_and_version("testproducer1", 1)
-    file_path = os.path.join(TEST_DATA_DIR, "geodatabases/Naperville.gdb")
+    file_path = os.path.join(TEST_DATA_DIR, "geodatabases/Naperville.gdb.zip")
     task_result = load_and_validate.delay(file_path, column_map.mapping)
     msg = "Duplicate inputs found for destination fields: COL_13 & COL_2, COL_5 & COL_6"
     with pytest.raises(Exception) as exc:
@@ -41,9 +41,7 @@ def test_load_and_validate_testprovider3(
     celery_worker, celery_app, producer_column_maps
 ):
     column_map = producer_column_maps.get_by_name_and_version("testproducer3", 1)
-    file_path = os.path.join(
-        TEST_DATA_DIR, "shapefiles/NM911_Address_202310/NM911_Address_202310.shp"
-    )
+    file_path = os.path.join(TEST_DATA_DIR, "shapefiles/NM911_Address_202310.zip")
     task_result = load_and_validate.delay(file_path, column_map.mapping)
     report_dict = task_result.get()
     # Check that sorted values from missing required fields match
