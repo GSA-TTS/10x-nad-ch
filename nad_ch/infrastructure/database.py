@@ -156,7 +156,7 @@ class UserModel(UserMixin, CommonBase):
         return model
 
     def to_entity(self):
-        producer = self.data_producer.to_entity()
+        producer = self.data_producer.to_entity() if self.data_producer else None
 
         entity = User(
             id=self.id,

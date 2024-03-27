@@ -33,7 +33,7 @@ def before_request():
 @login_required
 def index():
     try:
-        view_models = get_column_maps_by_producer(g.ctx, "New Jersey")
+        view_models = get_column_maps_by_producer(g.ctx, current_user.producer.name)
         return render_template("column_maps/index.html", column_maps=view_models)
     except ValueError:
         abort(404)
