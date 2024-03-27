@@ -1,5 +1,5 @@
 from flask import Blueprint, current_app, render_template, g
-from flask_login import login_required
+from flask_login import login_required, current_user
 from nad_ch.application.use_cases.data_submissions import (
     get_data_submission,
     list_data_submissions_by_producer,
@@ -30,7 +30,7 @@ def show(submission_id):
 @login_required
 def reports():
     # For demo purposes, hard-code the producer name
-    view_model = list_data_submissions_by_producer(g.ctx, "New Jersey")
+    view_model = list_data_submissions_by_producer(g.ctx, current_user.producer.name)
     return render_template("data_submissions/index.html", submissions=view_model)
 
 

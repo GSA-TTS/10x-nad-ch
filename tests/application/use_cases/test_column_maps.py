@@ -7,7 +7,7 @@ from nad_ch.application.use_cases.column_maps import (
     update_column_mapping_field,
 )
 from nad_ch.application.view_models import ColumnMapViewModel
-from nad_ch.core.entities import ColumnMap, DataProducer, User
+from nad_ch.core.entities import DataProducer, User
 from nad_ch.config import create_app_context
 
 
@@ -18,8 +18,8 @@ def app_context():
 
 
 def test_add_column_map_is_valid(app_context):
-    app_context.producers.add(DataProducer("New Jersey"))
-    user = app_context.users.add(User("test@test.org", "foo", "bar"))
+    nj = app_context.producers.add(DataProducer("New Jersey"))
+    user = app_context.users.add(User("test@test.org", "foo", "bar", True, nj))
 
     mapping = {
         "Add_Number": "address_number",
@@ -55,8 +55,8 @@ def test_add_column_map_is_invalid(app_context):
 
 
 def test_get_column_map(app_context):
-    app_context.producers.add(DataProducer("New Jersey"))
-    user = app_context.users.add(User("test@test.org", "foo", "bar"))
+    nj = app_context.producers.add(DataProducer("New Jersey"))
+    user = app_context.users.add(User("test@test.org", "foo", "bar", True, nj))
 
     mapping = {
         "Add_Number": "address_number",
@@ -87,8 +87,8 @@ def test_get_column_map(app_context):
 
 
 def test_get_column_maps_by_producer(app_context):
-    app_context.producers.add(DataProducer("New Jersey"))
-    user = app_context.users.add(User("test@test.org", "foo", "bar"))
+    nj = app_context.producers.add(DataProducer("New Jersey"))
+    user = app_context.users.add(User("test@test.org", "foo", "bar", True, nj))
 
     mapping = {
         "Add_Number": "address_number",
@@ -121,8 +121,8 @@ def test_get_column_maps_by_producer(app_context):
 
 
 def test_update_column_mapping(app_context):
-    app_context.producers.add(DataProducer("New Jersey"))
-    user = app_context.users.add(User("test@test.org", "foo", "bar"))
+    nj = app_context.producers.add(DataProducer("New Jersey"))
+    user = app_context.users.add(User("test@test.org", "foo", "bar", True, nj))
 
     mapping = {
         "Add_Number": "address_number",
@@ -175,8 +175,8 @@ def test_update_column_mapping(app_context):
 
 
 def test_update_column_mapping_field(app_context):
-    app_context.producers.add(DataProducer("New Jersey"))
-    user = app_context.users.add(User("test@test.org", "foo", "bar"))
+    nj = app_context.producers.add(DataProducer("New Jersey"))
+    user = app_context.users.add(User("test@test.org", "foo", "bar", True, nj))
 
     mapping = {
         "Add_Number": "address_number",
