@@ -29,6 +29,8 @@ def main():
         email="test@test.org",
         login_provider="cloudgov",
         logout_url=OAUTH2_CONFIG["cloudgov"]["logout_url"],
+        producer=saved_producer,
+        activated=True,
     )
     ctx.users.add(new_user)
 

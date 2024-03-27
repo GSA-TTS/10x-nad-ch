@@ -10,6 +10,7 @@ from nad_ch.core.repositories import (
     ColumnMapRepository,
 )
 from sqlalchemy import (
+    Boolean,
     Column,
     Integer,
     String,
@@ -71,6 +72,7 @@ class DataProducerModel(CommonBase):
     )
 
     column_maps = relationship("ColumnMapModel", back_populates="data_producer")
+    users = relationship("UserModel", back_populates="data_producer")
 
     @staticmethod
     def from_entity(producer: DataProducer):
@@ -136,6 +138,10 @@ class UserModel(UserMixin, CommonBase):
     email = Column(String)
     login_provider = Column(String)
     logout_url = Column(String)
+    data_producer_id = Column(Integer, ForeignKey("data_producers.id"), nullable=True)
+    activated = Column(Boolean, nullable=False, default=False)
+
+    data_producer = relationship("DataProducerModel", back_populates="users")
 
     @staticmethod
     def from_entity(user):
@@ -144,15 +150,21 @@ class UserModel(UserMixin, CommonBase):
             email=user.email,
             login_provider=user.login_provider,
             logout_url=user.logout_url,
+            data_producer_id=user.producer.id if user.producer else None,
+            activated=user.activated,
         )
         return model
 
     def to_entity(self):
+        producer = self.data_producer.to_entity()
+
         entity = User(
             id=self.id,
             email=self.email,
             login_provider=self.login_provider,
             logout_url=self.logout_url,
+            producer=producer,
+            activated=self.activated,
         )
 
         if self.created_at is not None:
