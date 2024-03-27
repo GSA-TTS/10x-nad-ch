@@ -174,7 +174,15 @@ class DataSubmission(Entity):
 
 
 class User(Entity):
-    def __init__(self, email, login_provider, logout_url, activated = False, producer: DataProducer = None, id: int = None):
+    def __init__(
+        self,
+        email,
+        login_provider,
+        logout_url,
+        activated=False,
+        producer: DataProducer = None,
+        id: int = None,
+    ):
         super().__init__(id)
         self.email = email
         self.login_provider = login_provider
