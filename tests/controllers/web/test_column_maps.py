@@ -20,31 +20,29 @@ def client(app):
 @pytest.fixture
 def logged_in_client(client, app):
     with app.app_context(), app.test_request_context():
+        producer = DataProducer("New Jersey")
+        saved_producer = app.extensions["ctx"]["producers"].add(producer)
+
         user = User(
-            "test_user", "test_user@test.org", "test_provider", "test_logout_url"
+            "test_user@test.org", "test_provider", "test_logout_url", True,
+            saved_producer
         )
         saved_user = app.extensions["ctx"]["users"].add(user)
         login_user(saved_user)
-
+        print(saved_user)
         yield client
 
         logout_user()
 
 
 def test_column_maps_route_empty(logged_in_client):
-    logged_in_client.application.extensions["ctx"]["producers"].add(
-        DataProducer("New Jersey")
-    )
-
     response = logged_in_client.get("/column-maps")
     assert response.status_code == 200
     assert "Create Your First Mapping" in response.data.decode("utf-8")
 
 
 def test_column_maps_route_has_two_column_maps(logged_in_client):
-    nj = logged_in_client.application.extensions["ctx"]["producers"].add(
-        DataProducer("New Jersey")
-    )
+    nj = logged_in_client.application.extensions["ctx"]["producers"].get_by_name("New Jersey")
     cm = ColumnMap(
         "Test",
         nj,

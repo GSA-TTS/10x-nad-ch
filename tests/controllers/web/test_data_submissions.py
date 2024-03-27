@@ -2,7 +2,7 @@ from flask_login import login_user, logout_user
 import pytest
 from nad_ch.config import create_app_context
 from nad_ch.controllers.web.flask import create_flask_application
-from nad_ch.core.entities import User
+from nad_ch.core.entities import DataProducer, User
 
 
 @pytest.fixture
@@ -20,8 +20,12 @@ def client(app):
 @pytest.fixture
 def logged_in_client(client, app):
     with app.app_context(), app.test_request_context():
+        producer = DataProducer("New Jersey")
+        saved_producer = app.extensions["ctx"]["producers"].add(producer)
+
         user = User(
-            "test_user", "test_user@test.org", "test_provider", "test_logout_url"
+            "test_user@test.org", "test_provider", "test_logout_url", True,
+            saved_producer
         )
         saved_user = app.extensions["ctx"]["users"].add(user)
         login_user(saved_user)

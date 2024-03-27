@@ -179,7 +179,7 @@ class User(Entity):
         email,
         login_provider,
         logout_url,
-        activated=False,
+        activated = False,
         producer: DataProducer = None,
         id: int = None,
     ):
@@ -211,7 +211,7 @@ class User(Entity):
             raise NotImplementedError("No `id` attribute - override `get_id`") from None
 
     def __repr__(self):
-        return f"User {self.id}, {self.email})"
+        return f"User {self.id}, {self.email}, {self.activated}, {self.producer.name})"
 
     def associate_with_data_producer(self, producer: DataProducer):
         self.producer = producer
