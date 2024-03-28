@@ -7,6 +7,7 @@ export interface CompletenessReportComponent {
   report: any;
   isGroupedByStatus: boolean;
   buttonText: string;
+  toggleButtonClass: string;
   getStatusTagClass(status: string): string;
 }
 
@@ -25,6 +26,11 @@ export function CompletenessReport(
     },
     get buttonText(): string {
       return this.isGroupedByStatus ? 'Ungroup by Status' : 'Group by Status';
+    },
+    get toggleButtonClass(): string {
+      return this.isGroupedByStatus
+        ? 'usa-button-toggle-on'
+        : 'usa-button-toggle-off';
     },
     getStatusTagClass(status: string): string {
       switch (status) {

@@ -92,6 +92,7 @@ content %}
       <div class="padding-top-2">
         <button
           class="usa-button"
+          :class="toggleButtonClass"
           @click.prevent="isGroupedByStatus = ! isGroupedByStatus"
           x-text="buttonText"
         ></button>
