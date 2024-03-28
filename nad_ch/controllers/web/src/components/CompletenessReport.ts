@@ -1,7 +1,7 @@
 import { AlpineComponent } from 'alpinejs';
-import { BASE_URL } from '../config';
+import { fetchReportData } from '../services';
 
-type CompletenessReport = {
+export type CompletenessReport = {
   features: Feature[];
   overview: Overview;
 };
@@ -37,6 +37,7 @@ export interface CompletenessReportComponent {
   isGroupedByStatus: boolean;
   buttonText: string;
   toggleButtonClass: string;
+  init(): Promise<void>;
   groupFeatures(features: Feature[]): GroupedFeature[];
   getStatusTagClass(status: string): string;
 }
@@ -60,9 +61,7 @@ export function CompletenessReport(
     isGroupedByStatus: false,
     async init(): Promise<void> {
       try {
-        const response = await fetch(`${BASE_URL}/api/reports/${this.id}`);
-        const reportData = await response.json();
-        this.report = JSON.parse(reportData);
+        this.report = await fetchReportData(this.id);
         if (this.report) {
           this.groupedFeatures = this.groupFeatures(this.report.features);
         }
@@ -70,8 +69,6 @@ export function CompletenessReport(
         console.error('Failed to load report:', error);
       } finally {
         this.isLoading = false;
-        console.log(this.report);
-        console.log(this.groupedFeatures);
       }
     },
     groupFeatures(features: Feature[]): GroupedFeature[] {
