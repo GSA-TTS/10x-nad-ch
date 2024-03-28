@@ -66,8 +66,7 @@ describe('CompletenessReportComponent', () => {
   });
 
   it('groups features by status', () => {
-    // Assuming mockReportData contains features with varying statuses
-    component.report = mockReportData; // Set report data directly for testing
+    component.report = mockReportData;
     const groupedFeatures = component.groupFeatures(mockReportData.features);
     expect(groupedFeatures).toEqual([
       {

@@ -54,25 +54,25 @@ content %}
       </div>
       <div class="grid-row">
         <div class="grid-col">
-          <h3>1141</h3>
+          <h3>{{ submission.report.overview.feature_count }}</h3>
           <p>Total records submitted</p>
         </div>
         <div class="grid-col">
-          <h3>0</h3>
+          <h3>{{ submission.report.overview.feature_count }}</h3>
           <p>Records added to NAD</p>
         </div>
         <div class="grid-col">
-          <h3>537</h3>
+          <h3>{{ submission.report.overview.features_flagged }}</h3>
           <p>Records flagged</p>
         </div>
       </div>
       <div class="grid-row">
         <div class="grid-col">
-          <h3>Yes</h3>
+          <h3>{{ submission.report.overview.etl_update_required }}</h3>
           <p>ETL update required</p>
         </div>
         <div class="grid-col">
-          <h3>Yes</h3>
+          <h3>{{ submission.report.overview.data_update_required }}</h3>
           <p>Data update required</p>
         </div>
         <div class="grid-col"></div>
