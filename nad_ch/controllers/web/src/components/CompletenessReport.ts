@@ -31,6 +31,7 @@ type GroupedFeature = {
 
 export interface CompletenessReportComponent {
   id: number;
+  isLoading: boolean;
   report: CompletenessReport | null;
   groupedFeatures: GroupedFeature[];
   isGroupedByStatus: boolean;
@@ -45,18 +46,33 @@ export function CompletenessReport(
 ): AlpineComponent<CompletenessReportComponent> {
   return {
     id: parseInt(id),
-    report: null,
+    isLoading: true,
+    report: {
+      features: [],
+      overview: {
+        data_update_required: false,
+        etl_update_required: false,
+        feature_count: 0,
+        features_flagged: 0,
+      },
+    },
     groupedFeatures: [],
     isGroupedByStatus: false,
     async init(): Promise<void> {
-      const response = await fetch(`${BASE_URL}/api/reports/${this.id}`);
-      const reportData = await response.json();
-      this.report = JSON.parse(reportData);
-      if (this.report) {
-        this.groupedFeatures = this.groupFeatures(this.report.features);
+      try {
+        const response = await fetch(`${BASE_URL}/api/reports/${this.id}`);
+        const reportData = await response.json();
+        this.report = JSON.parse(reportData);
+        if (this.report) {
+          this.groupedFeatures = this.groupFeatures(this.report.features);
+        }
+      } catch (error) {
+        console.error('Failed to load report:', error);
+      } finally {
+        this.isLoading = false;
+        console.log(this.report);
+        console.log(this.groupedFeatures);
       }
-      console.log(this.report);
-      console.log(this.groupedFeatures);
     },
     groupFeatures(features: Feature[]): GroupedFeature[] {
       const groupedByStatus = features.reduce<Record<string, Feature[]>>(
