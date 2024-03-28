@@ -1,0 +1,38 @@
+.usa-tag__success {
+  border-radius: 4px;
+  border: 1px solid var(--Green-cool-vivid-green-cool-vivid-10v, #b7f5bd);
+  background: var(--Green-cool-vivid-green-cool-vivid-10v, #b7f5bd);
+  color: black;
+  display: inline-flex;
+  padding: 2px 8px;
+  align-items: center;
+}
+
+.usa-tag__info {
+  border-radius: 4px;
+  background: var(--Blue-vivid-blue-vivid-10v, #cfe8ff);
+  color: black;
+  display: inline-flex;
+  padding: 2px 8px;
+  align-items: center;
+}
+
+.usa-tag__warning {
+  border-radius: 4px;
+  border: 1px solid var(--Warning-warning, #ffbe2e);
+  background: var(--Warning-warning, #ffbe2e);
+  color: black;
+  display: inline-flex;
+  padding: 2px 8px;
+  align-items: center;
+}
+
+.usa-tag__error {
+  border-radius: 4px;
+  border: 1px solid var(--Error-error-dark, #b50909);
+  background: var(--Error-error-dark, #b50909);
+  color: white;
+  display: inline-flex;
+  padding: 2px 8px;
+  align-items: center;
+}
