@@ -1,7 +1,13 @@
 import contextlib
 from typing import List, Optional
 from flask_login import UserMixin
-from nad_ch.core.entities import DataProducer, DataSubmission, DataSubmissionStatus, User, ColumnMap
+from nad_ch.core.entities import (
+    DataProducer,
+    DataSubmission,
+    DataSubmissionStatus,
+    User,
+    ColumnMap,
+)
 from nad_ch.core.repositories import (
     DataProducerRepository,
     DataSubmissionRepository,
@@ -95,7 +101,9 @@ class DataSubmissionModel(CommonBase):
     __tablename__ = "data_submissions"
 
     filename = Column(String, nullable=False)
-    status = Column(Enum(DataSubmissionStatus), default=DataSubmissionStatus.PENDING_SUBMISSION)
+    status = Column(
+        Enum(DataSubmissionStatus), default=DataSubmissionStatus.PENDING_SUBMISSION
+    )
     data_producer_id = Column(Integer, ForeignKey("data_producers.id"), nullable=False)
     column_map_id = Column(Integer, ForeignKey("column_maps.id"), nullable=False)
     report = Column(JSON)

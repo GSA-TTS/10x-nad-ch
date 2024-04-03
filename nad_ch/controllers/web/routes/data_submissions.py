@@ -1,4 +1,15 @@
-from flask import Blueprint, current_app, render_template, g, jsonify, request, abort, flash, redirect, url_for
+from flask import (
+    Blueprint,
+    current_app,
+    render_template,
+    g,
+    jsonify,
+    request,
+    abort,
+    flash,
+    redirect,
+    url_for,
+)
 from flask_login import login_required, current_user
 from nad_ch.application.use_cases.column_maps import get_column_maps_by_producer
 from nad_ch.application.use_cases.data_submissions import (
@@ -19,7 +30,9 @@ def before_request():
 @login_required
 def index():
     try:
-        view_models = get_data_submissions_by_producer(g.ctx, current_user.producer.name)
+        view_models = get_data_submissions_by_producer(
+            g.ctx, current_user.producer.name
+        )
         print(view_models)
         return render_template("data_submissions/index.html", submissions=view_models)
     except ValueError:
@@ -36,6 +49,7 @@ def show(id):
     except Exception:
         abort(404)
 
+
 @submissions_bp.route("/data-submissions/create")
 @login_required
 def create():
@@ -44,7 +58,9 @@ def create():
 
     name = request.args.get("name")
     column_map_options = get_column_maps_by_producer(g.ctx, current_user.producer.name)
-    return render_template("data_submissions/create.html", name=name, column_map_options=column_map_options)
+    return render_template(
+        "data_submissions/create.html", name=name, column_map_options=column_map_options
+    )
 
 
 @submissions_bp.route("/data-submissions", methods=["POST"])
@@ -67,7 +83,9 @@ def store():
         return redirect(url_for("submissions.create", name=name))
 
     try:
-        view_model = create_data_submission(g.ctx, current_user.id, column_map_id, name, file)
+        view_model = create_data_submission(
+            g.ctx, current_user.id, column_map_id, name, file
+        )
         return redirect(url_for("submissions.edit", id=view_model.id))
     except ValueError as e:
         flash(f"Error: {e}")

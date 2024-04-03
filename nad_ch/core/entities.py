@@ -138,7 +138,7 @@ class ColumnMap(Entity):
 class DataSubmissionStatus(Enum):
     PENDING_SUBMISSION = "PENDING_SUBMISSION"
     CANCELED = "CANCELED"
-    PENDING_VALIDATION  = "PENDING_VALIDATION"
+    PENDING_VALIDATION = "PENDING_VALIDATION"
     FAILED = "FAILED"
     VALIDATED = "VALIDATED"
 
@@ -155,7 +155,9 @@ class DataSubmission(Entity):
     ):
         super().__init__(id)
         self.filename = filename
-        self.status = status if status is not None else DataSubmissionStatus.PENDING_SUBMISSION
+        self.status = (
+            status if status is not None else DataSubmissionStatus.PENDING_SUBMISSION
+        )
         self.producer = producer
         self.column_map = column_map
         self.report = report

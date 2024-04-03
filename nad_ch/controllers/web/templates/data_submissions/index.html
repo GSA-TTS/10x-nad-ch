@@ -40,7 +40,9 @@ block content %}
         </th>
         <td>{{ sub.date_created }}</td>
         <td>
-          <span class="usa-tag {{ status_tag_class }}">{{ sub.status }}</span>
+          <span class="usa-tag {{ sub.status_tag_class }}"
+            >{{ sub.status }}</span
+          >
         </td>
         <td>
           {% if sub.status == "Validated" %}

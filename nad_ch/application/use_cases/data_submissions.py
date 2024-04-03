@@ -98,7 +98,13 @@ def validate_data_submission(
     ctx.storage.cleanup_temp_dir(download_result.temp_dir)
 
 
-def create_data_submission(ctx: ApplicationContext, user_id: int, column_map_id: int, submission_name: str, file: IO[bytes]):
+def create_data_submission(
+    ctx: ApplicationContext,
+    user_id: int,
+    column_map_id: int,
+    submission_name: str,
+    file: IO[bytes],
+):
     user = ctx.users.get_by_id(user_id)
     if user is None:
         raise ValueError("User not found")

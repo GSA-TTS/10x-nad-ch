@@ -3,7 +3,13 @@ from datetime import datetime
 import json
 import numpy as np
 from typing import Union, Dict, List, Tuple, Protocol
-from nad_ch.core.entities import Entity, ColumnMap, DataProducer, DataSubmissionStatus, DataSubmission
+from nad_ch.core.entities import (
+    Entity,
+    ColumnMap,
+    DataProducer,
+    DataSubmissionStatus,
+    DataSubmission,
+)
 
 
 class ViewModel(Protocol):
@@ -133,7 +139,6 @@ def create_data_submission_vm(submission: DataSubmission) -> DataSubmissionViewM
         producer_name=submission.producer.name,
         report=report_json,
     )
-
 
 
 def enrich_report(report: dict) -> dict:
