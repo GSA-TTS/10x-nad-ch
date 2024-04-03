@@ -1,8 +1,7 @@
 import contextlib
-import json
 from typing import List, Optional
 from flask_login import UserMixin
-from nad_ch.core.entities import DataProducer, DataSubmission, User, ColumnMap
+from nad_ch.core.entities import DataProducer, DataSubmission, DataSubmissionStatus, User, ColumnMap
 from nad_ch.core.repositories import (
     DataProducerRepository,
     DataSubmissionRepository,
@@ -12,6 +11,7 @@ from nad_ch.core.repositories import (
 from sqlalchemy import (
     Boolean,
     Column,
+    Enum,
     Integer,
     String,
     create_engine,
@@ -95,6 +95,7 @@ class DataSubmissionModel(CommonBase):
     __tablename__ = "data_submissions"
 
     filename = Column(String, nullable=False)
+    status = Column(Enum(DataSubmissionStatus), default=DataSubmissionStatus.PENDING_SUBMISSION)
     data_producer_id = Column(Integer, ForeignKey("data_producers.id"), nullable=False)
     column_map_id = Column(Integer, ForeignKey("column_maps.id"), nullable=False)
     report = Column(JSON)
@@ -106,6 +107,7 @@ class DataSubmissionModel(CommonBase):
     def from_entity(submission: DataSubmission, producer_id: int, column_map_id: int):
         model = DataSubmissionModel(
             filename=submission.filename,
+            status=submission.status,
             report=submission.report,
             data_producer_id=producer_id,
             column_map_id=column_map_id,
@@ -118,6 +120,7 @@ class DataSubmissionModel(CommonBase):
         entity = DataSubmission(
             id=self.id,
             filename=self.filename,
+            status=self.status,
             report=self.report,
             producer=producer,
             column_map=column_map,

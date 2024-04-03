@@ -1,7 +1,7 @@
 import os
 import zipfile
 from nad_ch.config import create_app_context, OAUTH2_CONFIG
-from nad_ch.core.entities import ColumnMap, DataProducer, DataSubmission, User
+from nad_ch.core.entities import ColumnMap, DataProducer, DataSubmissionStatus, DataSubmission, User
 
 
 def zip_directory(folder_path, zip_path):
@@ -266,7 +266,7 @@ def main():
             },
         ],
     }
-    new_submission = DataSubmission(filename, saved_producer, saved_column_map, report)
+    new_submission = DataSubmission(filename, DataSubmissionStatus.VALIDATED, saved_producer, saved_column_map, report)
     ctx.submissions.add(new_submission)
 
     os.remove(zipped_gdb_path)

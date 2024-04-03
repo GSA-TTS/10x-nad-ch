@@ -1,4 +1,5 @@
 from datetime import datetime, timezone, UTC
+from enum import Enum
 import os
 import re
 from typing import Optional, Dict
@@ -134,10 +135,19 @@ class ColumnMap(Entity):
         )
 
 
+class DataSubmissionStatus(Enum):
+    PENDING_SUBMISSION = "PENDING_SUBMISSION"
+    CANCELED = "CANCELED"
+    PENDING_VALIDATION  = "PENDING_VALIDATION"
+    FAILED = "FAILED"
+    VALIDATED = "VALIDATED"
+
+
 class DataSubmission(Entity):
     def __init__(
         self,
         filename: str,
+        status: DataSubmissionStatus,
         producer: DataProducer,
         column_map: ColumnMap,
         report: Optional[Dict[any, any]] = None,
@@ -145,13 +155,14 @@ class DataSubmission(Entity):
     ):
         super().__init__(id)
         self.filename = filename
+        self.status = status if status is not None else DataSubmissionStatus.PENDING_SUBMISSION
         self.producer = producer
         self.column_map = column_map
         self.report = report
 
     def __repr__(self):
         return f"DataSubmission \
-            {self.id}, {self.filename}, {self.producer}"
+            {self.id}, {self.filename}, {self.producer}, {self.status}"
 
     @staticmethod
     def generate_filename(file_path: str, producer: DataProducer) -> str:
@@ -167,6 +178,26 @@ class DataSubmission(Entity):
 
         _, file_extension = os.path.splitext(file_path)
         filename = f"{formatted_producer_name}_{datetime_str}{file_extension}"
+        return filename
+
+    @staticmethod
+    def generate_zipped_file_path(name: str, producer: DataProducer) -> str:
+        s = re.sub(r"\W+", "_", producer.name)
+        s = s.lower()
+        s = s.strip("_")
+        formatted_producer_name = re.sub(r"_+", "_", s)
+
+        s = re.sub(r"\W+", "_", name)
+        s = s.lower()
+        s = s.strip("_")
+        formatted_name = re.sub(r"\W+", "_", a)
+
+        current_time_utc = datetime.now(timezone.utc)
+        timestamp = current_time_utc.timestamp()
+        datetime_obj = datetime.fromtimestamp(timestamp, UTC)
+        datetime_str = datetime_obj.strftime("%Y%m%d_%H%M%S")
+
+        filename = f"{formatted_producer_name}/{formatted_name}_{datetime_str}.zip"
         return filename
 
     def has_report(self) -> bool:

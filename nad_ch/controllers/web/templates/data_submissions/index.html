@@ -39,7 +39,7 @@ block content %}
         </th>
         <td>{{ sub.date_created }}</td>
         <td>
-          {% if sub.status == "VALIDATED "%}
+          {% if sub.status == "Validated" %}
           <a href="{{ url_for('submissions.show', id=sub.id, _external=True) }}"
             >View Report</a
           >
