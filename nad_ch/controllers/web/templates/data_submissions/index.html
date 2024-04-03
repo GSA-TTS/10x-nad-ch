@@ -28,6 +28,7 @@ block content %}
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Created</th>
+        <th scope="col">Status</th>
         <th scope="col"></th>
       </tr>
     </thead>
@@ -38,6 +39,9 @@ block content %}
           {{ sub.filename }}
         </th>
         <td>{{ sub.date_created }}</td>
+        <td>
+          <span class="usa-tag {{ status_tag_class }}">{{ sub.status }}</span>
+        </td>
         <td>
           {% if sub.status == "Validated" %}
           <a href="{{ url_for('submissions.show', id=sub.id, _external=True) }}"
