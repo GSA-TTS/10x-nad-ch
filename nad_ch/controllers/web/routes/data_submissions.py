@@ -87,6 +87,7 @@ def store():
         view_model = create_data_submission(
             g.ctx, current_user.id, column_map_id, name, file
         )
+        print(view_model)
         return redirect(url_for("submissions.edit", id=view_model.id))
     except ValueError as e:
         flash(f"Error: {e}")
@@ -98,8 +99,23 @@ def store():
 def edit(id):
     try:
         view_model = get_data_submission(g.ctx, id)
-        return render_template("data_submissions/edit.html", submission=view_model)
-    except Exception:
+
+        data = [
+            {"Add_Number": "34", "St_Name": "Willow Creek Blvd", "Latitude": "44.968046", "Longitude": "-94.420307"},
+            {"Add_Number": "654", "St_Name": "Pinehurst Lane", "Latitude": "33.755787", "Longitude": "-89.132008"},
+            {"Add_Number": "324", "St_Name": "Cedarwood Drive", "Latitude": "33.844843", "Longitude": "-116.359998"},
+            {"Add_Number": "43", "St_Name": "Mapleview Court", "Latitude": "44.92057", "Longitude": "-116.54911"},
+            {"Add_Number": "5", "St_Name": "Elm Street", "Latitude": "44.240309", "Longitude": "-93.44786"},
+            {"Add_Number": "545", "St_Name": "Oak Ridge Way", "Latitude": "44.968041", "Longitude": "-91.493619"},
+            {"Add_Number": "34", "St_Name": "Sunnybrook Road", "Latitude": "44.333304", "Longitude": "-94.419696"},
+            {"Add_Number": "4", "St_Name": "Riverside Terrace", "Latitude": "33.755783", "Longitude": "-89.132027"},
+            {"Add_Number": "34", "St_Name": "Meadowbrook Lane", "Latitude": "33.844847", "Longitude": "-116.360066"},
+            {"Add_Number": "34", "St_Name": "Aspen Grove Circle", "Latitude": "44.920474", "Longitude": "-116.549069"},
+        ]
+
+        return render_template("data_submissions/edit.html", submission=view_model, data=data)
+    except Exception as e:
+        print(str(e))
         abort(404)
 
 

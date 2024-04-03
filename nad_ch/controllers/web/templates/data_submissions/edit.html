@@ -1,6 +1,58 @@
 {% extends "_layouts/base.html" %} {% block title %}Submission{% endblock %} {%
 block content %}
 
-<h1>Submission {{ data_submission.id }}</h1>
+<form action="/data-submissions" method="post" enctype="multipart/form-data">
+  <header class="usa-header usa-header--basic">
+    <div class="usa-nav-container">
+      <div class="usa-navbar">
+        <div class="display-flex flex-justify flex-align-end">
+          <div class="usa-logo">
+            <em class="usa-logo__text"
+              >{{ "Submission ID: " ~ submission.id }}</em
+            >
+          </div>
+          <div class="padding-bottom-2">
+            <a
+              class="usa-button usa-button--outline"
+              href="{{ url_for('submissions.index') }}"
+              >Cancel</a
+            >
+            <button class="usa-button" type="submit">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <h2>Review submission</h2>
+  <p>This data is a sample of what the NAD administrator will receive.</p>
+  <div class="usa-table-default width-full">
+    <table class="usa-table usa-table--borderless width-full">
+      <thead class="bg-base-lighter border-bottom-2px border-base-light">
+        <tr>
+          <th scope="col">Add_Number</th>
+          <th scope="col">St_Name</th>
+          <th scope="col">Latitude</th>
+          <th scope="col">Longitude</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in data %}
+        <tr>
+          <th class="border-bottom-1px border-base-lightest" scope="row">
+            {{ row["Add_Number"] }}
+          </th>
+          <td>{{ row["St_Name"] }}</td>
+          <td>{{ row["Latitude"] }}</td>
+          <td>>{{ row["Longitude"] }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="4">...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</form>
 
 {% endblock %}
