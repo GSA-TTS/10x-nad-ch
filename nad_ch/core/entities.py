@@ -192,7 +192,7 @@ class DataSubmission(Entity):
         s = re.sub(r"\W+", "_", name)
         s = s.lower()
         s = s.strip("_")
-        formatted_name = re.sub(r"\W+", "_", a)
+        formatted_name = re.sub(r"\W+", "_", s)
 
         current_time_utc = datetime.now(timezone.utc)
         timestamp = current_time_utc.timestamp()

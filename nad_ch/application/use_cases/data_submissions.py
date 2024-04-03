@@ -119,16 +119,16 @@ def create_data_submission(
     if column_map is None:
         raise ValueError("Column map not found")
 
-    # try:
-    #     filename = DataSubmission.generate_zipped_file_path(submission_name, producer)
-    #     submission = DataSubmission(filename, DataSubmissionStatus.PENDING_SUBMISSION, producer, column_map)
-    #     saved_submission = ctx.submissions.add(submission)
+    try:
+        filename = DataSubmission.generate_zipped_file_path(submission_name, producer)
+        submission = DataSubmission(filename, DataSubmissionStatus.PENDING_SUBMISSION, producer, column_map)
+        saved_submission = ctx.submissions.add(submission)
 
-    #     ctx.storage.upload(file, filename)
+        ctx.storage.upload(file, filename)
 
-    #     ctx.logger.info(f"Submission added: {saved_submission.filename}")
+        ctx.logger.info(f"Submission added: {saved_submission.filename}")
 
-    #     return get_view_model(saved_submission)
-    # except Exception as e:
-    #     ctx.storage.delete(filename)
-    #     ctx.logger.error(f"Failed to process submission: {e}")
+        return get_view_model(saved_submission)
+    except Exception as e:
+        ctx.storage.delete(filename)
+        ctx.logger.error(f"Failed to process submission: {e}")
