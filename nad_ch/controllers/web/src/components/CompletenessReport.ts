@@ -40,6 +40,7 @@ export interface CompletenessReportComponent {
   init(): Promise<void>;
   groupFeatures(features: Feature[]): GroupedFeature[];
   getStatusTagClass(status: string): string;
+  getNadFieldText(feature: Feature): string;
 }
 
 export function CompletenessReport(
@@ -107,6 +108,10 @@ export function CompletenessReport(
         default:
           return 'usa-tag__info';
       }
+    },
+    getNadFieldText(feature: Feature): string {
+      const embellishment = feature.required ? '*' : '';
+      return `${embellishment} ${feature.nad_feature_name}`;
     },
   };
 }

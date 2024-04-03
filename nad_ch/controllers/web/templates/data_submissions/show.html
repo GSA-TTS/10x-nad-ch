@@ -6,7 +6,7 @@
       <div class="usa-navbar">
         <div class="usa-logo">
           <em class="usa-logo__text"
-            >{{ submission.provider_name }} Submission</em
+            >New Jersey Submission MorrisCounty2024B</em
           >
         </div>
         <nav aria-label="Primary navigation" class="usa-nav usa-nav-section">
@@ -48,8 +48,8 @@
     <div class="grid-container padding-left-0">
       <div class="grid-row padding-top-2">
         <p>
-          NJ submitted Submission 1.0 to US DOT Schema version 3.0 04/2023. Data
-          was extracted from 1 file.
+          New Jersy submitted MorrisCounty2024B to US DOT Schema version 3.0
+          04/2023. Data was extracted from 1 file.
         </p>
       </div>
       <div class="grid-row">
@@ -129,7 +129,7 @@
               >
                 <tr>
                   <td x-text="feature.provided_feature_name"></td>
-                  <td x-text="feature.nad_feature_name"></td>
+                  <td x-text="getNadFieldText(feature)"></td>
                   <td>
                     <span
                       class="usa-tag"
@@ -195,7 +195,7 @@
               >
                 <tr>
                   <td x-text="feature.provided_feature_name"></td>
-                  <td x-text="feature.nad_feature_name"></td>
+                  <td x-text="getNadFieldText(feature)"></td>
                   <td>
                     <span
                       class="usa-tag"

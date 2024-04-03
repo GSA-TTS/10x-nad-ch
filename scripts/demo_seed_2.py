@@ -30,18 +30,6 @@ def main():
 
     producer = ctx.producers.get_by_name("New Jersey")
 
-    current_script_path = os.path.abspath(__file__)
-    project_root = os.path.dirname(os.path.dirname(current_script_path))
-    gdb_path = os.path.join(
-        project_root, "tests", "test_data", "geodatabases", "Naperville.gdb"
-    )
-    zipped_gdb_path = os.path.join(
-        project_root, "tests", "test_data", "geodatabases", "Naperville.gdb.zip"
-    )
-    zip_directory(gdb_path, zipped_gdb_path)
-
-    filename = DataSubmission.generate_filename(zipped_gdb_path, producer)
-    ctx.storage.upload(zipped_gdb_path, filename)
     report = {
         "overview": {
             "feature_count": 1141,
@@ -200,15 +188,13 @@ def main():
     column_map = ctx.column_maps.get_by_id(1)
 
     new_submission = DataSubmission(
-        filename,
+        "new_jersey/morriscounty2024b_20240403_184750.zip",
         DataSubmissionStatus.VALIDATED,
         producer,
         column_map,
         report,
     )
     ctx.submissions.add(new_submission)
-
-    os.remove(zipped_gdb_path)
 
 
 if __name__ == "__main__":
