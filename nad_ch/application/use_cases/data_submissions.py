@@ -6,7 +6,7 @@ from nad_ch.application.view_models import (
     get_view_model,
     DataSubmissionViewModel,
 )
-from nad_ch.core.entities import DataSubmission, ColumnMap
+from nad_ch.core.entities import DataSubmissionStatus, DataSubmission, ColumnMap
 
 
 def ingest_data_submission(
@@ -33,7 +33,9 @@ def ingest_data_submission(
         # TODO: Finish logic for obtaining column map from user
         column_map = ColumnMap("placeholder", producer, 1)
 
-        submission = DataSubmission(filename, producer, column_map)
+        submission = DataSubmission(
+            filename, DataSubmissionStatus.PENDING_VALIDATION, producer, column_map
+        )
         saved_submission = ctx.submissions.add(submission)
         ctx.logger.info(f"Submission added: {saved_submission.filename}")
 

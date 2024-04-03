@@ -1,6 +1,12 @@
 from conftest import TEST_COLUMN_MAPS_PATH
 import yaml
-from nad_ch.core.entities import DataProducer, DataSubmission, ColumnMap, User
+from nad_ch.core.entities import (
+    DataProducer,
+    DataSubmissionStatus,
+    DataSubmission,
+    ColumnMap,
+    User,
+)
 
 
 def test_add_producer(producers):
@@ -170,7 +176,12 @@ def test_add_data_submission(repositories):
     saved_producer = producers.add(new_producer)
     new_column_map = ColumnMap("TestMap", saved_producer, version_id=1)
     saved_column_map = column_maps.add(new_column_map)
-    new_submission = DataSubmission("some-file-name", saved_producer, saved_column_map)
+    new_submission = DataSubmission(
+        "some-file-name",
+        DataSubmissionStatus.PENDING_VALIDATION,
+        saved_producer,
+        saved_column_map,
+    )
 
     saved_submission = submissions.add(new_submission)
 
