@@ -5,7 +5,7 @@ from nad_ch.application.use_cases.data_producers import (
 )
 from nad_ch.application.use_cases.data_submissions import (
     ingest_data_submission,
-    list_data_submissions_by_producer,
+    get_data_submissions_by_producer,
     validate_data_submission,
 )
 
@@ -45,7 +45,7 @@ def ingest(ctx, file_path, producer):
 @click.argument("producer")
 def list_submissions_by_producer(ctx, producer):
     context = ctx.obj
-    list_data_submissions_by_producer(context, producer)
+    get_data_submissions_by_producer(context, producer)
 
 
 @cli.command()

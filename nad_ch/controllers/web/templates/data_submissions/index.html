@@ -1,6 +1,27 @@
-{% extends "_layouts/base.html" %} {% block title %}Home Page{% endblock %} {%
-block content %} {% from "components/page-header.html" import page_header %} {{
-page_header("Reports") }} {% if submissions %}
+{% extends "_layouts/base.html" %} {% block title %}Submissions{% endblock %} {%
+block content %}
+<header class="usa-header usa-header--basic">
+  <div class="usa-nav-container">
+    <div class="usa-navbar">
+      <div class="display-flex flex-justify flex-align-end">
+        <div class="usa-logo">
+          <em class="usa-logo__text">Submissions</em>
+        </div>
+        <div class="padding-bottom-2">
+          <a
+            href="#submission-modal"
+            class="usa-button"
+            aria-controls="submission-modal"
+            data-open-modal
+            >Create submission</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% if submissions %}
 <div class="usa-table-default width-full">
   <table class="usa-table usa-table--borderless width-full">
     <thead class="bg-base-lighter border-bottom-2px border-base-light">
@@ -18,10 +39,16 @@ page_header("Reports") }} {% if submissions %}
         </th>
         <td>{{ sub.date_created }}</td>
         <td>
-          <a
-            href="{{ url_for('submissions.view_report', submission_id=sub.id, _external=True) }}"
+          {% if sub.status == "VALIDATED "%}
+          <a href="{{ url_for('submissions.show', id=sub.id, _external=True) }}"
+            >View Report</a
+          >
+          {% else %}
+
+          <a href="{{ url_for('submissions.edit', id=sub.id, _external=True) }}"
             >View</a
           >
+          {% endif %}
         </td>
       </tr>
       {% endfor %}
@@ -29,5 +56,88 @@ page_header("Reports") }} {% if submissions %}
   </table>
 </div>
 {% else %}
-<p>You haven't uploaded any data submissions yet.</p>
-{% endif %} {% endblock %}
+<div class="usa-card padding-top-2 grid-col-4">
+  <div class="usa-card__container">
+    <div class="usa-card__header">
+      <h2 class="usa-card__heading">Create Your First Submission</h2>
+    </div>
+    <div class="usa-card__media">
+      <div class="usa-card__img">
+        <img
+          src="{{ url_for('static', filename='mapping.png') }}"
+          alt="A placeholder submission image"
+        />
+      </div>
+    </div>
+    <div class="usa-card__body">
+      <p>
+        Tell NAD which of your fields maps to NAD's so you can crosswalk your
+        address data seamlessly.
+      </p>
+    </div>
+    <div class="usa-card__footer">
+      <a
+        href="#submission-modal"
+        class="usa-button"
+        aria-controls="submission-modal"
+        data-open-modal
+        >Create submission</a
+      >
+    </div>
+  </div>
+</div>
+{% endif %}
+<div
+  class="usa-modal"
+  id="submission-modal"
+  aria-labelledby="submission-modal-heading"
+  aria-describedby="submission-modal-description"
+>
+  <div class="usa-modal__content margin-x-0">
+    <div class="usa-modal__main">
+      <h2 class="usa-modal__heading" id="submission-modal-heading">
+        New submission
+      </h2>
+      <form x-data="SubmissionForm()" @submit.prevent="create" novalidate>
+        <div class="usa-form-group">
+          <label for="submission-name">Submission name</label>
+          <br />
+          <input
+            type="text"
+            id="submission-name"
+            name="submission-name"
+            class="width-full"
+            x-model="name"
+          />
+          <br />
+          <span class="text-base">No more than 25 letters or numbers</span>
+          <br />
+          <span
+            class="usa-error-message"
+            role="alert"
+            x-show="hasError"
+            x-text="errorMessage"
+          ></span>
+          <div class="usa-modal__footer">
+            <ul class="usa-button-group">
+              <li class="usa-button-group__item">
+                <button type="submit" class="usa-button">Create</button>
+              </li>
+              <li class="usa-button-group__item">
+                <button
+                  id="cancel-button"
+                  type="button"
+                  class="usa-button usa-button--unstyled padding-105 text-center"
+                  @click="closeModal"
+                >
+                  Cancel
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

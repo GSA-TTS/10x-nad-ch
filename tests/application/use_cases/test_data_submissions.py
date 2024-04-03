@@ -4,7 +4,7 @@ from nad_ch.application.dtos import DataSubmissionReport, DataSubmissionReportOv
 from nad_ch.application.use_cases.data_producers import add_data_producer
 from nad_ch.application.use_cases.data_submissions import (
     ingest_data_submission,
-    list_data_submissions_by_producer,
+    get_data_submissions_by_producer,
     validate_data_submission,
 )
 from nad_ch.application.view_models import (
@@ -32,14 +32,14 @@ def test_ingest_data_submission(app_context):
     assert isinstance(result, DataSubmissionViewModel)
 
 
-def test_list_data_submissions_by_producer(app_context):
+def test_get_data_submissions_by_producer(app_context):
     producer_name = "State X"
     add_data_producer(app_context, producer_name)
 
     filename = "my_cool_file.zip"
     ingest_data_submission(app_context, filename, producer_name)
 
-    result = list_data_submissions_by_producer(app_context, producer_name)
+    result = get_data_submissions_by_producer(app_context, producer_name)
 
     assert len(result) == 1
     assert isinstance(result[0], DataSubmissionViewModel)
