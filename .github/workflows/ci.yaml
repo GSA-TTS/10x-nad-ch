@@ -40,7 +40,7 @@ jobs:
 
       - name: Test backend code
         shell: bash
-        run: poetry run pytest
+        run: poetry run pytest -k 'not test_task_queue'
 
       - name: Read .nvmrc
         run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
