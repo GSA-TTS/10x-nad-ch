@@ -26,3 +26,10 @@ class OAuth2TokenError(NadChError):
 
     def __init__(self, message="OAuth2 token retrieval failed."):
         super().__init__(message)
+
+
+class InvalidDataSubmissionFileError(NadChError):
+    """Exception raised when a data submission file is invalid."""
+
+    def __init__(self, message="Invalid data submission file."):
+        super().__init__(message)

@@ -1,10 +1,15 @@
-from typing import Dict, Optional
+import os
+from typing import Dict, List, Optional, IO
+from zipfile import ZipFile
+import fiona
 from geopandas import GeoDataFrame
 import pandas as pd
+import shapefile
 from nad_ch.application.dtos import (
     DataSubmissionReportFeature,
     DataSubmissionReportOverview,
 )
+from nad_ch.application.interfaces import Storage
 import glob
 from pathlib import Path
 from nad_ch.core.entities import ColumnMap
@@ -162,3 +167,64 @@ class DataValidator:
         self.initialize_overview_details(gdf_batch, self.valid_mappings)
         self.update_feature_details(gdf_batch)
         self.update_overview_details(gdf_batch)
+
+
+class FileValidator:
+    def __init__(self, file: IO[bytes], storage_service: Storage) -> None:
+        self.file = file
+        self.storage_service = storage_service
+
+    def validate_file(self) -> bool:
+        if not self._is_zipped():
+            return False
+
+        with ZipFile(self.file) as zip_file:
+            file_names = zip_file.namelist()
+            if not self.is_valid_shapefile(file_names) or self.is_valid_geodatabase(
+                file_names
+            ):
+                return False
+
+        return True
+
+    def validate_schema(self, column_map: Dict[str, str]) -> bool:
+        path = self.storage_service.save_file(self.file)
+
+        with ZipFile(self.file) as zip_file:
+            file_names = zip_file.namelist()
+            if self.is_valid_shapefile(file_names):
+                return self.validate_shapefile_schema(column_map)
+            elif self.is_valid_geodatabase(file_names):
+                return self.validate_gdb_schema(path, column_map)
+            else:
+                return False
+
+    def is_zipped(self) -> bool:
+        _, file_extension = os.path.splitext(self.file.filename)
+        if file_extension.lower() != ".zip":
+            return False
+
+        return True
+
+    def is_valid_shapefile(self, file_names: List[str]) -> bool:
+        required_extensions = {".shp", ".shx", ".dbf"}
+        found_extensions = set(os.path.splitext(name)[1].lower() for name in file_names)
+        return required_extensions.issubset(found_extensions)
+
+    def is_valid_geodatabase(self, file_names: List[str]) -> bool:
+        return any(name.endswith(".gdb") or ".gdb/" in name for name in file_names)
+
+    def validate_shapefile_schema(self, path: str, expected_schema: Dict[str, str]) -> bool:
+        sf = shapefile.Reader(path)
+
+        fields = [field[0] for field in sf.fields if field[0] != "DeletionFlag"]
+
+        actual_schema = {field: None for field in fields}
+
+        return actual_schema == expected_schema
+
+    def validate_gdb_schema(gdb_path, expected_schema: Dict[str, str]) -> bool:
+        with fiona.open(gdb_path, layer="your_layer_name") as layer:
+            actual_schema = {k: None for k in layer.schema["properties"].keys()}
+
+            return actual_schema == expected_schema

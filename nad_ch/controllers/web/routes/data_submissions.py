@@ -11,11 +11,13 @@ from flask import (
     url_for,
 )
 from flask_login import login_required, current_user
+from nad_ch.application.exceptions import InvalidDataSubmissionFileError
 from nad_ch.application.use_cases.column_maps import get_column_maps_by_producer
 from nad_ch.application.use_cases.data_submissions import (
     get_data_submission,
     get_data_submissions_by_producer,
     create_data_submission,
+    validate_file_before_submission,
 )
 
 
@@ -83,6 +85,16 @@ def store():
         flash("No selected file")
         return redirect(url_for("submissions.create", name=name))
 
+    # try to work with the file to confirm that
+    # 1. It is a .zip file
+    # 2. It contains a Shapefile OR It contains a .gdb directory
+    # 3. Its contents match the column map
+    try:
+        validate_file_before_submission(g.ctx, file, column_map_id)
+    except InvalidDataSubmissionFileError as e:
+        flash(f"Error: {e}")
+        return redirect(url_for("submissions.create", name=name))
+
     try:
         view_model = create_data_submission(
             g.ctx, current_user.id, column_map_id, name, file
@@ -101,19 +113,71 @@ def edit(id):
         view_model = get_data_submission(g.ctx, id)
 
         data = [
-            {"Add_Number": "34", "St_Name": "Willow Creek Blvd", "Latitude": "44.968046", "Longitude": "-94.420307"},
-            {"Add_Number": "654", "St_Name": "Pinehurst Lane", "Latitude": "33.755787", "Longitude": "-89.132008"},
-            {"Add_Number": "324", "St_Name": "Cedarwood Drive", "Latitude": "33.844843", "Longitude": "-116.359998"},
-            {"Add_Number": "43", "St_Name": "Mapleview Court", "Latitude": "44.92057", "Longitude": "-116.54911"},
-            {"Add_Number": "5", "St_Name": "Elm Street", "Latitude": "44.240309", "Longitude": "-93.44786"},
-            {"Add_Number": "545", "St_Name": "Oak Ridge Way", "Latitude": "44.968041", "Longitude": "-91.493619"},
-            {"Add_Number": "34", "St_Name": "Sunnybrook Road", "Latitude": "44.333304", "Longitude": "-94.419696"},
-            {"Add_Number": "4", "St_Name": "Riverside Terrace", "Latitude": "33.755783", "Longitude": "-89.132027"},
-            {"Add_Number": "34", "St_Name": "Meadowbrook Lane", "Latitude": "33.844847", "Longitude": "-116.360066"},
-            {"Add_Number": "34", "St_Name": "Aspen Grove Circle", "Latitude": "44.920474", "Longitude": "-116.549069"},
+            {
+                "Add_Number": "34",
+                "St_Name": "Willow Creek Blvd",
+                "Latitude": "44.968046",
+                "Longitude": "-94.420307",
+            },
+            {
+                "Add_Number": "654",
+                "St_Name": "Pinehurst Lane",
+                "Latitude": "33.755787",
+                "Longitude": "-89.132008",
+            },
+            {
+                "Add_Number": "324",
+                "St_Name": "Cedarwood Drive",
+                "Latitude": "33.844843",
+                "Longitude": "-116.359998",
+            },
+            {
+                "Add_Number": "43",
+                "St_Name": "Mapleview Court",
+                "Latitude": "44.92057",
+                "Longitude": "-116.54911",
+            },
+            {
+                "Add_Number": "5",
+                "St_Name": "Elm Street",
+                "Latitude": "44.240309",
+                "Longitude": "-93.44786",
+            },
+            {
+                "Add_Number": "545",
+                "St_Name": "Oak Ridge Way",
+                "Latitude": "44.968041",
+                "Longitude": "-91.493619",
+            },
+            {
+                "Add_Number": "34",
+                "St_Name": "Sunnybrook Road",
+                "Latitude": "44.333304",
+                "Longitude": "-94.419696",
+            },
+            {
+                "Add_Number": "4",
+                "St_Name": "Riverside Terrace",
+                "Latitude": "33.755783",
+                "Longitude": "-89.132027",
+            },
+            {
+                "Add_Number": "34",
+                "St_Name": "Meadowbrook Lane",
+                "Latitude": "33.844847",
+                "Longitude": "-116.360066",
+            },
+            {
+                "Add_Number": "34",
+                "St_Name": "Aspen Grove Circle",
+                "Latitude": "44.920474",
+                "Longitude": "-116.549069",
+            },
         ]
 
-        return render_template("data_submissions/edit.html", submission=view_model, data=data)
+        return render_template(
+            "data_submissions/edit.html", submission=view_model, data=data
+        )
     except Exception as e:
         print(str(e))
         abort(404)

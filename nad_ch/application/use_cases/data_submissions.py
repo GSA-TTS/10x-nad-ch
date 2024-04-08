@@ -1,6 +1,7 @@
 import os
 from typing import List, IO
 from nad_ch.application.dtos import DownloadResult
+from nad_ch.application.exceptions import InvalidDataSubmissionFileError
 from nad_ch.application.interfaces import ApplicationContext
 from nad_ch.application.view_models import (
     get_view_model,
@@ -100,6 +101,31 @@ def validate_data_submission(
     ctx.storage.cleanup_temp_dir(download_result.temp_dir)
 
 
+def validate_file_before_submission(
+    ctx: ApplicationContext, file: IO[bytes], column_map_id: int
+) -> bool:
+    column_map = ctx.column_maps.get_by_id(column_map_id)
+    if column_map is None:
+        raise ValueError("Column map not found")
+
+    _, file_extension = os.path.splitext(file.filename)
+    if file_extension.lower() != ".zip":
+        raise InvalidDataSubmissionFileError(
+            "Invalid file format. Only ZIP files are accepted."
+        )
+
+    # is the file valid?
+    # if not validator.valdiate_file(file):
+    #     return False
+
+    # is the schema valid?
+    # if not validator.validate_schema(file, column_map):
+    #     return False
+
+    # if both cases are true, return True
+    return True
+
+
 def create_data_submission(
     ctx: ApplicationContext,
     user_id: int,
@@ -121,7 +147,9 @@ def create_data_submission(
 
     try:
         filename = DataSubmission.generate_zipped_file_path(submission_name, producer)
-        submission = DataSubmission(filename, DataSubmissionStatus.PENDING_SUBMISSION, producer, column_map)
+        submission = DataSubmission(
+            filename, DataSubmissionStatus.PENDING_SUBMISSION, producer, column_map
+        )
         saved_submission = ctx.submissions.add(submission)
 
         # ctx.storage.upload(file, filename)
