@@ -168,19 +168,22 @@ class DataSubmission(Entity):
 
     @staticmethod
     def generate_filename(file_path: str, producer: DataProducer) -> str:
-        s = re.sub(r"\W+", "_", producer.name)
-        s = s.lower()
-        s = s.strip("_")
-        formatted_producer_name = re.sub(r"_+", "_", s)
+        return os.path.basename(file_path)
 
-        current_time_utc = datetime.now(timezone.utc)
-        timestamp = current_time_utc.timestamp()
-        datetime_obj = datetime.fromtimestamp(timestamp, UTC)
-        datetime_str = datetime_obj.strftime("%Y%m%d_%H%M%S")
-
-        _, file_extension = os.path.splitext(file_path)
-        filename = f"{formatted_producer_name}_{datetime_str}{file_extension}"
-        return filename
+    def get_mapped_data_dir(
+        self, source_path: str, base_path: str, remote: bool = False
+    ) -> str:
+        filename, _ = os.path.splitext(
+            self.generate_filename(source_path, self.producer)
+        )
+        if remote:
+            # Defines the path for remote storage such as s3
+            partition_dt = datetime.today().strftime("%Y_%m_%d")
+            path = f"data_submissions/{self.producer.name}/{partition_dt}/{filename}"
+        else:
+            # Defines the path for local storage of post-mapped data
+            path = os.path.join(base_path, f"data_submissions/{self.id}/{filename}")
+        return path
 
     @staticmethod
     def generate_zipped_file_path(name: str, producer: DataProducer) -> str:

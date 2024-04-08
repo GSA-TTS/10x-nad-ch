@@ -63,10 +63,17 @@ def test_validate_data_submission(app_context, caplog, producer_column_maps):
             submission_id: int,
             path: str,
             column_map: Dict[str, str],
+            mapped_data_dir: str,
         ):
             return DataSubmissionReport(
                 overview=DataSubmissionReportOverview(feature_count=1)
             )
+
+        def run_copy_mapped_data_to_remote(
+            self, mapped_data_local_dir: str, mapped_data_remote_dir: str
+        ):
+
+            return True
 
     app_context._task_queue = CustomMockTestTaskQueue()
     column_map_name = "testproducer1"

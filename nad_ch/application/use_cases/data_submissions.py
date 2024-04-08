@@ -8,6 +8,7 @@ from nad_ch.application.view_models import (
     DataSubmissionViewModel,
 )
 from nad_ch.core.entities import DataSubmissionStatus, DataSubmission, ColumnMap
+from nad_ch.config import LANDING_ZONE
 
 
 def ingest_data_submission(
@@ -88,17 +89,32 @@ def validate_data_submission(
 
     # Using version 1 for column maps for now, may add feature for user to select
     # version later
-    column_map = ctx.column_maps.get_by_name_and_version(column_map_name, 1)
-    report = ctx.task_queue.run_load_and_validate(
-        ctx.submissions,
-        submission.id,
-        download_result.extracted_dir,
-        column_map.mapping,
-    )
+    try:
+        column_map = ctx.column_maps.get_by_name_and_version(column_map_name, 1)
+        mapped_data_local_dir = submission.get_mapped_data_dir(
+            download_result.extracted_dir, LANDING_ZONE
+        )
+        mapped_data_remote_dir = submission.get_mapped_data_dir(
+            download_result.extracted_dir, LANDING_ZONE, True
+        )
+        report = ctx.task_queue.run_load_and_validate(
+            ctx.submissions,
+            submission.id,
+            download_result.extracted_dir,
+            column_map.mapping,
+            mapped_data_local_dir,
+        )
+        _ = ctx.task_queue.run_copy_mapped_data_to_remote(
+            mapped_data_local_dir,
+            mapped_data_remote_dir,
+        )
 
-    ctx.logger.info(f"Total number of features: {report.overview.feature_count}")
-
-    ctx.storage.cleanup_temp_dir(download_result.temp_dir)
+        ctx.logger.info(f"Total number of features: {report.overview.feature_count}")
+    except Exception:
+        raise
+    finally:
+        ctx.storage.cleanup_temp_dir(download_result.temp_dir)
+        ctx.storage.cleanup_temp_dir(mapped_data_local_dir)
 
 
 def validate_file_before_submission(

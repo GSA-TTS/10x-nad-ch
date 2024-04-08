@@ -1,58 +1,35 @@
-EXPECTED_DEFAULT_CONFIG = {
-    "data_required_fields": [
-        "Add_Number",
-        "AddNo_Full",
-        "St_Name",
-        "StNam_Full",
-        "County",
-        "Inc_Muni",
-        "Post_City",
-        "State",
-        "UUID",
-        "AddAuth",
-        "Longitude",
-        "Latitude",
-        "NatGrid",
-        "Placement",
-        "AddrPoint",
-        "DateUpdate",
-        "NAD_Source",
-        "DataSet_ID",
-    ]
-}
+# Baseline objects used for testing purposes
 
 TESTPRODUCER1_CONFIG = {
-    "COL_0": ["ID"],
-    "COL_1": ["STCOFIPS"],
-    "COL_10": ["HISPPOP"],
-    "COL_11": ["AMERIND"],
-    "COL_12": ["ASIAN"],
-    "COL_13": ["PACIFIC"],
-    "COL_14": ["RACE2UP"],
-    "COL_15": ["OTHRACE"],
-    "COL_16": ["LASTUPDATE"],
-    "COL_17": ["LASTEDITOR"],
-    "COL_18": ["AGEMAJOR"],
-    "COL_19": ["AREASQMETER"],
-    "COL_2": ["TRACT", "Pacific"],
-    "COL_20": ["Shape_Length"],
-    "COL_21": ["Shape_Area"],
-    "COL_22": ["geometry"],
-    "COL_3": ["STFID"],
-    "COL_4": ["BLOCK"],
-    "COL_5": ["TOTPOP"],
-    "COL_6": ["POPDENS", "totPop"],
-    "COL_7": ["RACEBASE"],
-    "COL_8": ["WHITE"],
-    "COL_9": ["BLACK"],
+    "COL_0": "ID",
+    "COL_1": "STCOFIPS",
+    "COL_10": "HISPPOP",
+    "COL_11": "AMERIND",
+    "COL_12": "ASIAN",
+    "COL_13": "PACIFIC",
+    "COL_14": "RACE2UP",
+    "COL_15": "OTHRACE",
+    "COL_16": "LASTUPDATE",
+    "COL_17": "LASTEDITOR",
+    "COL_18": "AGEMAJOR",
+    "COL_19": "AREASQMETER",
+    "COL_2": "TRACT",
+    "COL_20": "Shape_Length",
+    "COL_21": "Shape_Area",
+    "COL_3": "STFID",
+    "COL_4": "BLOCK",
+    "COL_5": "TOTPOP",
+    "COL_6": "POPDENS",
+    "COL_7": "RACEBASE",
+    "COL_8": "WHITE",
+    "COL_9": "BLACK",
 }
 
 TESTPRODUCER2_CONFIG = {
-    "COL_0": ["NAME"],
-    "COL_1": ["ST"],
-    "COL_2": ["ZIP"],
-    "COL_3": ["RuleID"],
-    "COL_4": ["geometry"],
+    "COL_0": "NAME",
+    "COL_1": "ST",
+    "COL_2": "ZIP",
+    "COL_3": "RuleID",
 }
 
 NAPERVILLE_GDB_REPORT = {
@@ -274,6 +251,7 @@ NAPERVILLE_GDB_REPORT = {
         },
     ],
 }
+
 MAJOR_CITIES_SHP_REPORT = {
     "overview": {
         "feature_count": 5,
@@ -350,7 +328,7 @@ MAJOR_CITIES_SHP_REPORT = {
         },
         {
             "provided_feature_name": "geometry",
-            "nad_feature_name": "COL_4",
+            "nad_feature_name": "geometry",
             "populated_count": 120,
             "null_count": 0,
             "invalid_domain_count": 0,
@@ -364,7 +342,7 @@ MAJOR_CITIES_SHP_REPORT = {
 
 NM911_ADDRESS_202310_REPORT = {
     "overview": {
-        "feature_count": 15,
+        "feature_count": 16,
         "features_flagged": 9,
         "records_count": 1000,
         "records_flagged": 1000,
@@ -585,6 +563,17 @@ NM911_ADDRESS_202310_REPORT = {
             "nad_feature_name": "AnomStatus",
             "populated_count": 791,
             "null_count": 209,
+            "invalid_domain_count": 0,
+            "valid_domain_count": 0,
+            "invalid_domains": [],
+            "domain_frequency": {},
+            "high_domain_cardinality": False,
+        },
+        {
+            "provided_feature_name": "geometry",
+            "nad_feature_name": "geometry",
+            "populated_count": 1000,
+            "null_count": 0,
             "invalid_domain_count": 0,
             "valid_domain_count": 0,
             "invalid_domains": [],

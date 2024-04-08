@@ -9,6 +9,7 @@ from nad_ch.core.repositories import (
     ColumnMapRepository,
 )
 import os
+import shutil
 
 
 class FakeDataProducerRepository(DataProducerRepository):
@@ -135,10 +136,14 @@ class FakeStorage:
         return True
 
     def download_temp(self, filename: str) -> Optional[DownloadResult]:
-        return DownloadResult(temp_dir=filename, extracted_dir=f"{filename}.gdb")
+        return DownloadResult(temp_dir=filename, extracted_dir=filename)
 
     def cleanup_temp_dir(self, temp_dir: str):
-        pass
+        try:
+            shutil.rmtree(temp_dir)
+            return True
+        except Exception:
+            return False
 
     def delete(self, file_path: str) -> bool:
         if os.path.exists(file_path):
