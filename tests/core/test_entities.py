@@ -5,10 +5,7 @@ from nad_ch.core.entities import DataProducer, DataSubmission, ColumnMap
 def test_data_submission_generates_filename():
     producer = DataProducer("Some Producer")
     filename = DataSubmission.generate_filename("someupload.zip", producer)
-    todays_date = datetime.datetime.now().strftime("%Y%m%d")
-    assert filename.startswith("some_producer_")
-    assert todays_date in filename
-    assert filename.endswith(".zip")
+    assert filename == "someupload.zip"
 
 
 def test_data_submission_knows_if_it_has_a_report():

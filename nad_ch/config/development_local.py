@@ -28,10 +28,6 @@ TEST_DATABASE_URL = (
     f"postgresql+psycopg2://{postgres_user}:{postgres_password}"
     f"@{postgres_host}:{postgres_port}/test_database"
 )
-# TEST_DATABASE_URL = (
-#     f"postgresql://{postgres_user}"
-#     f"@localhost:/var/run/postgresql/.s.PGSQL.5432/test_database"
-# )
 QUEUE_BROKER_URL = os.getenv("QUEUE_BROKER_URL")
 QUEUE_BACKEND_URL = os.getenv("QUEUE_BACKEND_URL")
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
@@ -39,6 +35,7 @@ S3_ENDPOINT = os.getenv("S3_ENDPOINT")
 S3_ACCESS_KEY = os.getenv("S3_ACCESS_KEY")
 S3_SECRET_ACCESS_KEY = os.getenv("S3_SECRET_ACCESS_KEY")
 S3_REGION = os.getenv("S3_REGION")
+LANDING_ZONE = os.path.join(os.getcwd(), "data/landing_zone")
 
 
 class DevLocalApplicationContext(ApplicationContext):
@@ -68,11 +65,13 @@ class DevLocalApplicationContext(ApplicationContext):
     def create_logger(self):
         return BasicLogger(__name__, logging.DEBUG)
 
-    def create_storage(self):
+    @staticmethod
+    def create_storage():
         return MinioStorage(
             S3_ENDPOINT,
             S3_ACCESS_KEY,
             S3_SECRET_ACCESS_KEY,
+            S3_REGION,
             S3_BUCKET_NAME,
         )
 

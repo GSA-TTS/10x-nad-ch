@@ -8,6 +8,7 @@ from boto3.session import Session
 from botocore.client import Config
 from nad_ch.application.dtos import DownloadResult
 from nad_ch.application.interfaces import Storage
+from minio import Minio
 
 
 class S3Storage(Storage):
@@ -25,17 +26,19 @@ class S3Storage(Storage):
 
     def upload(self, source: str, destination: str) -> bool:
         try:
-            self.client.upload_file(source, Bucket=self.bucket_name, Key=destination)
-            return True
+            response = self.client.upload_file(
+                source, Bucket=self.bucket_name, Key=destination
+            )
+            return response
         except FileNotFoundError:
-            return False
+            return None
 
     def delete(self, key: str) -> bool:
         try:
-            self.client.delete_object(Bucket=self.bucket_name, Key=key)
-            return True
+            response = self.client.delete_object(Bucket=self.bucket_name, Key=key)
+            return response
         except Exception:
-            return False
+            return None
 
     def download_temp(self, key: str) -> Optional[DownloadResult]:
         try:
@@ -69,20 +72,39 @@ class S3Storage(Storage):
 
 class MinioStorage(S3Storage):
     def __init__(
-        self, endpoint_url: str, access_key_id: str, secret_access_key: str, bucket: str
+        self,
+        endpoint_url: str,
+        access_key_id: str,
+        secret_access_key: str,
+        region: str,
+        bucket: str,
     ):
-        session = Session()
-        self.client = session.client(
-            "s3",
-            endpoint_url=endpoint_url,
-            aws_access_key_id=access_key_id,
-            aws_secret_access_key=secret_access_key,
-            aws_session_token=None,
-            region_name="us-east-1",
-            verify=False,
-            config=Config(signature_version="s3v4"),
+        self.client = Minio(
+            endpoint=endpoint_url,
+            access_key=access_key_id,
+            secret_key=secret_access_key,
+            region=region,
+            secure=False,
         )
         self.bucket_name = bucket
+        self.create_bucket()
+
+    def upload(self, source: str, destination: str) -> bool:
+        try:
+            response = self.client.fput_object(
+                file_path=source, bucket_name=self.bucket_name, object_name=destination
+            )
+            return response
+        except FileNotFoundError:
+            return None
+
+    def create_bucket(self):
+        # Make the bucket if it doesn't exist.
+        if not self.client.bucket_exists(self.bucket_name):
+            self.client.make_bucket(self.bucket_name)
+            print("Created bucket", self.bucket_name)
+        else:
+            print("Bucket", self.bucket_name, "already exists")
 
 
 class LocalStorage(Storage):
