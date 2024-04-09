@@ -1,8 +1,12 @@
 import os
 from typing import List, IO
 from nad_ch.application.dtos import DownloadResult
-from nad_ch.application.exceptions import InvalidDataSubmissionFileError
+from nad_ch.application.exceptions import (
+    InvalidDataSubmissionFileError,
+    InvalidSchemaError,
+)
 from nad_ch.application.interfaces import ApplicationContext
+from nad_ch.application.validation import FileValidator
 from nad_ch.application.view_models import (
     get_view_model,
     DataSubmissionViewModel,
@@ -130,14 +134,17 @@ def validate_file_before_submission(
             "Invalid file format. Only ZIP files are accepted."
         )
 
-    # is the file valid?
-    # if not validator.valdiate_file(file):
-    #     return False
+    file_validator = FileValidator(file, file.name)
+    if not file_validator.valdiate_file(file):
+        raise InvalidDataSubmissionFileError(
+            "Invalid file format. Only Shapefiles and Geodatabase files are accepted."
+        )
 
-    # is the schema valid?
-    # if not validator.validate_schema(file, column_map):
-    #     return False
-
+    if not file_validator.validate_schema(file, column_map):
+        raise InvalidSchemaError(
+            "Invalid schema. The schema of the file must align with the schema of the \
+            selected mapping."
+        )
     # if both cases are true, return True
     return True
 

@@ -33,3 +33,10 @@ class InvalidDataSubmissionFileError(NadChError):
 
     def __init__(self, message="Invalid data submission file."):
         super().__init__(message)
+
+
+class InvalidSchemaError(NadChError):
+    """Exception raised when a schema is invalid."""
+
+    def __init__(self, message="Invalid schema."):
+        super().__init__(message)

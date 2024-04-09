@@ -11,7 +11,10 @@ from flask import (
     url_for,
 )
 from flask_login import login_required, current_user
-from nad_ch.application.exceptions import InvalidDataSubmissionFileError
+from nad_ch.application.exceptions import (
+    InvalidDataSubmissionFileError,
+    InvalidSchemaError,
+)
 from nad_ch.application.use_cases.column_maps import get_column_maps_by_producer
 from nad_ch.application.use_cases.data_submissions import (
     get_data_submission,
@@ -85,13 +88,12 @@ def store():
         flash("No selected file")
         return redirect(url_for("submissions.create", name=name))
 
-    # try to work with the file to confirm that
-    # 1. It is a .zip file
-    # 2. It contains a Shapefile OR It contains a .gdb directory
-    # 3. Its contents match the column map
     try:
         validate_file_before_submission(g.ctx, file, column_map_id)
     except InvalidDataSubmissionFileError as e:
+        flash(f"Error: {e}")
+        return redirect(url_for("submissions.create", name=name))
+    except InvalidSchemaError as e:
         flash(f"Error: {e}")
         return redirect(url_for("submissions.create", name=name))
 
@@ -99,7 +101,7 @@ def store():
         view_model = create_data_submission(
             g.ctx, current_user.id, column_map_id, name, file
         )
-        print(view_model)
+
         return redirect(url_for("submissions.edit", id=view_model.id))
     except ValueError as e:
         flash(f"Error: {e}")

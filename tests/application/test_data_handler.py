@@ -27,9 +27,7 @@ def test_validate_column_map_duplicate_inputs(producer_column_maps):
 
 
 def test_read_file_in_batches_shape1(producer_column_maps):
-    file_path = os.path.join(
-        TEST_DATA_DIR, "shapefiles/usa-major-cities.zip"
-    )
+    file_path = os.path.join(TEST_DATA_DIR, "shapefiles/usa-major-cities.zip")
     column_map_entity = producer_column_maps.get_by_name_and_version("testproducer2", 1)
     reader = DataHandler(column_map_entity.mapping)
     i = 0
@@ -46,9 +44,7 @@ def test_read_file_in_batches_shape1(producer_column_maps):
 
 
 def test_read_file_in_batches_shape2(producer_column_maps):
-    file_path = os.path.join(
-        TEST_DATA_DIR, "shapefiles/NM911_Address_202310.zip"
-    )
+    file_path = os.path.join(TEST_DATA_DIR, "shapefiles/NM911_Address_202310.zip")
     column_map_entity = producer_column_maps.get_by_name_and_version("testproducer3", 1)
     reader = DataHandler(column_map_entity.mapping)
     i = 0
@@ -65,9 +61,7 @@ def test_read_file_in_batches_shape2(producer_column_maps):
 
 
 def test_read_file_in_batches_gdb1(producer_column_maps):
-    file_path = os.path.join(
-        TEST_DATA_DIR, "geodatabases/Naperville.gdb.zip"
-    )
+    file_path = os.path.join(TEST_DATA_DIR, "geodatabases/Naperville.gdb.zip")
     column_map_entity = producer_column_maps.get_by_name_and_version("testproducer1", 1)
     reader = DataHandler(column_map_entity.mapping)
     i = 0

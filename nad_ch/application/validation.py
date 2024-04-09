@@ -5,6 +5,7 @@ import fiona
 from geopandas import GeoDataFrame
 import pandas as pd
 import shapefile
+import tempfile
 from nad_ch.application.dtos import (
     DataSubmissionReportFeature,
     DataSubmissionReportOverview,
@@ -170,61 +171,101 @@ class DataValidator:
 
 
 class FileValidator:
-    def __init__(self, file: IO[bytes], storage_service: Storage) -> None:
+    def __init__(self, file: IO[bytes], filename: str) -> None:
         self.file = file
-        self.storage_service = storage_service
+        self.filename = filename
 
     def validate_file(self) -> bool:
+        """Confirm that the file is a valid shapefile or geodatabase."""
         if not self._is_zipped():
             return False
 
         with ZipFile(self.file) as zip_file:
             file_names = zip_file.namelist()
-            if not self.is_valid_shapefile(file_names) or self.is_valid_geodatabase(
-                file_names
+
+            if not (
+                self._is_valid_shapefile(file_names)
+                or self._is_valid_geodatabase(file_names)
             ):
                 return False
 
         return True
 
     def validate_schema(self, column_map: Dict[str, str]) -> bool:
-        path = self.storage_service.save_file(self.file)
-
+        """Confirm that the schema of the is accommodated by the selected mapping."""
         with ZipFile(self.file) as zip_file:
             file_names = zip_file.namelist()
-            if self.is_valid_shapefile(file_names):
-                return self.validate_shapefile_schema(column_map)
-            elif self.is_valid_geodatabase(file_names):
-                return self.validate_gdb_schema(path, column_map)
+            if self._is_valid_shapefile(file_names):
+                return self._validate_shapefile_schema(zip_file, column_map)
+            elif self._is_valid_geodatabase(file_names):
+                return self._validate_gdb_schema(zip_file, column_map)
             else:
                 return False
 
-    def is_zipped(self) -> bool:
-        _, file_extension = os.path.splitext(self.file.filename)
+    def _is_zipped(self) -> bool:
+        _, file_extension = os.path.splitext(self.filename)
         if file_extension.lower() != ".zip":
             return False
 
         return True
 
-    def is_valid_shapefile(self, file_names: List[str]) -> bool:
+    def _is_valid_shapefile(self, file_names: List[str]) -> bool:
         required_extensions = {".shp", ".shx", ".dbf"}
         found_extensions = set(os.path.splitext(name)[1].lower() for name in file_names)
         return required_extensions.issubset(found_extensions)
 
-    def is_valid_geodatabase(self, file_names: List[str]) -> bool:
-        return any(name.endswith(".gdb") or ".gdb/" in name for name in file_names)
+    def _is_valid_geodatabase(self, file_names: List[str]) -> bool:
+        return any(
+            (name.endswith(".gdb") or name.endswith(".gdb/")) and "/" in name
+            for name in file_names
+        )
 
-    def validate_shapefile_schema(self, path: str, expected_schema: Dict[str, str]) -> bool:
+    def _validate_shapefile_schema(
+        self, zip_file: ZipFile, expected_schema: Dict[str, str]
+    ) -> bool:
+        file_names = zip_file.namelist()
+        shp_file = next((name for name in file_names if name.endswith(".shp")), None)
+        if not shp_file:
+            return False
+
+        temp_dir = tempfile.mkdtemp()
+        zip_file.extractall(temp_dir)
+        path = os.path.join(temp_dir, shp_file)
         sf = shapefile.Reader(path)
 
-        fields = [field[0] for field in sf.fields if field[0] != "DeletionFlag"]
+        fields = [field[0] for field in sf.fields]
+        filtered_fields = [
+            item for item in fields if (item != "DeletionFlag" and item != "index")
+        ]
+        filtered_expected_fields = [
+            value for value in expected_schema.values() if value is not None
+        ]
 
-        actual_schema = {field: None for field in fields}
+        return all(value in filtered_fields for value in filtered_expected_fields)
 
-        return actual_schema == expected_schema
+    def _validate_gdb_schema(
+        self, zip_file: ZipFile, expected_schema: Dict[str, str]
+    ) -> bool:
+        file_names = zip_file.namelist()
+        gdb_dir = next((name for name in file_names if name.endswith(".gdb/")), None)
 
-    def validate_gdb_schema(gdb_path, expected_schema: Dict[str, str]) -> bool:
-        with fiona.open(gdb_path, layer="your_layer_name") as layer:
-            actual_schema = {k: None for k in layer.schema["properties"].keys()}
+        if not gdb_dir:
+            return False
 
-            return actual_schema == expected_schema
+        temp_dir = tempfile.mkdtemp()
+        zip_file.extractall(temp_dir)
+        gdb_path = os.path.join(temp_dir, gdb_dir)
+
+        layers = fiona.listlayers(gdb_path)
+
+        for layer_name in layers:
+            with fiona.open(gdb_path, layer=layer_name) as layer:
+                fields = layer.schema["properties"].keys()
+                filtered_expected_fields = [
+                    value for value in expected_schema.values() if value is not None
+                ]
+                all_present = all(value in fields for value in filtered_expected_fields)
+                if all_present:
+                    return True
+
+        return False
