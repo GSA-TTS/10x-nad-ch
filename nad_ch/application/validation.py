@@ -192,7 +192,7 @@ class FileValidator:
         return True
 
     def validate_schema(self, column_map: Dict[str, str]) -> bool:
-        """Confirm that the schema of the is accommodated by the selected mapping."""
+        """Confirm that the schema is accommodated by the selected mapping."""
         with ZipFile(self.file) as zip_file:
             file_names = zip_file.namelist()
             if self._is_valid_shapefile(file_names):

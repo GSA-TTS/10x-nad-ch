@@ -145,7 +145,7 @@ def validate_file_before_submission(
             "Invalid schema. The schema of the file must align with the schema of the \
             selected mapping."
         )
-    # if both cases are true, return True
+
     return True
 
 
