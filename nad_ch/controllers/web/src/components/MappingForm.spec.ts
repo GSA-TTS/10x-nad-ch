@@ -27,7 +27,7 @@ describe('MappingForm', () => {
   it('should set error state and message when name is invalid', () => {
     mappingForm.name = 'Invalid Name';
 
-    mappingForm.createMapping();
+    mappingForm.create();
 
     expect(mappingForm.hasError).toBe(true);
     expect(mappingForm.errorMessage).toBe(
@@ -39,7 +39,7 @@ describe('MappingForm', () => {
     const validName = 'ValidName123';
     mappingForm.name = validName;
 
-    mappingForm.createMapping();
+    mappingForm.create();
 
     expect(mappingForm.hasError).toBe(false);
     expect(navigateTo).toHaveBeenCalledWith(

@@ -1,6 +1,6 @@
 import { AlpineComponent } from 'alpinejs';
 import { BASE_URL } from '../config';
-import { getMappingNameValidationError } from '../formValidation';
+import { getSubmissionNameValidationError } from '../formValidation';
 import { navigateTo } from '../utilities';
 
 export interface SubmissionFormComponent {
@@ -19,7 +19,7 @@ export function SubmissionForm(): AlpineComponent<SubmissionFormComponent> {
     create(): void {
       this.hasError = false;
 
-      const validationError = getMappingNameValidationError(this.name);
+      const validationError = getSubmissionNameValidationError(this.name);
 
       if (validationError) {
         this.hasError = true;

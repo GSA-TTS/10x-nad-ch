@@ -7,7 +7,7 @@ export interface MappingFormComponent {
   hasError: boolean;
   errorMessage: string;
   name: string;
-  createMapping: () => void;
+  create: () => void;
   closeModal: () => void;
 }
 
@@ -16,7 +16,7 @@ export function MappingForm(): AlpineComponent<MappingFormComponent> {
     hasError: false,
     errorMessage: '',
     name: '',
-    createMapping(): void {
+    create(): void {
       this.hasError = false;
 
       const validationError = getMappingNameValidationError(this.name);
