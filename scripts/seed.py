@@ -116,8 +116,8 @@ def main():
     )
     zip_directory(gdb_path, zipped_gdb_path)
 
-    filename = DataSubmission.generate_filename(zipped_gdb_path, saved_producer)
-    ctx.storage.upload(zipped_gdb_path, filename)
+    file_path = DataSubmission.generate_zipped_file_path(zipped_gdb_path, saved_producer)
+    ctx.storage.upload(zipped_gdb_path, file_path)
     report = {
         "overview": {
             "feature_count": 1141,
@@ -273,7 +273,8 @@ def main():
         ],
     }
     new_submission = DataSubmission(
-        filename,
+        "MorrisCounty2024A",
+        file_path,
         DataSubmissionStatus.VALIDATED,
         saved_producer,
         saved_column_map,
