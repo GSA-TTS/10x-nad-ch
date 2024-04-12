@@ -57,6 +57,8 @@ def test_load_and_validate_testprovider3(
         file_path, column_map.mapping, mapped_data_dir
     )
     report_dict = task_result.get()
+    print(report_dict)
+
     # Validate that mapped data was written to shape file correctly
     assert os.path.exists(mapped_data_path)
     baseline_path = os.path.join(

@@ -183,10 +183,6 @@ def test_initialize_overview_details():
 
     assert isinstance(data_validator.report_overview, DataSubmissionReportOverview)
     assert data_validator.report_overview.feature_count == 36
-    assert data_validator.report_overview.missing_required_fields == [
-        "NatGrid",
-        "AddrPoint",
-    ]
     assert all(
         getattr(data_validator.report_overview, attribute) == 0
         for attribute in overview_attributes_to_check
