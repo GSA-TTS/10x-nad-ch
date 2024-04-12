@@ -55,10 +55,14 @@ def validate_data_submission(
         ctx.logger.error("Data extration error")
         return
 
+    column_map = ctx.column_maps.get_by_name_and_version(column_map_name, 1)
+    if column_map is None:
+        ctx.logger.error("Column map not found")
+        return
+
     # Using version 1 for column maps for now, may add feature for user to select
     # version later
     try:
-        column_map = ctx.column_maps.get_by_name_and_version(column_map_name, 1)
         mapped_data_local_dir = submission.get_mapped_data_dir(
             download_result.extracted_dir, LANDING_ZONE
         )
