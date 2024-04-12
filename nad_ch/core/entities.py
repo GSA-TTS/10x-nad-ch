@@ -146,7 +146,8 @@ class DataSubmissionStatus(Enum):
 class DataSubmission(Entity):
     def __init__(
         self,
-        filename: str,
+        name: str,
+        file_path: str,
         status: DataSubmissionStatus,
         producer: DataProducer,
         column_map: ColumnMap,
@@ -154,7 +155,8 @@ class DataSubmission(Entity):
         id: Optional[int] = None,
     ):
         super().__init__(id)
-        self.filename = filename
+        self.name = name
+        self.file_path = file_path
         self.status = (
             status if status is not None else DataSubmissionStatus.PENDING_SUBMISSION
         )
@@ -164,25 +166,25 @@ class DataSubmission(Entity):
 
     def __repr__(self):
         return f"DataSubmission \
-            {self.id}, {self.filename}, {self.producer}, {self.status}"
+            {self.id}, , {self.name}, {self.file_path}, {self.producer}, {self.status}"
 
     @staticmethod
-    def generate_filename(file_path: str, producer: DataProducer) -> str:
+    def generate_file_path(file_path: str, producer: DataProducer) -> str:
         return os.path.basename(file_path)
 
     def get_mapped_data_dir(
         self, source_path: str, base_path: str, remote: bool = False
     ) -> str:
-        filename, _ = os.path.splitext(
-            self.generate_filename(source_path, self.producer)
+        file_path, _ = os.path.splitext(
+            self.generate_file_path(source_path, self.producer)
         )
         if remote:
             # Defines the path for remote storage such as s3
             partition_dt = datetime.today().strftime("%Y_%m_%d")
-            path = f"data_submissions/{self.producer.name}/{partition_dt}/{filename}"
+            path = f"data_submissions/{self.producer.name}/{partition_dt}/{file_path}"
         else:
             # Defines the path for local storage of post-mapped data
-            path = os.path.join(base_path, f"data_submissions/{self.id}/{filename}")
+            path = os.path.join(base_path, f"data_submissions/{self.id}/{file_path}")
         return path
 
     @staticmethod
@@ -202,8 +204,8 @@ class DataSubmission(Entity):
         datetime_obj = datetime.fromtimestamp(timestamp, UTC)
         datetime_str = datetime_obj.strftime("%Y%m%d_%H%M%S")
 
-        filename = f"{formatted_producer_name}/{formatted_name}_{datetime_str}.zip"
-        return filename
+        file_path = f"{formatted_producer_name}/{formatted_name}_{datetime_str}.zip"
+        return file_path
 
     def has_report(self) -> bool:
         return self.report is not None
