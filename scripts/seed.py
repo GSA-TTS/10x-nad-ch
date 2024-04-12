@@ -114,7 +114,9 @@ def main():
     )
 
     submission_name = "MorrisCounty2024A"
-    file_path = DataSubmission.generate_zipped_file_path(submission_name, saved_producer)
+    file_path = DataSubmission.generate_zipped_file_path(
+        submission_name, saved_producer
+    )
     ctx.storage.upload(zipped_shapefile_path, file_path)
     report = {
         "overview": {

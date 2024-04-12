@@ -139,7 +139,11 @@ def create_data_submission(
     try:
         file_path = DataSubmission.generate_zipped_file_path(submission_name, producer)
         submission = DataSubmission(
-            submission_name, file_path, DataSubmissionStatus.PENDING_SUBMISSION, producer, column_map
+            submission_name,
+            file_path,
+            DataSubmissionStatus.PENDING_SUBMISSION,
+            producer,
+            column_map,
         )
         saved_submission = ctx.submissions.add(submission)
 

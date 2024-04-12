@@ -28,16 +28,24 @@ def test_get_data_submission(app_context):
     producer_name = "New Jersey"
     nj = app_context.producers.add(DataProducer(producer_name))
     user = app_context.users.add(User("test@test.org", "foo", "bar", True, nj))
-    column_map = app_context.column_maps.add(ColumnMap("TestMap", nj, {
-        "Add_Number": "address_number",
-        "St_Name": "street_name",
-        "St_PosTyp": "street_position_type",
-        "Unit": "unit",
-        "Inc_Muni": "city",
-        "Post_City": "post_city",
-        "DataSet_ID": "id",
-    }))
-    submission = create_data_submission(app_context, user.id, column_map.id, "TestSubmission", "test.zip")
+    column_map = app_context.column_maps.add(
+        ColumnMap(
+            "TestMap",
+            nj,
+            {
+                "Add_Number": "address_number",
+                "St_Name": "street_name",
+                "St_PosTyp": "street_position_type",
+                "Unit": "unit",
+                "Inc_Muni": "city",
+                "Post_City": "post_city",
+                "DataSet_ID": "id",
+            },
+        )
+    )
+    submission = create_data_submission(
+        app_context, user.id, column_map.id, "TestSubmission", "test.zip"
+    )
 
     result = get_data_submission(app_context, submission.id)
 
@@ -48,16 +56,24 @@ def test_get_data_submissions_by_producer(app_context):
     producer_name = "New Jersey"
     nj = app_context.producers.add(DataProducer(producer_name))
     user = app_context.users.add(User("test@test.org", "foo", "bar", True, nj))
-    column_map = app_context.column_maps.add(ColumnMap("TestMap", nj, {
-        "Add_Number": "address_number",
-        "St_Name": "street_name",
-        "St_PosTyp": "street_position_type",
-        "Unit": "unit",
-        "Inc_Muni": "city",
-        "Post_City": "post_city",
-        "DataSet_ID": "id",
-    }))
-    create_data_submission(app_context, user.id, column_map.id, "TestSubmission", "test.zip")
+    column_map = app_context.column_maps.add(
+        ColumnMap(
+            "TestMap",
+            nj,
+            {
+                "Add_Number": "address_number",
+                "St_Name": "street_name",
+                "St_PosTyp": "street_position_type",
+                "Unit": "unit",
+                "Inc_Muni": "city",
+                "Post_City": "post_city",
+                "DataSet_ID": "id",
+            },
+        )
+    )
+    create_data_submission(
+        app_context, user.id, column_map.id, "TestSubmission", "test.zip"
+    )
 
     result = get_data_submissions_by_producer(app_context, producer_name)
 
@@ -68,16 +84,24 @@ def test_get_data_submissions_by_producer(app_context):
 def test_create_data_submission(app_context):
     nj = app_context.producers.add(DataProducer("New Jersey"))
     user = app_context.users.add(User("test@test.org", "foo", "bar", True, nj))
-    column_map = app_context.column_maps.add(ColumnMap("TestMap", nj, {
-        "Add_Number": "address_number",
-        "St_Name": "street_name",
-        "St_PosTyp": "street_position_type",
-        "Unit": "unit",
-        "Inc_Muni": "city",
-        "Post_City": "post_city",
-        "DataSet_ID": "id",
-    }))
-    result = create_data_submission(app_context, user.id, column_map.id, "TestSubmission", "test.zip")
+    column_map = app_context.column_maps.add(
+        ColumnMap(
+            "TestMap",
+            nj,
+            {
+                "Add_Number": "address_number",
+                "St_Name": "street_name",
+                "St_PosTyp": "street_position_type",
+                "Unit": "unit",
+                "Inc_Muni": "city",
+                "Post_City": "post_city",
+                "DataSet_ID": "id",
+            },
+        )
+    )
+    result = create_data_submission(
+        app_context, user.id, column_map.id, "TestSubmission", "test.zip"
+    )
 
     assert isinstance(result, DataSubmissionViewModel)
 
@@ -87,17 +111,26 @@ def test_validate_data_submission(app_context, caplog):
     nj = app_context.producers.add(DataProducer(producer_name))
     user = app_context.users.add(User("test@test.org", "foo", "bar", True, nj))
     column_map_name = "TestMap"
-    column_map = app_context.column_maps.add(ColumnMap(column_map_name, nj, {
-        "Add_Number": "address_number",
-        "St_Name": "street_name",
-        "St_PosTyp": "street_position_type",
-        "Unit": "unit",
-        "Inc_Muni": "city",
-        "Post_City": "post_city",
-        "DataSet_ID": "id",
-    }, 1))
+    column_map = app_context.column_maps.add(
+        ColumnMap(
+            column_map_name,
+            nj,
+            {
+                "Add_Number": "address_number",
+                "St_Name": "street_name",
+                "St_PosTyp": "street_position_type",
+                "Unit": "unit",
+                "Inc_Muni": "city",
+                "Post_City": "post_city",
+                "DataSet_ID": "id",
+            },
+            1,
+        )
+    )
 
-    vm = create_data_submission(app_context, user.id, column_map.id, "TestSubmission", "test.zip")
+    vm = create_data_submission(
+        app_context, user.id, column_map.id, "TestSubmission", "test.zip"
+    )
     submission = app_context.submissions.get_by_id(vm.id)
 
     class CustomMockTestTaskQueue:

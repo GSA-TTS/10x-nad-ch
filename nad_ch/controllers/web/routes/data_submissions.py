@@ -178,7 +178,7 @@ def edit(id):
         return render_template(
             "data_submissions/edit.html", submission=view_model, data=data
         )
-    except Exception as e:
+    except Exception:
         abort(404)
 
 
