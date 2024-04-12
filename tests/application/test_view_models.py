@@ -43,6 +43,7 @@ def test_get_a_single_data_submisson_view_model():
     producer = DataProducer("State X")
     column_map_a = ColumnMap("MapA", producer, 1)
     submission = DataSubmission(
+        "some_name",
         "some_file_name",
         DataSubmissionStatus.PENDING_VALIDATION,
         producer,
@@ -62,6 +63,7 @@ def test_get_a_list_of_data_submisson_view_models():
     producer_a = DataProducer("State A")
     column_map_a = ColumnMap("MapA", producer_a, 1)
     submission_a = DataSubmission(
+        "some_name",
         "some_file_name",
         DataSubmissionStatus.PENDING_VALIDATION,
         producer_a,
@@ -73,6 +75,7 @@ def test_get_a_list_of_data_submisson_view_models():
     producer_b = DataProducer("State B")
     column_map_b = ColumnMap("MapB", producer_b, 1)
     submission_b = DataSubmission(
+        "some_name",
         "some_other_file_name",
         DataSubmissionStatus.PENDING_VALIDATION,
         producer_b,

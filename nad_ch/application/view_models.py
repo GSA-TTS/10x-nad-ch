@@ -102,7 +102,7 @@ def create_data_producer_vm(producer: DataProducer) -> DataProducerViewModel:
 class DataSubmissionViewModel(ViewModel):
     id: int
     date_created: str
-    filename: str
+    name: str
     status: str
     status_tag_class: str
     producer_name: str
@@ -133,7 +133,7 @@ def create_data_submission_vm(submission: DataSubmission) -> DataSubmissionViewM
     return DataSubmissionViewModel(
         id=submission.id,
         date_created=present_date(submission.created_at),
-        filename=submission.filename,
+        name=submission.name,
         status=status_map[submission.status],
         status_tag_class=status_tag_class_map[submission.status],
         producer_name=submission.producer.name,
