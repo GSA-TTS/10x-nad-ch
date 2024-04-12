@@ -37,20 +37,20 @@ def get_data_submissions_by_producer(
     submissions = ctx.submissions.get_by_producer(producer)
     ctx.logger.info(f"Data submissions for {producer.name}")
     for s in submissions:
-        ctx.logger.info(f"{s.producer.name}: {s.filename}")
+        ctx.logger.info(f"{s.producer.name}: {s.name}")
 
     return get_view_model(submissions)
 
 
 def validate_data_submission(
-    ctx: ApplicationContext, filename: str, column_map_name: str
+    ctx: ApplicationContext, file_path: str, column_map_name: str
 ):
-    submission = ctx.submissions.get_by_filename(filename)
+    submission = ctx.submissions.get_by_file_path(file_path)
     if not submission:
         ctx.logger.error("Data submission with that filename does not exist")
         return
 
-    download_result: DownloadResult = ctx.storage.download_temp(filename)
+    download_result: DownloadResult = ctx.storage.download_temp(file_path)
     if not download_result:
         ctx.logger.error("Data extration error")
         return
