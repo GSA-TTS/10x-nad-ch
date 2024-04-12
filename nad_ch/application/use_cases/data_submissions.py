@@ -99,12 +99,12 @@ def validate_file_before_submission(
         )
 
     file_validator = FileValidator(file, file.name)
-    if not file_validator.valdiate_file(file):
+    if not file_validator.validate_file():
         raise InvalidDataSubmissionFileError(
             "Invalid file format. Only Shapefiles and Geodatabase files are accepted."
         )
 
-    if not file_validator.validate_schema(file, column_map):
+    if not file_validator.validate_schema(column_map):
         raise InvalidSchemaError(
             "Invalid schema. The schema of the file must align with the schema of the \
             selected mapping."
