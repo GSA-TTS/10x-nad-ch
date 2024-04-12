@@ -32,7 +32,6 @@ def logged_in_client(client, app):
         )
         saved_user = app.extensions["ctx"]["users"].add(user)
         login_user(saved_user)
-        print(saved_user)
         yield client
 
         logout_user()

@@ -39,7 +39,6 @@ def index():
         view_models = get_data_submissions_by_producer(
             g.ctx, current_user.producer.name
         )
-        print(view_models)
         return render_template("data_submissions/index.html", submissions=view_models)
     except ValueError:
         abort(404)
@@ -50,7 +49,6 @@ def index():
 def show(id):
     try:
         view_model = get_data_submission(g.ctx, id)
-        print(view_model)
         return render_template("data_submissions/show.html", submission=view_model)
     except Exception:
         abort(404)
@@ -181,7 +179,6 @@ def edit(id):
             "data_submissions/edit.html", submission=view_model, data=data
         )
     except Exception as e:
-        print(str(e))
         abort(404)
 
 

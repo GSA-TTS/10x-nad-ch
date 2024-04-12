@@ -182,7 +182,6 @@ class FileValidator:
 
         with ZipFile(self.file) as zip_file:
             file_names = zip_file.namelist()
-
             if not (
                 self._is_valid_shapefile(file_names)
                 or self._is_valid_geodatabase(file_names)
@@ -224,6 +223,7 @@ class FileValidator:
         self, zip_file: ZipFile, expected_schema: Dict[str, str]
     ) -> bool:
         file_names = zip_file.namelist()
+
         shp_file = next((name for name in file_names if name.endswith(".shp")), None)
         if not shp_file:
             return False
