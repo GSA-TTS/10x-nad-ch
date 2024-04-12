@@ -100,7 +100,8 @@ class DataProducerModel(CommonBase):
 class DataSubmissionModel(CommonBase):
     __tablename__ = "data_submissions"
 
-    filename = Column(String, nullable=False)
+    name = Column(String, nullable=False)
+    file_path = Column(String, nullable=False)
     status = Column(
         Enum(DataSubmissionStatus), default=DataSubmissionStatus.PENDING_SUBMISSION
     )
@@ -114,7 +115,8 @@ class DataSubmissionModel(CommonBase):
     @staticmethod
     def from_entity(submission: DataSubmission, producer_id: int, column_map_id: int):
         model = DataSubmissionModel(
-            filename=submission.filename,
+            name=submission.name,
+            file_path=submission.file_path,
             status=submission.status,
             report=submission.report,
             data_producer_id=producer_id,
@@ -127,7 +129,8 @@ class DataSubmissionModel(CommonBase):
         column_map = self.column_map.to_entity()
         entity = DataSubmission(
             id=self.id,
-            filename=self.filename,
+            name=self.name,
+            file_path=self.file_path,
             status=self.status,
             report=self.report,
             producer=producer,
@@ -313,11 +316,11 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
             ]
             return submission_entities
 
-    def get_by_filename(self, filename: str) -> Optional[DataSubmission]:
+    def get_by_file_path(self, file_path: str) -> Optional[DataSubmission]:
         with session_scope(self.session_factory) as session:
             submission_model = (
                 session.query(DataSubmissionModel)
-                .filter(DataSubmissionModel.filename == filename)
+                .filter(DataSubmissionModel.file_path == file_path)
                 .first()
             )
 

@@ -177,7 +177,8 @@ def test_add_data_submission(repositories):
     new_column_map = ColumnMap("TestMap", saved_producer, version_id=1)
     saved_column_map = column_maps.add(new_column_map)
     new_submission = DataSubmission(
-        "some-file-name",
+        "MySubmission",
+        "my_submission.zip",
         DataSubmissionStatus.PENDING_VALIDATION,
         saved_producer,
         saved_column_map,
@@ -189,7 +190,7 @@ def test_add_data_submission(repositories):
     assert saved_submission.created_at is not None
     assert saved_submission.updated_at is not None
     assert saved_submission.producer.id == saved_producer.id
-    assert saved_submission.filename == "some-file-name"
+    assert saved_submission.name == "MySubmission"
 
 
 def test_data_submission_get_by_id(producer_column_maps_and_submissions):
@@ -201,7 +202,7 @@ def test_data_submission_get_by_id(producer_column_maps_and_submissions):
     assert submission.report is None
     assert submission.producer.id == 2
     assert submission.column_map.id == 2
-    assert submission.filename == "testproducer2-submission"
+    assert submission.name == "testproducer2-submission"
 
 
 def test_data_submission_get_by_producer(producer_column_maps_and_submissions):
@@ -217,29 +218,16 @@ def test_data_submission_get_by_producer(producer_column_maps_and_submissions):
     assert submission.report is None
     assert submission.producer.id == 2
     assert submission.column_map.id == 2
-    assert submission.filename == "testproducer2-submission"
-
-
-def test_data_submission_get_by_filename(producer_column_maps_and_submissions):
-    _, submissions = producer_column_maps_and_submissions
-    filename = "testproducer2-submission"
-    submissions_entity = submissions.get_by_filename(filename)
-    assert submissions_entity.id == 2
-    assert submissions_entity.filename == filename
-
-    filename = "testproducer1-submission"
-    submissions_entity = submissions.get_by_filename(filename)
-    assert submissions_entity.id == 1
-    assert submissions_entity.filename == filename
+    assert submission.name == "testproducer2-submission"
 
 
 def test_data_submission_update_report(producer_column_maps_and_submissions):
     _, submissions = producer_column_maps_and_submissions
     submission = submissions.get_by_id(2)
     assert submission.report is None
-    assert submission.filename == "testproducer2-submission"
+    assert submission.name == "testproducer2-submission"
 
     new_report = {"a": 1, "c": 2}
     submission = submissions.update_report(submission.id, new_report)
     assert submission.report == new_report
-    assert submission.filename == "testproducer2-submission"
+    assert submission.name == "testproducer2-submission"

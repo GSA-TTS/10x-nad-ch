@@ -76,12 +76,14 @@ def producer_column_maps_and_submissions(repositories):
 
     new_submission1 = DataSubmission(
         "testproducer1-submission",
+        DataSubmission.generate_zipped_file_path("testproducer1-submission", producer_entities[0]),
         DataSubmissionStatus.VALIDATED,
         producer_entities[0],
         column_map_entities[0],
     )
     new_submission2 = DataSubmission(
         "testproducer2-submission",
+        DataSubmission.generate_zipped_file_path("testproducer1-submission", producer_entities[0]),
         DataSubmissionStatus.VALIDATED,
         producer_entities[1],
         column_map_entities[1],
