@@ -1,3 +1,4 @@
+import io
 import os
 import glob
 import shutil
@@ -5,7 +6,7 @@ import tempfile
 from typing import Optional
 from zipfile import ZipFile
 from boto3.session import Session
-from botocore.client import Config
+from botocore.exceptions import ClientError
 from nad_ch.application.dtos import DownloadResult
 from nad_ch.application.interfaces import Storage
 from minio import Minio
@@ -24,14 +25,24 @@ class S3Storage(Storage):
         )
         self.bucket_name = bucket
 
-    def upload(self, source: str, destination: str) -> bool:
+    def upload(self, source, destination: str) -> bool:
         try:
-            response = self.client.upload_file(
-                source, Bucket=self.bucket_name, Key=destination
-            )
-            return response
+            if isinstance(source, str):
+                with open(source, "rb") as file:
+                    self.client.upload_fileobj(file, self.bucket_name, destination)
+            elif isinstance(source, io.IOBase):
+                self.client.upload_fileobj(source, self.bucket_name, destination)
+            else:
+                raise ValueError("Source must be a file path or a file-like object")
+            return True
         except FileNotFoundError:
-            return None
+            return False
+        except ClientError as e:
+            print(f"An error occurred: {e}")
+            return False
+        except ValueError as e:
+            print(f"Value error: {e}")
+            return False
 
     def delete(self, key: str) -> bool:
         try:

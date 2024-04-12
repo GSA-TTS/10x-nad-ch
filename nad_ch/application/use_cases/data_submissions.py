@@ -145,5 +145,5 @@ def create_data_submission(
 
         return get_view_model(saved_submission)
     except Exception as e:
-        # ctx.storage.delete(filename)
+        ctx.storage.delete(file_path)
         ctx.logger.error(f"Failed to process submission: {e}")
