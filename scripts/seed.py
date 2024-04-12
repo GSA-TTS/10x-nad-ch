@@ -108,16 +108,14 @@ def main():
 
     current_script_path = os.path.abspath(__file__)
     project_root = os.path.dirname(os.path.dirname(current_script_path))
-    gdb_path = os.path.join(
-        project_root, "tests", "test_data", "geodatabases", "Naperville.gdb"
-    )
-    zipped_gdb_path = os.path.join(
-        project_root, "tests", "test_data", "geodatabases", "Naperville.gdb.zip"
-    )
-    zip_directory(gdb_path, zipped_gdb_path)
 
-    file_path = DataSubmission.generate_zipped_file_path(zipped_gdb_path, saved_producer)
-    ctx.storage.upload(zipped_gdb_path, file_path)
+    zipped_shapefile_path = os.path.join(
+        project_root, "tests", "test_data", "shapefiles", "NM911_Address_202310.zip"
+    )
+
+    submission_name = "MorrisCounty2024A"
+    file_path = DataSubmission.generate_zipped_file_path(submission_name, saved_producer)
+    ctx.storage.upload(zipped_shapefile_path, file_path)
     report = {
         "overview": {
             "feature_count": 1141,
@@ -273,7 +271,7 @@ def main():
         ],
     }
     new_submission = DataSubmission(
-        "MorrisCounty2024A",
+        submission_name,
         file_path,
         DataSubmissionStatus.VALIDATED,
         saved_producer,
@@ -281,8 +279,6 @@ def main():
         report,
     )
     ctx.submissions.add(new_submission)
-
-    os.remove(zipped_gdb_path)
 
 
 if __name__ == "__main__":
