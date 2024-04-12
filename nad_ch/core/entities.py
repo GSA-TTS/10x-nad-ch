@@ -92,22 +92,11 @@ class ColumnMap(Entity):
 
     required_fields = [
         "Add_Number",
-        "AddNo_Full",
         "St_Name",
-        "StNam_Full",
-        "County",
+        "St_PosTyp",
+        "Unit",
         "Inc_Muni",
         "Post_City",
-        "State",
-        "UUID",
-        "AddAuth",
-        "Longitude",
-        "Latitude",
-        "NatGrid",
-        "Placement",
-        "AddrPoint",
-        "DateUpdate",
-        "NAD_Source",
         "DataSet_ID",
     ]
 
