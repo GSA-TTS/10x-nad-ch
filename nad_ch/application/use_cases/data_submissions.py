@@ -15,42 +15,6 @@ from nad_ch.core.entities import DataSubmissionStatus, DataSubmission, ColumnMap
 from nad_ch.config import LANDING_ZONE
 
 
-def ingest_data_submission(
-    ctx: ApplicationContext, file_path: str, producer_name: str
-) -> DataSubmissionViewModel:
-    if not file_path:
-        ctx.logger.error("File path required")
-        return
-
-    _, file_extension = os.path.splitext(file_path)
-    if file_extension.lower() not in [".zip", ".csv"]:
-        ctx.logger.error("Invalid file format. Only ZIP or CSV files are accepted.")
-        return
-
-    producer = ctx.producers.get_by_name(producer_name)
-    if not producer:
-        ctx.logger.error("Producer with that name does not exist")
-        return
-
-    try:
-        filename = DataSubmission.generate_filename(file_path, producer)
-        ctx.storage.upload(file_path, filename)
-
-        # TODO: Finish logic for obtaining column map from user
-        column_map = ColumnMap("placeholder", producer, 1)
-
-        submission = DataSubmission(
-            filename, DataSubmissionStatus.PENDING_VALIDATION, producer, column_map
-        )
-        saved_submission = ctx.submissions.add(submission)
-        ctx.logger.info(f"Submission added: {saved_submission.filename}")
-
-        return get_view_model(saved_submission)
-    except Exception as e:
-        ctx.storage.delete(filename)
-        ctx.logger.error(f"Failed to process submission: {e}")
-
-
 def get_data_submission(
     ctx: ApplicationContext, submission_id: int
 ) -> DataSubmissionViewModel:
@@ -169,15 +133,15 @@ def create_data_submission(
         raise ValueError("Column map not found")
 
     try:
-        filename = DataSubmission.generate_zipped_file_path(submission_name, producer)
+        file_path = DataSubmission.generate_zipped_file_path(submission_name, producer)
         submission = DataSubmission(
-            filename, DataSubmissionStatus.PENDING_SUBMISSION, producer, column_map
+            submission_name, file_path, DataSubmissionStatus.PENDING_SUBMISSION, producer, column_map
         )
         saved_submission = ctx.submissions.add(submission)
 
-        # ctx.storage.upload(file, filename)
+        ctx.storage.upload(file, file_path)
 
-        ctx.logger.info(f"Submission added: {saved_submission.filename}")
+        ctx.logger.info(f"Submission added: {saved_submission.file_path}")
 
         return get_view_model(saved_submission)
     except Exception as e:
