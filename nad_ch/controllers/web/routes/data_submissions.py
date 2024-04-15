@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, render_template, g
+from flask import Blueprint, current_app, render_template, g, jsonify
 from flask_login import login_required, current_user
 from nad_ch.application.use_cases.data_submissions import (
     get_data_submission,
@@ -39,3 +39,10 @@ def reports():
 def view_report(submission_id):
     view_model = get_data_submission(g.ctx, submission_id)
     return render_template("data_submissions/show.html", submission=view_model)
+
+
+@submissions_bp.route("/api/reports/<submission_id>")
+@login_required
+def view_report_json(submission_id):
+    view_model = get_data_submission(g.ctx, submission_id)
+    return jsonify(view_model.report)

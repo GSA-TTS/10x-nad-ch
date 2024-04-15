@@ -104,8 +104,7 @@ class DataSubmissionViewModel(ViewModel):
 def create_data_submission_vm(submission: DataSubmission) -> DataSubmissionViewModel:
     report_json = []
     if submission.report is not None:
-        enriched_report = enrich_report(submission.report)
-        report_json = json.dumps(enriched_report)
+        report_json = enrich_report(submission.report)
 
     return DataSubmissionViewModel(
         id=submission.id,

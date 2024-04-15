@@ -18,7 +18,6 @@ content %}
                   type="button"
                   class="usa-accordion__button usa-nav__link"
                   aria-expanded="false"
-                  aria-controls="extended-mega-nav-section-one"
                   :class="showSummary ? 'usa-current' : ''"
                   @click="showSummary = true; showCompleteness = false"
                 >
@@ -31,7 +30,6 @@ content %}
                   type="button"
                   class="usa-accordion__button usa-nav__link"
                   aria-expanded="false"
-                  aria-controls="extended-mega-nav-section-two"
                   :class="showCompleteness ? 'usa-current' : ''"
                   @click="showSummary = false; showCompleteness = true"
                 >
@@ -56,25 +54,25 @@ content %}
       </div>
       <div class="grid-row">
         <div class="grid-col">
-          <h3>1141</h3>
+          <h3>{{ submission.report.overview.feature_count }}</h3>
           <p>Total records submitted</p>
         </div>
         <div class="grid-col">
-          <h3>0</h3>
+          <h3>{{ submission.report.overview.feature_count }}</h3>
           <p>Records added to NAD</p>
         </div>
         <div class="grid-col">
-          <h3>537</h3>
+          <h3>{{ submission.report.overview.features_flagged }}</h3>
           <p>Records flagged</p>
         </div>
       </div>
       <div class="grid-row">
         <div class="grid-col">
-          <h3>Yes</h3>
+          <h3>{{ submission.report.overview.etl_update_required }}</h3>
           <p>ETL update required</p>
         </div>
         <div class="grid-col">
-          <h3>Yes</h3>
+          <h3>{{ submission.report.overview.data_update_required }}</h3>
           <p>Data update required</p>
         </div>
         <div class="grid-col"></div>
@@ -88,7 +86,153 @@ content %}
     </div>
   </div>
   <div id="report-completeness-section" x-show="showCompleteness">
-    {# Table goes here #}
+    <div x-data="CompletenessReport({{ submission.id }})">
+      <div class="padding-top-2">
+        <button
+          class="usa-button"
+          :class="toggleButtonClass"
+          @click.prevent="isGroupedByStatus = ! isGroupedByStatus"
+          x-text="buttonText"
+        ></button>
+      </div>
+
+      <div x-show="isGroupedByStatus">
+        <table class="usa-table usa-table--borderless">
+          <thead class="bg-base-lighter border-bottom-2px border-base-light">
+            <tr>
+              <th scope="col">Submitted Field</th>
+              <th scope="col">
+                <span class="usa-tooltip" data-position="top" title="Required">
+                  *
+                </span>
+                NAD Field
+              </th>
+              <th scope="col">Status</th>
+              <th scope="col">Empty</th>
+              <th scope="col">Populated</th>
+            </tr>
+          </thead>
+          <template x-for="grouping in groupedFeatures" :key="grouping.status">
+            <tbody>
+              <tr>
+                <td colspan="5">
+                  <span
+                    class="usa-tag"
+                    :class="getStatusTagClass(grouping.status)"
+                    ><span x-text="grouping.status"></span
+                  ></span>
+                </td>
+              </tr>
+              <template
+                x-for="feature in grouping.features"
+                :key="feature.provided_feature_name"
+              >
+                <tr>
+                  <td x-text="feature.provided_feature_name"></td>
+                  <td x-text="feature.nad_feature_name"></td>
+                  <td>
+                    <span
+                      class="usa-tag"
+                      :class="getStatusTagClass(feature.status)"
+                    >
+                      <span x-text="feature.status"></span>
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      class="font-mono-sm"
+                      x-text="feature.null_percentage"
+                    ></span>
+                    <br />
+                    <span
+                      class="font-mono-3xs"
+                      x-text="feature.null_count"
+                    ></span>
+                  </td>
+                  <td>
+                    <span
+                      class="font-mono-sm"
+                      x-text="feature.populated_percentage"
+                    ></span>
+                    <br />
+                    <span
+                      class="font-mono-3xs"
+                      x-text="feature.populated_count"
+                    ></span>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </template>
+        </table>
+      </div>
+
+      <div x-show="!isGroupedByStatus">
+        <div class="usa-table-default width-full">
+          <table class="usa-table usa-table--borderless">
+            <thead class="bg-base-lighter border-bottom-2px border-base-light">
+              <tr>
+                <th scope="col">Submitted Field</th>
+                <th scope="col">
+                  <span
+                    class="usa-tooltip"
+                    data-position="top"
+                    title="Required"
+                  >
+                    *
+                  </span>
+                  NAD Field
+                </th>
+                <th scope="col">Status</th>
+                <th scope="col">Empty</th>
+                <th scope="col">Populated</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template
+                x-for="feature in report.features"
+                :key="feature.provided_feature_name"
+              >
+                <tr>
+                  <td x-text="feature.provided_feature_name"></td>
+                  <td x-text="feature.nad_feature_name"></td>
+                  <td>
+                    <span
+                      class="usa-tag"
+                      :class="getStatusTagClass(feature.status)"
+                    >
+                      <span x-text="feature.status"></span>
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      class="font-mono-sm"
+                      x-text="feature.null_percentage"
+                    ></span>
+                    <br />
+                    <span
+                      class="font-mono-3xs"
+                      x-text="feature.null_count"
+                    ></span>
+                  </td>
+                  <td>
+                    <span
+                      class="font-mono-sm"
+                      x-text="feature.populated_percentage"
+                    ></span>
+                    <br />
+                    <span
+                      class="font-mono-3xs"
+                      x-text="feature.populated_count"
+                    ></span>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
   {% else %}
   <p>No such submission exists.</p>

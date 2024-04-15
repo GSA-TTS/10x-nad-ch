@@ -8,3 +8,63 @@
   width: auto;
   height: 30px;
 }
+
+@mixin rounded-border {
+  border-radius: 99px;
+}
+
+@mixin focus-style {
+  // Override for outline-offset when focused and not disabled
+  &:not([disabled]):focus,
+  &:not([disabled]).usa-focus {
+    outline: 0;
+  }
+}
+
+.usa-button-group-toggle {
+  justify-content: space-between;
+}
+
+.usa-button-toggle-on,
+.usa-button-toggle-off {
+  @include rounded-border;
+  @include focus-style;
+  color: var(--Primary-primary-dark, #1a4480);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50px;
+  min-width: 200px;
+}
+
+.usa-button-toggle-on {
+  background: var(--Blue-vivid-blue-vivid-5v, #e8f5ff);
+
+  &:hover {
+    background: var(--Blue-vivid-blue-vivid-10v, #cfe8ff);
+    color: var(--Primary-primary-dark, #1a4480);
+  }
+
+  &:active {
+    background: var(--Primary-primary-dark, #1a4480);
+    color: var(--Base-base-lightest, #f0f0f0);
+  }
+}
+
+.usa-button-toggle-off {
+  background: var(--Base-base-lightest, #f0f0f0);
+  border: 2px solid var(--Primary-primary-dark, #1a4480);
+  border-radius: 99px;
+  color: var(--Primary-primary-dark, #1a4480);
+
+  &:hover {
+    border: 2px solid var(--Primary-primary-dark, #1a4480);
+    background: var(--Blue-vivid-blue-vivid-10v, #cfe8ff);
+    color: var(--Primary-primary-dark, #1a4480);
+  }
+
+  &:active {
+    color: var(--Base-base-lightest, #f0f0f0);
+    background: var(--Primary-primary-dark, #1a4480);
+  }
+}
