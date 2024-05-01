@@ -102,10 +102,11 @@ def validate_file_before_submission(
             "Invalid file format. Only ZIP files are accepted."
         )
 
-    file_validator = FileValidator(file, file.name)
+    file_validator = FileValidator(file, file.filename)
+    print(file, file.name)
     if not file_validator.validate_file():
         raise InvalidDataSubmissionFileError(
-            "Invalid file format. Only Shapefiles and Geodatabase files are accepted."
+            "Invalid zipped file. Only Shapefiles and Geodatabase files are accepted."
         )
 
     if not file_validator.validate_schema(column_map):
