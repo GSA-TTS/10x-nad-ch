@@ -237,6 +237,7 @@ class FileValidator:
         filtered_fields = [
             item for item in fields if (item != "DeletionFlag" and item != "index")
         ]
+
         filtered_expected_fields = [
             value for value in expected_schema.values() if value is not None
         ]
