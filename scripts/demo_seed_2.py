@@ -28,96 +28,8 @@ def main():
 
     ctx = create_app_context()
 
-    new_producer = DataProducer(name="New Jersey")
-    saved_producer = ctx.producers.add(new_producer)
+    producer = ctx.producers.get_by_name("New Jersey")
 
-    new_user = User(
-        email="test@test.org",
-        login_provider="cloudgov",
-        logout_url=OAUTH2_CONFIG["cloudgov"]["logout_url"],
-        producer=saved_producer,
-        activated=True,
-    )
-    ctx.users.add(new_user)
-
-    new_column_map = ColumnMap(
-        name="NewJerseyMapping", producer=saved_producer, version_id=1
-    )
-    new_column_map.mapping = {
-        "AddNum_Pre": "",
-        "Add_Number": "address_number",
-        "AddNum_Suf": "",
-        "AddNo_Full": "",
-        "St_PreMod": "",
-        "St_PreDir": "",
-        "St_PreTyp": "",
-        "St_PreSep": "",
-        "St_Name": "street_name",
-        "St_PosTyp": "street_pos_type",
-        "St_PosDir": "",
-        "St_PosMod": "",
-        "StNam_Full": "",
-        "Building": "",
-        "Floor": "",
-        "Unit": "unit",
-        "Room": "",
-        "Seat": "",
-        "Addtl_Loc": "",
-        "SubAddress": "",
-        "LandmkName": "",
-        "County": "county",
-        "Inc_Muni": "inc_muni",
-        "Post_City": "post_city",
-        "Census_Plc": "",
-        "Uninc_Comm": "",
-        "Nbrhd_Comm": "",
-        "NatAmArea": "",
-        "NatAmSub": "",
-        "Urbnztn_PR": "",
-        "PlaceOther": "",
-        "PlaceNmTyp": "",
-        "State": "state",
-        "Zip_Code": "zip",
-        "Plus_4": "",
-        "UUID": "",
-        "AddAuth": "",
-        "AddrRefSys": "",
-        "Longitude": "long",
-        "Latitude": "lat",
-        "NatGrid": "",
-        "Elevation": "",
-        "Placement": "",
-        "AddrPoint": "",
-        "Related_ID": "",
-        "RelateType": "",
-        "ParcelSrc": "",
-        "Parcel_ID": "",
-        "AddrClass": "",
-        "Lifecycle": "",
-        "Effective": "",
-        "Expire": "",
-        "DateUpdate": "",
-        "AnomStatus": "",
-        "LocatnDesc": "",
-        "Addr_Type": "",
-        "DeliverTyp": "",
-        "NAD_Source": "",
-        "DataSet_ID": "id",
-    }
-    saved_column_map = ctx.column_maps.add(new_column_map)
-
-    current_script_path = os.path.abspath(__file__)
-    project_root = os.path.dirname(os.path.dirname(current_script_path))
-
-    zipped_shapefile_path = os.path.join(
-        project_root, "tests", "test_data", "shapefiles", "NM911_Address_202310.zip"
-    )
-
-    submission_name = "MorrisCounty2024A"
-    file_path = DataSubmission.generate_zipped_file_path(
-        submission_name, saved_producer
-    )
-    ctx.storage.upload(zipped_shapefile_path, file_path)
     report = {
         "overview": {
             "feature_count": 1141,
@@ -272,12 +184,14 @@ def main():
             },
         ],
     }
+
+    column_map = ctx.column_maps.get_by_id(1)
+
     new_submission = DataSubmission(
-        submission_name,
-        file_path,
+        "new_jersey/morriscounty2024b_20240403_184750.zip",
         DataSubmissionStatus.VALIDATED,
-        saved_producer,
-        saved_column_map,
+        producer,
+        column_map,
         report,
     )
     ctx.submissions.add(new_submission)

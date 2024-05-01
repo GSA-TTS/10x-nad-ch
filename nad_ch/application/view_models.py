@@ -3,7 +3,13 @@ from datetime import datetime
 import json
 import numpy as np
 from typing import Union, Dict, List, Tuple, Protocol
-from nad_ch.core.entities import Entity, ColumnMap, DataProducer, DataSubmission
+from nad_ch.core.entities import (
+    Entity,
+    ColumnMap,
+    DataProducer,
+    DataSubmissionStatus,
+    DataSubmission,
+)
 
 
 class ViewModel(Protocol):
@@ -96,7 +102,9 @@ def create_data_producer_vm(producer: DataProducer) -> DataProducerViewModel:
 class DataSubmissionViewModel(ViewModel):
     id: int
     date_created: str
-    filename: str
+    name: str
+    status: str
+    status_tag_class: str
     producer_name: str
     report: str
 
@@ -106,10 +114,28 @@ def create_data_submission_vm(submission: DataSubmission) -> DataSubmissionViewM
     if submission.report is not None:
         report_json = enrich_report(submission.report)
 
+    status_map = {
+        DataSubmissionStatus.PENDING_SUBMISSION: "Pending submission",
+        DataSubmissionStatus.CANCELED: "Canceled",
+        DataSubmissionStatus.PENDING_VALIDATION: "Pending validation",
+        DataSubmissionStatus.FAILED: "Validation failed",
+        DataSubmissionStatus.VALIDATED: "Validated",
+    }
+
+    status_tag_class_map = {
+        DataSubmissionStatus.PENDING_SUBMISSION: "usa-tag__warning",
+        DataSubmissionStatus.CANCELED: "usa-tag__error",
+        DataSubmissionStatus.PENDING_VALIDATION: "usa-tag__warning",
+        DataSubmissionStatus.FAILED: "usa-tag__error",
+        DataSubmissionStatus.VALIDATED: "usa-tag__success",
+    }
+
     return DataSubmissionViewModel(
         id=submission.id,
         date_created=present_date(submission.created_at),
-        filename=submission.filename,
+        name=submission.name,
+        status=status_map[submission.status],
+        status_tag_class=status_tag_class_map[submission.status],
         producer_name=submission.producer.name,
         report=report_json,
     )

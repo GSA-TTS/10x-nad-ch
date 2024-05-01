@@ -2,6 +2,7 @@ import '@uswds/uswds/css/uswds.css';
 import '@uswds/uswds';
 import Alpine from 'alpinejs';
 import { MappingForm } from './components/MappingForm';
+import { SubmissionForm } from './components/SubmissionForm';
 import { CompletenessReport } from './components/CompletenessReport';
 
 declare global {
@@ -13,6 +14,7 @@ declare global {
 
 document.addEventListener('alpine:init', () => {
   Alpine.data('MappingForm', MappingForm);
+  Alpine.data('SubmissionForm', SubmissionForm);
   Alpine.data('CompletenessReport', CompletenessReport);
 });
 

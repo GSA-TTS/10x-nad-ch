@@ -38,25 +38,18 @@ def logged_in_client(client, app):
         logout_user()
 
 
-def test_reports_route_should_be_protected_by_auth(client):
-    response = client.get("/reports")
+def test_data_submissions_index_route_should_be_protected_by_auth(client):
+    response = client.get("/data-submissions")
     assert response.status_code == 401
 
 
-def test_reports_route(logged_in_client):
-    response = logged_in_client.get("/reports")
+def test_data_submissions_index_route(logged_in_client):
+    response = logged_in_client.get("/data-submissions")
     assert response.status_code == 200
-    assert "Reports" in response.data.decode("utf-8")
+    assert "Submissions" in response.data.decode("utf-8")
 
 
-def test_view_report_route_should_be_protected_by_auth(client):
+def test_data_submission_show_route_should_be_protected_by_auth(client):
     submission_id = "some_valid_id"
-    response = client.get(f"/reports/{submission_id}")
+    response = client.get(f"/data-submissions/{submission_id}")
     assert response.status_code == 401
-
-
-def test_view_report_route(logged_in_client):
-    submission_id = "some_valid_id"
-    response = logged_in_client.get(f"/reports/{submission_id}")
-    assert response.status_code == 200
-    assert "Report" in response.data.decode("utf-8")

@@ -1,0 +1,71 @@
+{% extends "_layouts/base.html" %} {% block title %}{{ "Submission " + name}}{%
+endblock %} {% block content %}
+
+<form action="/data-submissions" method="post" enctype="multipart/form-data">
+  <header class="usa-header usa-header--basic">
+    <div class="usa-nav-container">
+      <div class="usa-navbar">
+        <div class="display-flex flex-justify flex-align-end">
+          <div class="usa-logo">
+            <em class="usa-logo__text">{{ "Submission: " ~ name }}</em>
+          </div>
+          <div class="padding-bottom-2">
+            <a
+              class="usa-button usa-button--outline"
+              href="{{ url_for('submissions.index') }}"
+              >Cancel</a
+            >
+            <button class="usa-button" type="submit">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <ol class="usa-process-list">
+    <li class="usa-process-list__item">
+      <h4 class="usa-process-list__heading">Select a mapping</h4>
+      <p class="margin-top-05">
+        Select a mapping that matches the schema of the addresses you are about
+        to submit.
+        <div class="usa-form-group">
+            <select id="mapping-select" class="usa-select" name="column-map-id" required>
+                <option value="">Select a mapping</option>
+                {% for option in column_map_options %}
+                <option value="{{ option.id }}">{{ option.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+      </p>
+    </li>
+
+    <li class="usa-process-list__item">
+      <h4 class="usa-process-list__heading">Upload addresses</h4>
+      <p>Select a zipped .gdb or shapefile to start the submission process.</p>
+      <div class="usa-form-group">
+        <label class="usa-label" for="mapping-csv-input"
+          >Input accepts a single file</label
+        >
+        <input
+          id="mapping-csv-input"
+          class="usa-file-input"
+          type="file"
+          name="mapping-csv-input"
+          required
+        />
+
+        <input type="hidden" name="name" value="{{ name }}" />
+      </div>
+
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="usa-error-messages">
+        {% for message in messages %}
+        <div class="usa-error-message" role="alert">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+    </li>
+  </ol>
+</form>
+
+{% endblock %}

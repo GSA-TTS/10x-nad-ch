@@ -8,3 +8,14 @@ export function getMappingNameValidationError(name: string): string | null {
   }
   return null;
 }
+
+export function getSubmissionNameValidationError(name: string): string | null {
+  if (name === '') {
+    return 'Submission name is required';
+  } else if (name.length > 25) {
+    return 'Enter less than 25 letters or numbers';
+  } else if (/[^a-zA-Z0-9]/.test(name)) {
+    return 'Name can only contain letters and numbers';
+  }
+  return null;
+}

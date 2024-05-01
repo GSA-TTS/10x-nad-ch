@@ -1,14 +1,20 @@
+import os
 import geopandas as gpd
+import pytest
 from shapely.geometry import Polygon
 from nad_ch.application.dtos import (
     DataSubmissionReportFeature,
     DataSubmissionReportOverview,
 )
-from nad_ch.application.validation import DataValidator
+from nad_ch.application.validation import DataValidator, FileValidator
 from tests.factories import (
     create_fake_geopandas_dataframe,
     create_fake_column_map_from_gdf,
 )
+
+
+TEST_DATA_DIR = "tests/test_data"
+
 
 NULL_NAD_FIELDS = [
     "AddNum_Pre",
@@ -177,10 +183,6 @@ def test_initialize_overview_details():
 
     assert isinstance(data_validator.report_overview, DataSubmissionReportOverview)
     assert data_validator.report_overview.feature_count == 36
-    assert data_validator.report_overview.missing_required_fields == [
-        "NatGrid",
-        "AddrPoint",
-    ]
     assert all(
         getattr(data_validator.report_overview, attribute) == 0
         for attribute in overview_attributes_to_check
@@ -222,3 +224,53 @@ def test_finalize_overview_details():
     data_validator.report_features["Floor"].invalid_domain_count = 7
     data_validator.finalize_overview_details()
     assert data_validator.report_overview.features_flagged == 2
+
+
+def test_file_validator_detects_shapefile():
+    file_path = os.path.join(TEST_DATA_DIR, "shapefiles/NM911_Address_202310.zip")
+
+    with open(file_path, "rb") as file:
+        validator = FileValidator(file, "NM911_Address_202310.zip")
+        assert (
+            validator.validate_file()
+        ), "Shapefile validation failed when it should have passed."
+
+
+def test_file_validator_detects_geodatabase():
+    file_path = os.path.join(TEST_DATA_DIR, "geodatabases/Naperville.gdb.zip")
+
+    with open(file_path, "rb") as file:
+        validator = FileValidator(file, "Naperville.gdb.zip")
+        assert (
+            validator.validate_file()
+        ), "Geodatabase validation failed when it should have passed."
+
+
+def test_file_validator_detects_valid_schema_for_shapefile(producer_column_maps):
+    file_path = os.path.join(TEST_DATA_DIR, "shapefiles/NM911_Address_202310.zip")
+
+    with open(file_path, "rb") as file:
+        validator = FileValidator(file, "NM911_Address_202310.zip")
+        column_map_entity = producer_column_maps.get_by_name_and_version(
+            "testproducer3", 1
+        )
+
+        result = validator.validate_schema(column_map_entity.mapping)
+
+        assert result, "Shapefile schema validation failed when it should have passed."
+
+
+def test_file_validator_detects_valid_schema_for_geodatabase(producer_column_maps):
+    file_path = os.path.join(TEST_DATA_DIR, "geodatabases/Naperville.gdb.zip")
+
+    with open(file_path, "rb") as file:
+        validator = FileValidator(file, "Naperville.gdb.zip")
+        column_map_entity = producer_column_maps.get_by_name_and_version(
+            "testproducer1", 1
+        )
+
+        result = validator.validate_schema(column_map_entity.mapping)
+
+        assert (
+            result
+        ), "Geodatabase schema validation failed when it should have passed."

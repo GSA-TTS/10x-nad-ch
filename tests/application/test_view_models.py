@@ -4,7 +4,12 @@ from nad_ch.application.view_models import (
     DataProducerViewModel,
     DataSubmissionViewModel,
 )
-from nad_ch.core.entities import DataProducer, DataSubmission, ColumnMap
+from nad_ch.core.entities import (
+    DataProducer,
+    DataSubmissionStatus,
+    DataSubmission,
+    ColumnMap,
+)
 
 
 def test_get_a_single_data_producer_view_model():
@@ -37,7 +42,13 @@ def test_get_a_list_of_data_producer_view_models():
 def test_get_a_single_data_submisson_view_model():
     producer = DataProducer("State X")
     column_map_a = ColumnMap("MapA", producer, 1)
-    submission = DataSubmission("some_file_name", producer, column_map_a)
+    submission = DataSubmission(
+        "some_name",
+        "some_file_name",
+        DataSubmissionStatus.PENDING_VALIDATION,
+        producer,
+        column_map_a,
+    )
     date = datetime(2024, 2, 29, 20, 48, 58, 205608)
     submission.set_created_at(date)
 
@@ -51,13 +62,25 @@ def test_get_a_single_data_submisson_view_model():
 def test_get_a_list_of_data_submisson_view_models():
     producer_a = DataProducer("State A")
     column_map_a = ColumnMap("MapA", producer_a, 1)
-    submission_a = DataSubmission("some_file_name", producer_a, column_map_a)
+    submission_a = DataSubmission(
+        "some_name",
+        "some_file_name",
+        DataSubmissionStatus.PENDING_VALIDATION,
+        producer_a,
+        column_map_a,
+    )
     date_a = datetime(2024, 2, 29, 20, 48, 58, 205608)
     submission_a.set_created_at(date_a)
 
     producer_b = DataProducer("State B")
     column_map_b = ColumnMap("MapB", producer_b, 1)
-    submission_b = DataSubmission("some_other_file_name", producer_b, column_map_b)
+    submission_b = DataSubmission(
+        "some_name",
+        "some_other_file_name",
+        DataSubmissionStatus.PENDING_VALIDATION,
+        producer_b,
+        column_map_b,
+    )
     date_b = datetime(2024, 5, 1, 20, 48, 58, 205608)
     submission_b.set_created_at(date_b)
 

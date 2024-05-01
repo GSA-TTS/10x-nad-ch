@@ -1,10 +1,16 @@
-from typing import Dict, Optional
+import os
+from typing import Dict, List, Optional, IO
+from zipfile import ZipFile
+import fiona
 from geopandas import GeoDataFrame
 import pandas as pd
+import shapefile
+import tempfile
 from nad_ch.application.dtos import (
     DataSubmissionReportFeature,
     DataSubmissionReportOverview,
 )
+from nad_ch.application.interfaces import Storage
 import glob
 from pathlib import Path
 from nad_ch.core.entities import ColumnMap
@@ -162,3 +168,104 @@ class DataValidator:
         self.initialize_overview_details(gdf_batch, self.valid_mappings)
         self.update_feature_details(gdf_batch)
         self.update_overview_details(gdf_batch)
+
+
+class FileValidator:
+    def __init__(self, file: IO[bytes], filename: str) -> None:
+        self.file = file
+        self.filename = filename
+
+    def validate_file(self) -> bool:
+        """Confirm that the file is a valid shapefile or geodatabase."""
+        if not self._is_zipped():
+            return False
+
+        with ZipFile(self.file) as zip_file:
+            file_names = zip_file.namelist()
+            if not (
+                self._is_valid_shapefile(file_names)
+                or self._is_valid_geodatabase(file_names)
+            ):
+                return False
+
+        return True
+
+    def validate_schema(self, column_map: Dict[str, str]) -> bool:
+        """Confirm that the schema is accommodated by the selected mapping."""
+        with ZipFile(self.file) as zip_file:
+            file_names = zip_file.namelist()
+            if self._is_valid_shapefile(file_names):
+                return self._validate_shapefile_schema(zip_file, column_map)
+            elif self._is_valid_geodatabase(file_names):
+                return self._validate_gdb_schema(zip_file, column_map)
+            else:
+                return False
+
+    def _is_zipped(self) -> bool:
+        _, file_extension = os.path.splitext(self.filename)
+        if file_extension.lower() != ".zip":
+            return False
+
+        return True
+
+    def _is_valid_shapefile(self, file_names: List[str]) -> bool:
+        required_extensions = {".shp", ".shx", ".dbf"}
+        found_extensions = set(os.path.splitext(name)[1].lower() for name in file_names)
+        return required_extensions.issubset(found_extensions)
+
+    def _is_valid_geodatabase(self, file_names: List[str]) -> bool:
+        return any(
+            (name.endswith(".gdb") or name.endswith(".gdb/")) and "/" in name
+            for name in file_names
+        )
+
+    def _validate_shapefile_schema(
+        self, zip_file: ZipFile, expected_schema: Dict[str, str]
+    ) -> bool:
+        file_names = zip_file.namelist()
+
+        shp_file = next((name for name in file_names if name.endswith(".shp")), None)
+        if not shp_file:
+            return False
+
+        temp_dir = tempfile.mkdtemp()
+        zip_file.extractall(temp_dir)
+        path = os.path.join(temp_dir, shp_file)
+        sf = shapefile.Reader(path)
+
+        fields = [field[0] for field in sf.fields]
+        filtered_fields = [
+            item for item in fields if (item != "DeletionFlag" and item != "index")
+        ]
+        filtered_expected_fields = [
+            value for value in expected_schema.values() if value is not None
+        ]
+
+        return all(value in filtered_fields for value in filtered_expected_fields)
+
+    def _validate_gdb_schema(
+        self, zip_file: ZipFile, expected_schema: Dict[str, str]
+    ) -> bool:
+        file_names = zip_file.namelist()
+        gdb_dir = next((name for name in file_names if name.endswith(".gdb/")), None)
+
+        if not gdb_dir:
+            return False
+
+        temp_dir = tempfile.mkdtemp()
+        zip_file.extractall(temp_dir)
+        gdb_path = os.path.join(temp_dir, gdb_dir)
+
+        layers = fiona.listlayers(gdb_path)
+
+        for layer_name in layers:
+            with fiona.open(gdb_path, layer=layer_name) as layer:
+                fields = layer.schema["properties"].keys()
+                filtered_expected_fields = [
+                    value for value in expected_schema.values() if value is not None
+                ]
+                all_present = all(value in fields for value in filtered_expected_fields)
+                if all_present:
+                    return True
+
+        return False

@@ -1,8 +1,13 @@
 import contextlib
-import json
 from typing import List, Optional
 from flask_login import UserMixin
-from nad_ch.core.entities import DataProducer, DataSubmission, User, ColumnMap
+from nad_ch.core.entities import (
+    DataProducer,
+    DataSubmission,
+    DataSubmissionStatus,
+    User,
+    ColumnMap,
+)
 from nad_ch.core.repositories import (
     DataProducerRepository,
     DataSubmissionRepository,
@@ -12,6 +17,7 @@ from nad_ch.core.repositories import (
 from sqlalchemy import (
     Boolean,
     Column,
+    Enum,
     Integer,
     String,
     create_engine,
@@ -94,7 +100,11 @@ class DataProducerModel(CommonBase):
 class DataSubmissionModel(CommonBase):
     __tablename__ = "data_submissions"
 
-    filename = Column(String, nullable=False)
+    name = Column(String, nullable=False)
+    file_path = Column(String, nullable=False)
+    status = Column(
+        Enum(DataSubmissionStatus), default=DataSubmissionStatus.PENDING_SUBMISSION
+    )
     data_producer_id = Column(Integer, ForeignKey("data_producers.id"), nullable=False)
     column_map_id = Column(Integer, ForeignKey("column_maps.id"), nullable=False)
     report = Column(JSON)
@@ -105,7 +115,9 @@ class DataSubmissionModel(CommonBase):
     @staticmethod
     def from_entity(submission: DataSubmission, producer_id: int, column_map_id: int):
         model = DataSubmissionModel(
-            filename=submission.filename,
+            name=submission.name,
+            file_path=submission.file_path,
+            status=submission.status,
             report=submission.report,
             data_producer_id=producer_id,
             column_map_id=column_map_id,
@@ -117,7 +129,9 @@ class DataSubmissionModel(CommonBase):
         column_map = self.column_map.to_entity()
         entity = DataSubmission(
             id=self.id,
-            filename=self.filename,
+            name=self.name,
+            file_path=self.file_path,
+            status=self.status,
             report=self.report,
             producer=producer,
             column_map=column_map,
@@ -302,11 +316,11 @@ class SqlAlchemyDataSubmissionRepository(DataSubmissionRepository):
             ]
             return submission_entities
 
-    def get_by_filename(self, filename: str) -> Optional[DataSubmission]:
+    def get_by_file_path(self, file_path: str) -> Optional[DataSubmission]:
         with session_scope(self.session_factory) as session:
             submission_model = (
                 session.query(DataSubmissionModel)
-                .filter(DataSubmissionModel.filename == filename)
+                .filter(DataSubmissionModel.file_path == file_path)
                 .first()
             )
 

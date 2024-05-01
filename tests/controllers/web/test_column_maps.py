@@ -32,7 +32,6 @@ def logged_in_client(client, app):
         )
         saved_user = app.extensions["ctx"]["users"].add(user)
         login_user(saved_user)
-        print(saved_user)
         yield client
 
         logout_user()
@@ -41,7 +40,7 @@ def logged_in_client(client, app):
 def test_column_maps_route_empty(logged_in_client):
     response = logged_in_client.get("/column-maps")
     assert response.status_code == 200
-    assert "Create Your First Mapping" in response.data.decode("utf-8")
+    assert "Create your first mapping" in response.data.decode("utf-8")
 
 
 def test_column_maps_route_has_two_column_maps(logged_in_client):

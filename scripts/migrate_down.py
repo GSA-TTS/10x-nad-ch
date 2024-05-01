@@ -26,7 +26,7 @@ def main():
     session = Session()
     minio_client = session.client(
         "s3",
-        endpoint_url=S3_ENDPOINT,
+        endpoint_url=f"http://{S3_ENDPOINT}",
         aws_access_key_id=S3_ACCESS_KEY,
         aws_secret_access_key=S3_SECRET_ACCESS_KEY,
         aws_session_token=None,

@@ -25,9 +25,9 @@
       </li>
       <li class="usa-sidenav__item">
         <a
-          href="{{ url_for('submissions.reports') }}"
-          class="{{ 'usa-current' if request.path.startswith('/reports') else '' }}"
-          >Reports</a
+          href="{{ url_for('submissions.index') }}"
+          class="{{ 'usa-current' if request.path.startswith('/data-submissions') else '' }}"
+          >Submissions</a
         >
       </li>
       {% endif %}

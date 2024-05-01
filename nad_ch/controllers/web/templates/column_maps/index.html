@@ -4,7 +4,7 @@ page_header("Mappings") }} {% if not column_maps %}
 <div class="usa-card padding-top-2 grid-col-4">
   <div class="usa-card__container">
     <div class="usa-card__header">
-      <h2 class="usa-card__heading">Create Your First Mapping</h2>
+      <h2 class="usa-card__heading">Create your first mapping</h2>
     </div>
     <div class="usa-card__media">
       <div class="usa-card__img">
@@ -41,7 +41,7 @@ page_header("Mappings") }} {% if not column_maps %}
   <div class="usa-modal__content margin-x-0">
     <div class="usa-modal__main">
       <h2 class="usa-modal__heading" id="mapping-modal-heading">New mapping</h2>
-      <form x-data="MappingForm()" @submit.prevent="createMapping" novalidate>
+      <form x-data="MappingForm()" @submit.prevent="create" novalidate>
         <div class="usa-form-group">
           <label for="mapping-name">Mapping name</label>
           <br />

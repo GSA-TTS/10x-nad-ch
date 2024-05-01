@@ -49,8 +49,8 @@ class FakeDataSubmissionRepository(DataSubmissionRepository):
     def get_by_producer(self, producer: DataProducer) -> Optional[DataSubmission]:
         return [s for s in self._submissions if s.producer.name == producer.name]
 
-    def get_by_filename(self, filename: str) -> Optional[DataSubmission]:
-        return next((s for s in self._submissions if s.filename == filename), None)
+    def get_by_file_path(self, file_path: str) -> Optional[DataSubmission]:
+        return next((s for s in self._submissions if s.file_path == file_path), None)
 
     def update_report(self, submission_id: int, report) -> None:
         return None

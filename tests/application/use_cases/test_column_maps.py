@@ -23,22 +23,11 @@ def test_add_column_map_is_valid(app_context):
 
     mapping = {
         "Add_Number": "address_number",
-        "AddNo_Full": "address_number_full",
         "St_Name": "street_name",
-        "StNam_Full": "street_name_full",
-        "County": "county",
+        "St_PosTyp": "street_position_type",
+        "Unit": "unit",
         "Inc_Muni": "city",
         "Post_City": "post_city",
-        "State": "state",
-        "UUID": "guid",
-        "AddAuth": "address_authority",
-        "Longitude": "long",
-        "Latitude": "lat",
-        "NatGrid": "nat_grid",
-        "Placement": "placement",
-        "AddrPoint": "address_point",
-        "DateUpdate": "date_updated",
-        "NAD_Source": "source",
         "DataSet_ID": "id",
     }
 
@@ -60,22 +49,11 @@ def test_get_column_map(app_context):
 
     mapping = {
         "Add_Number": "address_number",
-        "AddNo_Full": "address_number_full",
         "St_Name": "street_name",
-        "StNam_Full": "street_name_full",
-        "County": "county",
+        "St_PosTyp": "street_position_type",
+        "Unit": "unit",
         "Inc_Muni": "city",
         "Post_City": "post_city",
-        "State": "state",
-        "UUID": "guid",
-        "AddAuth": "address_authority",
-        "Longitude": "long",
-        "Latitude": "lat",
-        "NatGrid": "nat_grid",
-        "Placement": "placement",
-        "AddrPoint": "address_point",
-        "DateUpdate": "date_updated",
-        "NAD_Source": "source",
         "DataSet_ID": "id",
     }
 
@@ -92,22 +70,11 @@ def test_get_column_maps_by_producer(app_context):
 
     mapping = {
         "Add_Number": "address_number",
-        "AddNo_Full": "address_number_full",
         "St_Name": "street_name",
-        "StNam_Full": "street_name_full",
-        "County": "county",
+        "St_PosTyp": "street_position_type",
+        "Unit": "unit",
         "Inc_Muni": "city",
         "Post_City": "post_city",
-        "State": "state",
-        "UUID": "guid",
-        "AddAuth": "address_authority",
-        "Longitude": "long",
-        "Latitude": "lat",
-        "NatGrid": "nat_grid",
-        "Placement": "placement",
-        "AddrPoint": "address_point",
-        "DateUpdate": "date_updated",
-        "NAD_Source": "source",
         "DataSet_ID": "id",
     }
 
@@ -126,22 +93,11 @@ def test_update_column_mapping(app_context):
 
     mapping = {
         "Add_Number": "address_number",
-        "AddNo_Full": "address_number_full",
         "St_Name": "street_name",
-        "StNam_Full": "street_name_full",
-        "County": "county",
+        "St_PosTyp": "street_position_type",
+        "Unit": "unit",
         "Inc_Muni": "city",
         "Post_City": "post_city",
-        "State": "state",
-        "UUID": "guid",
-        "AddAuth": "address_authority",
-        "Longitude": "long",
-        "Latitude": "lat",
-        "NatGrid": "nat_grid",
-        "Placement": "placement",
-        "AddrPoint": "address_point",
-        "DateUpdate": "date_updated",
-        "NAD_Source": "source",
         "DataSet_ID": "id",
     }
 
@@ -150,28 +106,17 @@ def test_update_column_mapping(app_context):
         app_context,
         cm.id,
         {
-            "Add_Number": "foo",
-            "AddNo_Full": "address_number_full",
+            "Add_Number": "address_number",
             "St_Name": "street_name",
-            "StNam_Full": "street_name_full",
-            "County": "county",
+            "St_PosTyp": "street_position_type",
+            "Unit": "unit",
             "Inc_Muni": "city",
             "Post_City": "post_city",
-            "State": "state",
-            "UUID": "guid",
-            "AddAuth": "address_authority",
-            "Longitude": "long",
-            "Latitude": "lat",
-            "NatGrid": "nat_grid",
-            "Placement": "placement",
-            "AddrPoint": "address_point",
-            "DateUpdate": "date_updated",
-            "NAD_Source": "source",
-            "DataSet_ID": "id",
+            "DataSet_ID": "guid",
         },
     )
     assert isinstance(result, ColumnMapViewModel)
-    assert result.mapping["Add_Number"] == "foo"
+    assert result.mapping["DataSet_ID"] == "guid"
 
 
 def test_update_column_mapping_field(app_context):
@@ -180,27 +125,16 @@ def test_update_column_mapping_field(app_context):
 
     mapping = {
         "Add_Number": "address_number",
-        "AddNo_Full": "address_number_full",
         "St_Name": "street_name",
-        "StNam_Full": "street_name_full",
-        "County": "county",
+        "St_PosTyp": "street_position_type",
+        "Unit": "unit",
         "Inc_Muni": "city",
         "Post_City": "post_city",
-        "State": "state",
-        "UUID": "guid",
-        "AddAuth": "address_authority",
-        "Longitude": "long",
-        "Latitude": "lat",
-        "NatGrid": "nat_grid",
-        "Placement": "placement",
-        "AddrPoint": "address_point",
-        "DateUpdate": "date_updated",
-        "NAD_Source": "source",
         "DataSet_ID": "id",
     }
 
     cm = add_column_map(app_context, user.id, "Test", mapping)
-    result = update_column_mapping_field(app_context, cm.id, "foo", "Add_Number")
+    result = update_column_mapping_field(app_context, cm.id, "guid", "DataSet_ID")
 
     assert isinstance(result, ColumnMapViewModel)
-    assert result.mapping["Add_Number"] == "foo"
+    assert result.mapping["DataSet_ID"] == "guid"

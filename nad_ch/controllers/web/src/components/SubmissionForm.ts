@@ -1,9 +1,9 @@
 import { AlpineComponent } from 'alpinejs';
 import { BASE_URL } from '../config';
-import { getMappingNameValidationError } from '../formValidation';
+import { getSubmissionNameValidationError } from '../formValidation';
 import { navigateTo } from '../utilities';
 
-export interface MappingFormComponent {
+export interface SubmissionFormComponent {
   hasError: boolean;
   errorMessage: string;
   name: string;
@@ -11,7 +11,7 @@ export interface MappingFormComponent {
   closeModal: () => void;
 }
 
-export function MappingForm(): AlpineComponent<MappingFormComponent> {
+export function SubmissionForm(): AlpineComponent<SubmissionFormComponent> {
   return {
     hasError: false,
     errorMessage: '',
@@ -19,14 +19,14 @@ export function MappingForm(): AlpineComponent<MappingFormComponent> {
     create(): void {
       this.hasError = false;
 
-      const validationError = getMappingNameValidationError(this.name);
+      const validationError = getSubmissionNameValidationError(this.name);
 
       if (validationError) {
         this.hasError = true;
         this.errorMessage = validationError;
       } else {
         navigateTo(
-          `${BASE_URL}/column-maps/create?name=${encodeURIComponent(this.name)}`,
+          `${BASE_URL}/data-submissions/create?name=${encodeURIComponent(this.name)}`,
         );
       }
     },

@@ -5,7 +5,13 @@ import glob
 import pathlib
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from nad_ch.core.entities import DataProducer, DataSubmission, ColumnMap, User
+from nad_ch.core.entities import (
+    DataProducer,
+    DataSubmissionStatus,
+    DataSubmission,
+    ColumnMap,
+    User,
+)
 from nad_ch.infrastructure.database import (
     ModelBase,
     SqlAlchemyDataProducerRepository,
@@ -69,10 +75,22 @@ def producer_column_maps_and_submissions(repositories):
         column_map_entities.append(column_maps.add(new_column_map))
 
     new_submission1 = DataSubmission(
-        "testproducer1-submission", producer_entities[0], column_map_entities[0]
+        "testproducer1-submission",
+        DataSubmission.generate_zipped_file_path(
+            "testproducer1-submission", producer_entities[0]
+        ),
+        DataSubmissionStatus.VALIDATED,
+        producer_entities[0],
+        column_map_entities[0],
     )
     new_submission2 = DataSubmission(
-        "testproducer2-submission", producer_entities[1], column_map_entities[1]
+        "testproducer2-submission",
+        DataSubmission.generate_zipped_file_path(
+            "testproducer1-submission", producer_entities[0]
+        ),
+        DataSubmissionStatus.VALIDATED,
+        producer_entities[1],
+        column_map_entities[1],
     )
     _ = submissions.add(new_submission1)
     _ = submissions.add(new_submission2)

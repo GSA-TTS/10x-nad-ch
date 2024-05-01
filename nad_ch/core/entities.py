@@ -1,4 +1,5 @@
 from datetime import datetime, timezone, UTC
+from enum import Enum
 import os
 import re
 from typing import Optional, Dict
@@ -91,22 +92,11 @@ class ColumnMap(Entity):
 
     required_fields = [
         "Add_Number",
-        "AddNo_Full",
         "St_Name",
-        "StNam_Full",
-        "County",
+        "St_PosTyp",
+        "Unit",
         "Inc_Muni",
         "Post_City",
-        "State",
-        "UUID",
-        "AddAuth",
-        "Longitude",
-        "Latitude",
-        "NatGrid",
-        "Placement",
-        "AddrPoint",
-        "DateUpdate",
-        "NAD_Source",
         "DataSet_ID",
     ]
 
@@ -134,43 +124,77 @@ class ColumnMap(Entity):
         )
 
 
+class DataSubmissionStatus(Enum):
+    PENDING_SUBMISSION = "PENDING_SUBMISSION"
+    CANCELED = "CANCELED"
+    PENDING_VALIDATION = "PENDING_VALIDATION"
+    FAILED = "FAILED"
+    VALIDATED = "VALIDATED"
+
+
 class DataSubmission(Entity):
     def __init__(
         self,
-        filename: str,
+        name: str,
+        file_path: str,
+        status: DataSubmissionStatus,
         producer: DataProducer,
         column_map: ColumnMap,
         report: Optional[Dict[any, any]] = None,
         id: Optional[int] = None,
     ):
         super().__init__(id)
-        self.filename = filename
+        self.name = name
+        self.file_path = file_path
+        self.status = (
+            status if status is not None else DataSubmissionStatus.PENDING_SUBMISSION
+        )
         self.producer = producer
         self.column_map = column_map
         self.report = report
 
     def __repr__(self):
         return f"DataSubmission \
-            {self.id}, {self.filename}, {self.producer}"
+            {self.id}, , {self.name}, {self.file_path}, {self.producer}, {self.status}"
 
     @staticmethod
-    def generate_filename(file_path: str, producer: DataProducer) -> str:
+    def generate_file_path(file_path: str, producer: DataProducer) -> str:
         return os.path.basename(file_path)
 
     def get_mapped_data_dir(
         self, source_path: str, base_path: str, remote: bool = False
     ) -> str:
-        filename, _ = os.path.splitext(
-            self.generate_filename(source_path, self.producer)
+        file_path, _ = os.path.splitext(
+            self.generate_file_path(source_path, self.producer)
         )
         if remote:
             # Defines the path for remote storage such as s3
             partition_dt = datetime.today().strftime("%Y_%m_%d")
-            path = f"data_submissions/{self.producer.name}/{partition_dt}/{filename}"
+            path = f"data_submissions/{self.producer.name}/{partition_dt}/{file_path}"
         else:
             # Defines the path for local storage of post-mapped data
-            path = os.path.join(base_path, f"data_submissions/{self.id}/{filename}")
+            path = os.path.join(base_path, f"data_submissions/{self.id}/{file_path}")
         return path
+
+    @staticmethod
+    def generate_zipped_file_path(name: str, producer: DataProducer) -> str:
+        s = re.sub(r"\W+", "_", producer.name)
+        s = s.lower()
+        s = s.strip("_")
+        formatted_producer_name = re.sub(r"_+", "_", s)
+
+        s = re.sub(r"\W+", "_", name)
+        s = s.lower()
+        s = s.strip("_")
+        formatted_name = re.sub(r"\W+", "_", s)
+
+        current_time_utc = datetime.now(timezone.utc)
+        timestamp = current_time_utc.timestamp()
+        datetime_obj = datetime.fromtimestamp(timestamp, UTC)
+        datetime_str = datetime_obj.strftime("%Y%m%d_%H%M%S")
+
+        file_path = f"{formatted_producer_name}/{formatted_name}_{datetime_str}.zip"
+        return file_path
 
     def has_report(self) -> bool:
         return self.report is not None
