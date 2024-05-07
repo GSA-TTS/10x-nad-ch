@@ -236,6 +236,13 @@ class ColumnMapModel(CommonBase):
         return entity
 
 
+class RoleModel(CommonBase):
+    __tablename__ = "roles"
+
+    name = Column(String, nullable=False, unique=True)
+    permissions = Column(JSON, nullable=False)
+
+
 class SqlAlchemyDataProducerRepository(DataProducerRepository):
     def __init__(self, session_factory):
         self.session_factory = session_factory

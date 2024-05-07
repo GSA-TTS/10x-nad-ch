@@ -243,3 +243,22 @@ class User(Entity):
     def associate_with_data_producer(self, producer: DataProducer):
         self.producer = producer
         return self
+
+
+class Permission:
+    CREATE_MAPPING = 'create_mapping'
+    CREATE_SUBMISSION = 'create_submission'
+    ACTIVATE_USER = 'activate_user'
+
+
+class Role(Entity):
+    def __init__(self, name: str, permissions: list, id: Optional[int] = None):
+        super().__init__(id)
+        self.name = name
+        self.permissions = permissions
+
+    def __repr__(self):
+        return f"Role {self.id}, {self.name}, {self.permissions})"
+
+    def has_permission(self, permission: str) -> bool:
+        return permission in self.permissions
