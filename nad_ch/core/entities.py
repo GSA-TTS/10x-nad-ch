@@ -246,9 +246,9 @@ class User(Entity):
 
 
 class Permission:
-    CREATE_MAPPING = 'create_mapping'
-    CREATE_SUBMISSION = 'create_submission'
-    ACTIVATE_USER = 'activate_user'
+    CREATE_MAPPING = "create_mapping"
+    CREATE_SUBMISSION = "create_submission"
+    ACTIVATE_USER = "activate_user"
 
 
 class Role(Entity):

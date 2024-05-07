@@ -24,6 +24,7 @@ from sqlalchemy import (
     ForeignKey,
     DateTime,
     UniqueConstraint,
+    Table,
 )
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from sqlalchemy.sql import func
@@ -146,6 +147,24 @@ class DataSubmissionModel(CommonBase):
         return entity
 
 
+user_role_association = Table(
+    "user_role",
+    ModelBase.metadata,
+    Column("user_id", Integer, ForeignKey("users.id")),
+    Column("role_id", Integer, ForeignKey("roles.id")),
+)
+
+
+class RoleModel(CommonBase):
+    __tablename__ = "roles"
+
+    name = Column(String, nullable=False, unique=True)
+    permissions = Column(JSON, nullable=False)
+    users = relationship(
+        "UserModel", secondary=user_role_association, back_populates="roles"
+    )
+
+
 class UserModel(UserMixin, CommonBase):
     __tablename__ = "users"
 
@@ -156,6 +175,9 @@ class UserModel(UserMixin, CommonBase):
     activated = Column(Boolean, nullable=False, default=False)
 
     data_producer = relationship("DataProducerModel", back_populates="users")
+    roles = relationship(
+        "RoleModel", secondary=user_role_association, back_populates="users"
+    )
 
     @staticmethod
     def from_entity(user):
@@ -234,13 +256,6 @@ class ColumnMapModel(CommonBase):
             entity.set_updated_at(self.updated_at)
 
         return entity
-
-
-class RoleModel(CommonBase):
-    __tablename__ = "roles"
-
-    name = Column(String, nullable=False, unique=True)
-    permissions = Column(JSON, nullable=False)
 
 
 class SqlAlchemyDataProducerRepository(DataProducerRepository):

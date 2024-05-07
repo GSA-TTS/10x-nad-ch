@@ -28,6 +28,13 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
 
+    op.create_table(
+        "user_role",
+        sa.Column("user_id", sa.Integer, sa.ForeignKey("users.id", ondelete="CASCADE")),
+        sa.Column("role_id", sa.Integer, sa.ForeignKey("roles.id", ondelete="CASCADE")),
+    )
+
 
 def downgrade() -> None:
     op.drop_table("roles")
+    op.drop_table("user_role")
