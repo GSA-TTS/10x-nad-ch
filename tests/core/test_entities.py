@@ -4,6 +4,7 @@ from nad_ch.core.entities import (
     DataSubmissionStatus,
     DataSubmission,
     ColumnMap,
+    User,
     Role,
 )
 
@@ -122,3 +123,12 @@ def test_role_has_permission():
     assert role.has_permission("read")
     assert role.has_permission("update")
     assert role.has_permission("delete")
+
+
+def test_user_can():
+    role = Role("admin", ["create", "read", "update", "delete"])
+    user = User(email="test@test.org", login_provider="", logout_url="", roles=[role])
+    assert user.can("create")
+    assert user.can("read")
+    assert user.can("update")
+    assert user.can("delete")

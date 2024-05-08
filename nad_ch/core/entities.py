@@ -208,6 +208,7 @@ class User(Entity):
         logout_url,
         activated=False,
         producer: DataProducer = None,
+        roles: List = [],
         id: int = None,
     ):
         super().__init__(id)
@@ -216,6 +217,7 @@ class User(Entity):
         self.logout_url = logout_url
         self.activated = activated
         self.producer = producer
+        self.roles = roles
 
     # The following property definitions and get_id method are required in order for the
     # Flask-Login library to be able to handle instances of the User domain entity.
@@ -243,6 +245,9 @@ class User(Entity):
     def associate_with_data_producer(self, producer: DataProducer):
         self.producer = producer
         return self
+
+    def can(self, permission: str) -> bool:
+        return any(role.has_permission(permission) for role in self.roles)
 
 
 class Permission:
