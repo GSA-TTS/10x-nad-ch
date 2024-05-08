@@ -12,3 +12,7 @@ def main():
     for role, permissions in ROLE_PERMISSIONS_MAP.items():
         role = Role(name=role, permissions=permissions)
         ctx.roles.add(role)
+
+
+if __name__ == "__main__":
+    main()

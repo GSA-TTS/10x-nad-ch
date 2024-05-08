@@ -11,6 +11,7 @@ from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy.sql import func
 
 # revision identifiers, used by Alembic.
 revision: str = "4ad25b043abe"
@@ -22,7 +23,20 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.create_table(
         "roles",
-        sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("id", sa.Integer, primary_key=True),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            server_default=func.now(),
+            nullable=False,
+        ),
+        sa.Column(
+            "updated_at",
+            sa.DateTime(timezone=True),
+            server_default=func.now(),
+            onupdate=func.now(),
+            nullable=False,
+        ),
         sa.Column("name", sa.String(), nullable=False),
         sa.Column("permissions", JSON, default=list),
         sa.PrimaryKeyConstraint("id"),
@@ -36,5 +50,5 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_table("roles")
     op.drop_table("user_role")
+    op.drop_table("roles")

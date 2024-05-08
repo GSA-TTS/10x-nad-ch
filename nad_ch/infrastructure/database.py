@@ -432,6 +432,11 @@ class SqlAlchemyRoleRepository(RoleRepository):
             session.refresh(role_model)
             return role_model.to_entity()
 
+    def get_by_name(self, name: str) -> Optional[Role]:
+        with session_scope(self.session_factory) as session:
+            role_model = session.query(RoleModel).filter(RoleModel.name == name).first()
+            return role_model.to_entity() if role_model else None
+
 
 class SqlAlchemyColumnMapRepository(ColumnMapRepository):
     def __init__(self, session_factory):
