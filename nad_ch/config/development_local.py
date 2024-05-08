@@ -46,7 +46,7 @@ class DevLocalApplicationContext(ApplicationContext):
         self._submissions = self.create_submission_repository()
         self._users = self.create_user_repository()
         self._column_maps = self.create_column_map_repository()
-        self.roles = self.create_role_repository()
+        self._roles = self.create_role_repository()
         self._logger = self.create_logger()
         self._storage = self.create_storage()
         self._task_queue = self.create_task_queue()
