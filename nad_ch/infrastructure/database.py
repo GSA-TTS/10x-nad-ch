@@ -433,6 +433,24 @@ class SqlAlchemyUserRepository(UserRepository):
             user_entities = [user.to_entity() for user in user_models]
             return user_entities
 
+    def update(self, user: User) -> User:
+        with session_scope(self.session_factory) as session:
+            user_model = (
+                session.query(UserModel)
+                .filter(UserModel.id == user.id)
+                .first()
+            )
+
+            user_model.email = user.email
+            user_model.login_provider = user.login_provider
+            user_model.logout_url = user.logout_url
+            user_model.data_producer_id = user.producer.id if user.producer else None
+            user_model.activated = user.activated
+            user_model.roles = [RoleModel.from_entity(role, session) for role in user.roles]
+            session.commit()
+            session.refresh(user_model)
+            return user_model.to_entity()
+
 
 class SqlAlchemyRoleRepository(RoleRepository):
     def __init__(self, session_factory):

@@ -9,6 +9,7 @@ from tests.fakes_and_mocks import (
     FakeDataSubmissionRepository,
     FakeUserRepository,
     FakeColumnMapRepository,
+    FakeRoleRepository,
     FakeStorage,
 )
 
@@ -26,6 +27,7 @@ class TestApplicationContext(ApplicationContext):
         self._submissions = self.create_submission_repository()
         self._users = self.create_user_repository()
         self._column_maps = self.create_column_map_repository()
+        self._roles = self.create_role_repository()
         self._logger = self.create_logger()
         self._storage = self.create_storage()
         self._task_queue = self.create_task_queue()
@@ -42,6 +44,9 @@ class TestApplicationContext(ApplicationContext):
 
     def create_column_map_repository(self):
         return FakeColumnMapRepository()
+
+    def create_role_repository(self):
+        return FakeRoleRepository()
 
     def create_logger(self):
         return BasicLogger(__name__, logging.DEBUG)

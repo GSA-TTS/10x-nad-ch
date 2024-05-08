@@ -1,12 +1,13 @@
 from datetime import datetime
 from typing import Optional, Iterable
 from nad_ch.application.dtos import DownloadResult
-from nad_ch.core.entities import DataProducer, DataSubmission, User, ColumnMap
+from nad_ch.core.entities import DataProducer, DataSubmission, User, ColumnMap, Role
 from nad_ch.core.repositories import (
     DataProducerRepository,
     DataSubmissionRepository,
     UserRepository,
     ColumnMapRepository,
+    RoleRepository
 )
 import os
 import shutil
@@ -74,6 +75,13 @@ class FakeUserRepository(UserRepository):
     def get_by_id(self, id: int) -> Optional[User]:
         return next((u for u in self._users if u.id == id), None)
 
+    def update(self, user: User) -> User:
+        self._users.remove(
+            next((u for u in self._users if u.email == user.email), None)
+        )
+        self._users.add(user)
+        return user
+
 
 class FakeColumnMapRepository(ColumnMapRepository):
     def __init__(self) -> None:
@@ -125,6 +133,18 @@ class FakeColumnMapRepository(ColumnMapRepository):
 
     def remove(self, column_map: ColumnMap) -> None:
         self._column_maps.remove(column_map)
+
+
+class FakeRoleRepository(RoleRepository):
+    def __init__(self) -> None:
+        self._roles = set()
+
+    def add(self, role: Role) -> Role:
+        self._roles.add(role)
+        return role
+
+    def get_by_name(self, name: str) -> Optional[Role]:
+        return next((r for r in self._roles if r.name == name), None)
 
 
 class FakeStorage:
