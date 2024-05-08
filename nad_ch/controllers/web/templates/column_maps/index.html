@@ -1,6 +1,28 @@
 {% extends "_layouts/base.html" %} {% block title %}Mappings{% endblock %} {%
-from "components/page-header.html" import page_header %} {% block content %} {{
-page_header("Mappings") }} {% if not column_maps %}
+block content %}
+<header class="usa-header usa-header--basic">
+  <div class="usa-nav-container">
+    <div class="usa-navbar">
+      <div class="display-flex flex-justify flex-align-end">
+        <div class="usa-logo">
+          <em class="usa-logo__text">Submissions</em>
+        </div>
+        <div class="padding-bottom-2">
+          {% if column_maps %}
+          <a
+            href="#mapping-modal"
+            class="usa-button"
+            aria-controls="mapping-modal"
+            data-open-modal
+            >Create mapping</a
+          >
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+{% if not column_maps %}
 <div class="usa-card padding-top-2 grid-col-4">
   <div class="usa-card__container">
     <div class="usa-card__header">
@@ -31,7 +53,36 @@ page_header("Mappings") }} {% if not column_maps %}
     </div>
   </div>
 </div>
-
+{% else %}
+<div class="usa-table-default width-full">
+  <table class="usa-table usa-table--borderless width-full">
+    <thead class="bg-base-lighter border-bottom-2px border-base-light">
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Created</th>
+        <th scope="col">Updated</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cm in column_maps %}
+      <tr>
+        <th class="border-bottom-1px border-base-lightest" scope="row">
+          {{ cm.name }}
+        </th>
+        <td>{{ cm.date_created }}</td>
+        <td>{{ cm.date_updated }}</td>
+        <td>
+          <a href="{{ url_for('column_maps.show', id=cm.id, _external=True) }}"
+            >View</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
 <div
   class="usa-modal"
   id="mapping-modal"
@@ -83,33 +134,4 @@ page_header("Mappings") }} {% if not column_maps %}
     </div>
   </div>
 </div>
-{% else %}
-<div class="usa-table-default width-full">
-  <table class="usa-table usa-table--borderless width-full">
-    <thead class="bg-base-lighter border-bottom-2px border-base-light">
-      <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Created</th>
-        <th scope="col">Updated</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for cm in column_maps %}
-      <tr>
-        <th class="border-bottom-1px border-base-lightest" scope="row">
-          {{ cm.name }}
-        </th>
-        <td>{{ cm.date_created }}</td>
-        <td>{{ cm.date_updated }}</td>
-        <td>
-          <a href="{{ url_for('column_maps.show', id=cm.id, _external=True) }}"
-            >View</a
-          >
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% endif %} {% endblock %}
+{% endblock %}
