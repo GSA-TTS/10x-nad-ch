@@ -166,6 +166,13 @@ class RoleModel(CommonBase):
         "UserModel", secondary=user_role_association, back_populates="roles"
     )
 
+    @staticmethod
+    def from_entity(role: Role, session):
+        existing_role = session.query(RoleModel).filter_by(name=role.name).one_or_none()
+        if existing_role:
+            return existing_role
+        return RoleModel(id=role.id, name=role.name, permissions=role.permissions)
+
     def to_entity(self):
         entity = Role(id=self.id, name=self.name, permissions=self.permissions)
 
@@ -193,7 +200,7 @@ class UserModel(UserMixin, CommonBase):
     )
 
     @staticmethod
-    def from_entity(user):
+    def from_entity(user, session):
         model = UserModel(
             id=user.id,
             email=user.email,
@@ -202,6 +209,10 @@ class UserModel(UserMixin, CommonBase):
             data_producer_id=user.producer.id if user.producer else None,
             activated=user.activated,
         )
+
+        if hasattr(user, 'roles') and user.roles:
+            model.roles = [RoleModel.from_entity(role, session) for role in user.roles]
+
         return model
 
     def to_entity(self):
@@ -215,6 +226,9 @@ class UserModel(UserMixin, CommonBase):
             producer=producer,
             activated=self.activated,
         )
+
+        if self.roles:
+            entity.roles = [Role(id=role.id, name=role.name, permissions=role.permissions) for role in self.roles]
 
         if self.created_at is not None:
             entity.set_created_at(self.created_at)
@@ -387,7 +401,7 @@ class SqlAlchemyUserRepository(UserRepository):
 
     def add(self, user: User) -> User:
         with session_scope(self.session_factory) as session:
-            user_model = UserModel.from_entity(user)
+            user_model = UserModel.from_entity(user, session)
             session.add(user_model)
             session.commit()
             session.refresh(user_model)
