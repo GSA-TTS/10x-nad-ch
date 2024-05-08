@@ -2,7 +2,7 @@ from datetime import datetime, timezone, UTC
 from enum import Enum
 import os
 import re
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 
 class Entity:
@@ -252,7 +252,7 @@ class Permission:
 
 
 class Role(Entity):
-    def __init__(self, name: str, permissions: list, id: Optional[int] = None):
+    def __init__(self, name: str, permissions: List, id: Optional[int] = None):
         super().__init__(id)
         self.name = name
         self.permissions = permissions
@@ -262,3 +262,13 @@ class Role(Entity):
 
     def has_permission(self, permission: str) -> bool:
         return permission in self.permissions
+
+
+ROLE_PERMISSIONS_MAP = {
+    "admin": [
+        Permission.CREATE_MAPPING,
+        Permission.CREATE_SUBMISSION,
+        Permission.ACTIVATE_USER,
+    ],
+    "producer": [Permission.CREATE_MAPPING, Permission.CREATE_SUBMISSION],
+}

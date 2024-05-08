@@ -1,6 +1,6 @@
 from typing import Optional, Protocol
 from collections.abc import Iterable
-from nad_ch.core.entities import DataProducer, DataSubmission, User, ColumnMap
+from nad_ch.core.entities import DataProducer, DataSubmission, User, ColumnMap, Role
 
 
 class DataProducerRepository(Protocol):
@@ -51,3 +51,7 @@ class ColumnMapRepository(Protocol):
     def get_by_producer(self, producer: DataProducer) -> Iterable[ColumnMap]: ...
 
     def update(self, column_map: ColumnMap) -> ColumnMap: ...
+
+
+class RoleRepository(Protocol):
+    def add(self, role: Role) -> Role: ...

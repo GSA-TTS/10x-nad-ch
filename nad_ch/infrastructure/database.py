@@ -7,12 +7,14 @@ from nad_ch.core.entities import (
     DataSubmissionStatus,
     User,
     ColumnMap,
+    Role,
 )
 from nad_ch.core.repositories import (
     DataProducerRepository,
     DataSubmissionRepository,
     UserRepository,
     ColumnMapRepository,
+    RoleRepository,
 )
 from sqlalchemy import (
     Boolean,
@@ -163,6 +165,17 @@ class RoleModel(CommonBase):
     users = relationship(
         "UserModel", secondary=user_role_association, back_populates="roles"
     )
+
+    def to_entity(self):
+        entity = Role(id=self.id, name=self.name, permissions=self.permissions)
+
+        if self.created_at is not None:
+            entity.set_created_at(self.created_at)
+
+        if self.updated_at is not None:
+            entity.set_updated_at(self.updated_at)
+
+        return entity
 
 
 class UserModel(UserMixin, CommonBase):
@@ -405,6 +418,19 @@ class SqlAlchemyUserRepository(UserRepository):
             user_models = session.query(UserModel).all()
             user_entities = [user.to_entity() for user in user_models]
             return user_entities
+
+
+class SqlAlchemyRoleRepository(RoleRepository):
+    def __init__(self, session_factory):
+        self.session_factory = session_factory
+
+    def add(self, role):
+        with session_scope(self.session_factory) as session:
+            role_model = RoleModel(name=role.name, permissions=role.permissions)
+            session.add(role_model)
+            session.commit()
+            session.refresh(role_model)
+            return role_model.to_entity()
 
 
 class SqlAlchemyColumnMapRepository(ColumnMapRepository):

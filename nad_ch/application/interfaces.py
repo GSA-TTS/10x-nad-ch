@@ -5,6 +5,7 @@ from nad_ch.core.repositories import (
     DataSubmissionRepository,
     UserRepository,
     ColumnMapRepository,
+    RoleRepository,
 )
 
 
@@ -72,6 +73,10 @@ class ApplicationContext:
         return self._column_maps
 
     @property
+    def roles(self) -> RoleRepository:
+        return self._roles
+
+    @property
     def logger(self) -> Logger:
         return self._logger
 
@@ -96,6 +101,8 @@ class ApplicationContext:
             return self.users
         elif key == "column_maps":
             return self.column_maps
+        elif key == "roles":
+            return self.roles
         elif key == "logger":
             return self.logger
         elif key == "storage":

@@ -18,6 +18,7 @@ from nad_ch.infrastructure.database import (
     SqlAlchemyDataSubmissionRepository,
     SqlAlchemyColumnMapRepository,
     SqlAlchemyUserRepository,
+    SqlAlchemyRoleRepository,
 )
 from nad_ch.config import DATABASE_URL
 
@@ -126,6 +127,12 @@ def submissions(test_database):
 def producers(test_database):
     Session = sessionmaker(bind=test_database)
     return SqlAlchemyDataProducerRepository(Session)
+
+
+@pytest.fixture(scope="function")
+def roles(test_database):
+    Session = sessionmaker(bind=test_database)
+    return SqlAlchemyRoleRepository(Session)
 
 
 @pytest.fixture(scope="function")

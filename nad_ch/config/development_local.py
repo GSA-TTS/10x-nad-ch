@@ -8,6 +8,7 @@ from nad_ch.infrastructure.database import (
     SqlAlchemyDataSubmissionRepository,
     SqlAlchemyUserRepository,
     SqlAlchemyColumnMapRepository,
+    SqlAlchemyRoleRepository,
 )
 from nad_ch.infrastructure.auth import AuthenticationImplementation
 from nad_ch.infrastructure.logger import BasicLogger
@@ -45,6 +46,7 @@ class DevLocalApplicationContext(ApplicationContext):
         self._submissions = self.create_submission_repository()
         self._users = self.create_user_repository()
         self._column_maps = self.create_column_map_repository()
+        self.roles = self.create_role_repository()
         self._logger = self.create_logger()
         self._storage = self.create_storage()
         self._task_queue = self.create_task_queue()
@@ -61,6 +63,9 @@ class DevLocalApplicationContext(ApplicationContext):
 
     def create_column_map_repository(self):
         return SqlAlchemyColumnMapRepository(self._session_factory)
+
+    def create_role_repository(self):
+        return SqlAlchemyRoleRepository(self._session_factory)
 
     def create_logger(self):
         return BasicLogger(__name__, logging.DEBUG)

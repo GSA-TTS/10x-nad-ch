@@ -4,6 +4,7 @@ from nad_ch.core.entities import (
     DataSubmissionStatus,
     DataSubmission,
     ColumnMap,
+    Role,
 )
 
 
@@ -113,3 +114,11 @@ def test_column_map_is_invalid_if_empty_values_for_required_field():
     producer = DataProducer("Some producer")
     column_map = ColumnMap("TestMap", producer, mapping, 1)
     assert not column_map.is_valid()
+
+
+def test_role_has_permission():
+    role = Role("admin", ["create", "read", "update", "delete"])
+    assert role.has_permission("create")
+    assert role.has_permission("read")
+    assert role.has_permission("update")
+    assert role.has_permission("delete")

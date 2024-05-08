@@ -6,6 +6,7 @@ from nad_ch.core.entities import (
     DataSubmission,
     ColumnMap,
     User,
+    Role,
 )
 
 
@@ -231,3 +232,13 @@ def test_data_submission_update_report(producer_column_maps_and_submissions):
     submission = submissions.update_report(submission.id, new_report)
     assert submission.report == new_report
     assert submission.name == "testproducer2-submission"
+
+
+def test_role_repository_add(roles):
+    role = Role("Role A", ["perm1", "perm2"])
+    added_role = roles.add(role)
+    assert added_role.id == 1
+    assert added_role.created_at is not None
+    assert added_role.updated_at is not None
+    assert added_role.name == "Role A"
+    assert added_role.permissions == ["perm1", "perm2"]
