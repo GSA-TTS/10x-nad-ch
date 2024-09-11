@@ -2,6 +2,9 @@
 
 ## Local Development
 
+To run the app locally, you will need to have Python version 3.11.7 and Node.js
+version 18.17.1 installed.
+
 Install [poetry](https://python-poetry.org/docs/#installation) so that you can
 run tests and scripts locally.
 

@@ -384,6 +384,24 @@ class SqlAlchemyUserRepository(UserRepository):
             user_entities = [user.to_entity() for user in user_models]
             return user_entities
 
+    def update(self, user: User) -> User:
+        with session_scope(self.session_factory) as session:
+            existing_user = (
+                session.query(UserModel)
+                .filter(UserModel.id == user.id)
+                .first()
+            )
+
+            existing_user.email = user.email
+            existing_user.login_provider = user.login_provider
+            existing_user.logout_url = user.logout_url
+            existing_user.data_producer_id = user.producer.id
+            existing_user.activated = user.activated
+
+            session.commit()
+            session.refresh(existing_user)
+            return existing_user.to_entity()
+
 
 class SqlAlchemyColumnMapRepository(ColumnMapRepository):
     def __init__(self, session_factory):
