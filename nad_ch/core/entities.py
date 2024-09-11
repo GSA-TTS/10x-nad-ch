@@ -243,3 +243,10 @@ class User(Entity):
     def associate_with_data_producer(self, producer: DataProducer):
         self.producer = producer
         return self
+
+    def activate(self):
+        if isinstance(self.producer, DataProducer):
+            self.activated = True
+            return True
+        else:
+            raise ValueError("Cannot activate user without a valid DataProducer.")
