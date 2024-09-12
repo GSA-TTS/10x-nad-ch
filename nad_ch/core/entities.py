@@ -155,7 +155,7 @@ class DataSubmission(Entity):
 
     def __repr__(self):
         return f"DataSubmission \
-            {self.id}, , {self.name}, {self.file_path}, {self.producer}, {self.status}"
+            {self.id}, {self.name}, {self.file_path}, {self.producer}, {self.status}"
 
     @staticmethod
     def generate_file_path(file_path: str, producer: DataProducer) -> str:

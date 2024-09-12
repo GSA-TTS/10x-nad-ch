@@ -188,6 +188,7 @@ def main():
     column_map = ctx.column_maps.get_by_id(1)
 
     new_submission = DataSubmission(
+        "New Jersey Submission A",
         "new_jersey/morriscounty2024b_20240403_184750.zip",
         DataSubmissionStatus.VALIDATED,
         producer,
