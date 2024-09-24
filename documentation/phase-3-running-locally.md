@@ -11,7 +11,7 @@ Prerequisites:
 1. Start Docker containers
 
 ```shell
-docker compuse up --build
+docker compose up --build
 ```
 
 2. Run alembic migrations
