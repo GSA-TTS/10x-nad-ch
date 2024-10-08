@@ -31,9 +31,15 @@ s3_credentials = get_credentials("s3")
 
 
 DATABASE_URL = postgres_credentials.get("uri", os.getenv("DATABASE_URL"))
+
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg2://", 1)
+
 QUEUE_HOST = redis_credentials.get("hostname", os.getenv("QUEUE_HOST"))
 QUEUE_PORT = redis_credentials.get("port", os.getenv("QUEUE_PORT"))
 QUEUE_PASSWORD = redis_credentials.get("password", os.getenv("QUEUE_PASSWORD"))
+QUEUE_BROKER_URL = redis_credentials.get("uri", os.getenv("QUEUE_BROKER_URL"))
+QUEUE_BACKEND_URL = redis_credentials.get("uri", os.getenv("QUEUE_BACKEND_URL"))
 S3_BUCKET_NAME = s3_credentials.get("bucket", os.getenv("S3_BUCKET_NAME"))
 S3_ENDPOINT = s3_credentials.get("endpoint", os.getenv("S3_ENDPOINT"))
 S3_ACCESS_KEY = s3_credentials.get("access_key_id", os.getenv("S3_ACCESS_KEY"))
