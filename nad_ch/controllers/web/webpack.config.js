@@ -28,13 +28,12 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              implementation: require('node-sass'),
-              sourceMap: true,
+              implementation: require('sass'),
               sassOptions: {
                 includePaths: [
                   path.resolve(__dirname, 'node_modules'),
-                  path.resolve(__dirname, 'node_modules/uswds/dist/scss'),
-                  path.resolve(__dirname, 'node_modules/uswds/dist/fonts'),
+                  path.resolve(__dirname, 'node_modules/@uswds/uswds/packages'),
+                  path.resolve(__dirname, 'node_modules/@uswds/uswds/dist/scss'),
                 ],
               },
             },
