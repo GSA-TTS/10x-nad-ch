@@ -1,16 +1,22 @@
 ---
 applications:
-  - name: nad-ch-dev
+  - name: 10x-nad-ch-dev
     buildpacks:
-      - https://github.com/cloudfoundry/python-buildpack
+      - python_buildpack
     services:
-      - nad-ch-dev-postgres
-      - nad-ch-dev-redis
-      - nad-ch-dev-s3
-      - nad-ch-identity-provider
+      - 10x-nad-dev-psql
+      - 10x-nad-dev-redis
+      - 10x-nad-dev-ip
+      - 10x-nad-dev-s3
     random-route: false
-    memory: 256M
+    memory: 512M
     stack: cflinuxfs4
-    command: python3 ./nad_ch/main.py serve_flask_app
+    command: ./start_app.sh
     env:
       APP_ENV: dev_remote
+      FLASK_DEBUG: true
+      STORAGE_PATH: storage
+      LOCAL_ALLOWED_DOMAIN: test.org
+      LANDING_ZONE: /data/landing_zone
+    routes:
+      - route: 10x-nad-ch-dev.app.cloud.gov
