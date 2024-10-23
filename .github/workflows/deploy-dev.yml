@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -25,6 +24,17 @@ jobs:
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           echo "/root/.local/bin" >> $GITHUB_PATH
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "${{ steps.nvm.outputs.NVMRC }}"
+
+      - name: Install frontend dependencies and build assets
+        run: |
+          cd nad_ch/controllers/web
+          npm install
+          npm run build
 
       - name: Create requirements.txt
         shell: bash
