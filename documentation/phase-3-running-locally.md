@@ -2,7 +2,7 @@
 
 Prerequisites:
 
-- Python 3.11.7
+- Python 3.11.9
 - Node.js 18.17.1
 - Docker
 - `CLOUDGOV_CLIENT_ID` and `CLOUDGOV_CLIENT_SECRET` keys in `.env` populated
@@ -11,7 +11,7 @@ Prerequisites:
 1. Start Docker containers
 
 ```shell
-docker compuse up --build
+docker compose up --build
 ```
 
 2. Run alembic migrations
