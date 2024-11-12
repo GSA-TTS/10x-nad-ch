@@ -1,8 +1,13 @@
+import logging
 import os
+import secrets
+
 from dotenv import load_dotenv
 
 
 load_dotenv()
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 APP_ENV = os.getenv("APP_ENV")
@@ -25,6 +30,20 @@ OAUTH2_CONFIG = {
         "scopes": ["openid"],
     },
     "logingov": {
-        # login.gov configuration details go here
-    },
+        "client_id": os.getenv("LOGINGOV_CLIENT_ID"),
+        "authorize_url": "https://idp.int.identitysandbox.gov/openid_connect/authorize",
+        "token_url": "https://idp.int.identitysandbox.gov/api/openid_connect/token",
+        "logout_url": "https://idp.int.identitysandbox.gov/openid_connect/logout",
+        "userinfo": {
+            "url": "https://idp.int.identitysandbox.gov/api/openid_connect/userinfo",
+            "email": lambda json: json["email"],
+        },
+        "private_key_jwt": {
+            "key": os.getenv("LOGINGOV_PRIVATE_KEY"),
+            "alg": "RS256"
+        },
+        "acr_values": "http://idmanagement.gov/ns/assurance/ial/1",
+        "scopes": ["openid", "email", "profile"],
+        "nonce": lambda: logging.debug(f"Generated nonce: {secrets.token_urlsafe(64)}") or secrets.token_urlsafe(64),
+    }
 }
