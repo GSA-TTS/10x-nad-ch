@@ -1,14 +1,8 @@
-import logging
 import os
 import secrets
-
 from dotenv import load_dotenv
 
-
 load_dotenv()
-
-logging.basicConfig(level=logging.DEBUG)
-
 
 APP_ENV = os.getenv("APP_ENV")
 PORT = os.getenv("PORT", 5000)
@@ -44,6 +38,6 @@ OAUTH2_CONFIG = {
         },
         "acr_values": "http://idmanagement.gov/ns/assurance/ial/1",
         "scopes": ["openid", "email", "profile"],
-        "nonce": lambda: logging.debug(f"Generated nonce: {secrets.token_urlsafe(64)}") or secrets.token_urlsafe(64),
+        "nonce": lambda: secrets.token_urlsafe(64),
     }
 }
