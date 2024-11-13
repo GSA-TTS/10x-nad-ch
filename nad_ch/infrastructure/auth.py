@@ -24,37 +24,7 @@ class AuthenticationImplementation(Authentication):
         if not provider_config:
             return None
 
-        if provider_name == "cloudgov":
-            token_url = provider_config["token_url"]
-            request_data = {
-                "client_id": provider_config["client_id"],
-                "client_secret": provider_config["client_secret"],
-                "code": code,
-                "grant_type": "authorization_code",
-                "redirect_uri": url_for(
-                    "auth.oauth2_callback",
-                    provider=provider_name,
-                    _scheme=self._callback_url_scheme,
-                    _external=True,
-                ),
-            }
-
-            response = requests.post(
-                token_url,
-                data=request_data,
-                headers={"Accept": "application/json"},
-                timeout=4,
-            )
-
-            if response.status_code != 200:
-                return None
-
-            oauth2_token = response.json().get("access_token")
-            if not oauth2_token:
-                return None
-
-            return oauth2_token
-        elif provider_name == "logingov":
+        if provider_name == "logingov":
             private_key = provider_config["private_key_jwt"]["key"]
             private_key = private_key.replace(r"\n", "\n")
 
@@ -86,19 +56,37 @@ class AuthenticationImplementation(Authentication):
                 headers={"Accept": "application/json"},
                 timeout=4,
             )
+        else:
+            token_url = provider_config["token_url"]
+            request_data = {
+                "client_id": provider_config["client_id"],
+                "client_secret": provider_config["client_secret"],
+                "code": code,
+                "grant_type": "authorization_code",
+                "redirect_uri": url_for(
+                    "auth.oauth2_callback",
+                    provider=provider_name,
+                    _scheme=self._callback_url_scheme,
+                    _external=True,
+                ),
+            }
 
-            if response.status_code != 200:
-                logging.error("Failed to fetch OAuth2 token from Login.gov")
-                return None
+            response = requests.post(
+                token_url,
+                data=request_data,
+                headers={"Accept": "application/json"},
+                timeout=4,
+            )
 
-            oauth2_token = response.json().get("access_token")
-            if not oauth2_token:
-                logging.error("No access token found in the response from Login.gov")
-                return None
+        if response.status_code != 200:
+            return None
 
-            return oauth2_token
+        oauth2_token = response.json().get("access_token")
 
-        return None
+        if not oauth2_token:
+            return None
+
+        return oauth2_token
 
     def fetch_user_email_from_login_provider(
         self, provider_name: str, oauth2_token: str

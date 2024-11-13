@@ -30,6 +30,7 @@ def test_fetch_oauth2_token_success(mocker, auth_impl):
 
     token = auth_impl.fetch_oauth2_token("test_provider", "dummy_code")
 
+    print("token", token)
     assert token == "mocked_access_token"
     mock_post.assert_called_once_with(
         "https://example.com/oauth/token",
