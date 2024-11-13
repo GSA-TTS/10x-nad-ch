@@ -9,7 +9,7 @@ page_header("NAD Collaboration Hub") }} {% if current_user.is_authenticated %}
   <a
     href="{{ url_for('auth.oauth2_authorize', provider='logingov') }}"
     class="usa-button"
-    >Login with cloud.gov</a
+    >Sign in with login.gov</a
   >
 </div>
 {% endif %} {% endblock %}
