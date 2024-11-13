@@ -159,7 +159,6 @@ class AuthenticationImplementation(Authentication):
             "state": state_token,
         }
 
-        # Include acr_values and nonce if provided
         if acr_values:
             query_params["acr_values"] = acr_values
         if nonce:
