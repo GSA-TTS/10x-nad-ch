@@ -49,14 +49,18 @@ def test_get_or_create_user_invalid_email(app_context):
 
 
 def test_get_logged_in_user_redirect_url(app_context):
-    app_context.auth.make_login_url = lambda provider_name, state_token, acr_values=None, nonce=None: "test"
+    app_context.auth.make_login_url = (
+        lambda provider_name, state_token, acr_values=None, nonce=None: "test"
+    )
 
     provider_name = "test"
     state_token = "test"
     acr_values = "test_acr_value"
     nonce = "test_nonce"
 
-    result = get_logged_in_user_redirect_url(app_context, provider_name, state_token, acr_values, nonce)
+    result = get_logged_in_user_redirect_url(
+        app_context, provider_name, state_token, acr_values, nonce
+    )
 
     assert result == "test"
 
