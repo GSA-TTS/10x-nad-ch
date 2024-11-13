@@ -76,8 +76,13 @@ def oauth2_authorize(provider: str):
     state_token = secrets.token_urlsafe(16)
     nonce = secrets.token_urlsafe(32)
 
-    redirect_url = get_logged_in_user_redirect_url(g.ctx, provider, state_token, nonce=nonce,
-                                                   acr_values="http://idmanagement.gov/ns/assurance/ial/1")
+    redirect_url = get_logged_in_user_redirect_url(
+        g.ctx,
+        provider,
+        state_token,
+        nonce=nonce,
+        acr_values="http://idmanagement.gov/ns/assurance/ial/1",
+    )
 
     if not redirect_url:
         abort(404)

@@ -33,10 +33,15 @@ def get_or_create_user(ctx: ApplicationContext, provider_name: str, email: str) 
 
 
 def get_logged_in_user_redirect_url(
-    ctx: ApplicationContext, provider_name: str, state_token: str, acr_values: str = None, nonce: str = None
+    ctx: ApplicationContext,
+    provider_name: str,
+    state_token: str,
+    acr_values: str = None,
+    nonce: str = None,
 ) -> str | None:
-    return ctx.auth.make_login_url(provider_name, state_token, acr_values=acr_values, nonce=nonce)
-
+    return ctx.auth.make_login_url(
+        provider_name, state_token, acr_values=acr_values, nonce=nonce
+    )
 
 
 def get_logged_out_user_redirect_url(

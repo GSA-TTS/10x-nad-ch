@@ -56,7 +56,7 @@ class AuthenticationImplementation(Authentication):
             return oauth2_token
         elif provider_name == "logingov":
             private_key = provider_config["private_key_jwt"]["key"]
-            private_key = private_key.replace(r'\n', '\n')
+            private_key = private_key.replace(r"\n", "\n")
 
             payload = {
                 "iss": provider_config["client_id"],
@@ -69,12 +69,14 @@ class AuthenticationImplementation(Authentication):
             header = {"alg": provider_config["private_key_jwt"]["alg"]}
 
             jws = jose_jwt.encode(header=header, payload=payload, key=private_key)
-            signed_jwt = jws.decode('utf-8')
+            signed_jwt = jws.decode("utf-8")
 
             request_data = {
                 "code": code,
                 "grant_type": "authorization_code",
-                "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+                "client_assertion_type": (
+                    "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
+                ),
                 "client_assertion": signed_jwt,
             }
 
@@ -140,7 +142,11 @@ class AuthenticationImplementation(Authentication):
         return provider_config["logout_url"]
 
     def make_login_url(
-        self, provider_name: str, state_token: str, acr_values: str = None, nonce: str = None
+        self,
+        provider_name: str,
+        state_token: str,
+        acr_values: str = None,
+        nonce: str = None,
     ) -> str | None:
         provider_config = self._providers[provider_name]
         if not provider_config:
