@@ -53,8 +53,8 @@ def test_get_logged_in_user_redirect_url(app_context):
         lambda provider_name, state_token, acr_values=None, nonce=None: "test"
     )
 
-    provider_name = "test"
-    state_token = "test"
+    provider_name = "test_provider_name"
+    state_token = "test_state_token"
     acr_values = "test_acr_value"
     nonce = "test_nonce"
 
