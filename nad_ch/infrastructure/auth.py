@@ -24,59 +24,37 @@ class AuthenticationImplementation(Authentication):
         if not provider_config:
             return None
 
-        if provider_name == "logingov":
-            private_key = provider_config["private_key_jwt"]["key"]
-            private_key = private_key.replace(r"\n", "\n")
+        private_key = provider_config["private_key_jwt"]["key"]
+        private_key = private_key.replace(r"\n", "\n")
 
-            payload = {
-                "iss": provider_config["client_id"],
-                "sub": provider_config["client_id"],
-                "aud": provider_config["token_url"],
-                "jti": str(uuid.uuid4()),
-                "exp": int(time.time()) + timedelta(minutes=30).seconds,
-            }
+        payload = {
+            "iss": provider_config["client_id"],
+            "sub": provider_config["client_id"],
+            "aud": provider_config["token_url"],
+            "jti": str(uuid.uuid4()),
+            "exp": int(time.time()) + timedelta(minutes=30).seconds,
+        }
 
-            header = {"alg": provider_config["private_key_jwt"]["alg"]}
+        header = {"alg": provider_config["private_key_jwt"]["alg"]}
 
-            jws = jose_jwt.encode(header=header, payload=payload, key=private_key)
-            signed_jwt = jws.decode("utf-8")
+        jws = jose_jwt.encode(header=header, payload=payload, key=private_key)
+        signed_jwt = jws.decode("utf-8")
 
-            request_data = {
-                "code": code,
-                "grant_type": "authorization_code",
-                "client_assertion_type": (
-                    "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
-                ),
-                "client_assertion": signed_jwt,
-            }
+        request_data = {
+            "code": code,
+            "grant_type": "authorization_code",
+            "client_assertion_type": (
+                "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
+            ),
+            "client_assertion": signed_jwt,
+        }
 
-            response = requests.post(
-                provider_config["token_url"],
-                data=request_data,
-                headers={"Accept": "application/json"},
-                timeout=4,
-            )
-        else:
-            token_url = provider_config["token_url"]
-            request_data = {
-                "client_id": provider_config["client_id"],
-                "client_secret": provider_config["client_secret"],
-                "code": code,
-                "grant_type": "authorization_code",
-                "redirect_uri": url_for(
-                    "auth.oauth2_callback",
-                    provider=provider_name,
-                    _scheme=self._callback_url_scheme,
-                    _external=True,
-                ),
-            }
-
-            response = requests.post(
-                token_url,
-                data=request_data,
-                headers={"Accept": "application/json"},
-                timeout=4,
-            )
+        response = requests.post(
+            provider_config["token_url"],
+            data=request_data,
+            headers={"Accept": "application/json"},
+            timeout=4,
+        )
 
         if response.status_code != 200:
             return None

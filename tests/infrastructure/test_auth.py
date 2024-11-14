@@ -20,6 +20,7 @@ def auth_impl():
 
 
 def test_fetch_oauth2_token_success(mocker, auth_impl):
+    # Mock dependencies
     mock_post = mocker.patch("nad_ch.infrastructure.auth.requests.post")
     mocker.patch("nad_ch.infrastructure.auth.url_for", return_value="mock_callback_url")
 
@@ -28,12 +29,35 @@ def test_fetch_oauth2_token_success(mocker, auth_impl):
     mock_response.json.return_value = {"access_token": "mocked_access_token"}
     mock_post.return_value = mock_response
 
+    provider_config = {
+        "client_id": "test_client_id",
+        "token_url": "https://example.com/oauth/token",
+        "private_key_jwt": {
+            "key": "-----BEGIN PRIVATE KEY-----\nmocked_key_content\n-----END PRIVATE KEY-----",
+            "alg": "RS256",
+        }
+    }
+    mocker.patch.object(auth_impl, '_providers', {"test_provider": provider_config})
+
+    mock_jwt_encode = mocker.patch("nad_ch.infrastructure.auth.jose_jwt.encode")
+    mock_jwt_encode.return_value = b"mocked_signed_jwt"
+
     token = auth_impl.fetch_oauth2_token("test_provider", "dummy_code")
 
     assert token == "mocked_access_token"
+    mock_jwt_encode.assert_called_once_with(
+        header={"alg": "RS256"},
+        payload=mocker.ANY,
+        key="-----BEGIN PRIVATE KEY-----\nmocked_key_content\n-----END PRIVATE KEY-----"
+    )
     mock_post.assert_called_once_with(
         "https://example.com/oauth/token",
-        data=mocker.ANY,
+        data={
+            "code": "dummy_code",
+            "grant_type": "authorization_code",
+            "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+            "client_assertion": "mocked_signed_jwt",
+        },
         headers={"Accept": "application/json"},
         timeout=4,
     )
