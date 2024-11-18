@@ -30,8 +30,8 @@ def main():
 
     new_user = User(
         email="test@test.org",
-        login_provider="cloudgov",
-        logout_url=OAUTH2_CONFIG["cloudgov"]["logout_url"],
+        login_provider="logingov",
+        logout_url=OAUTH2_CONFIG["logingov"]["logout_url"],
         producer=saved_producer,
         activated=True,
     )

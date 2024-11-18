@@ -1,4 +1,4 @@
-from typing import Optional, Protocol, Dict
+from typing import Optional, Protocol, Dict, Union
 from nad_ch.application.dtos import DownloadResult
 from nad_ch.core.repositories import (
     DataProducerRepository,
@@ -37,20 +37,26 @@ class TaskQueue(Protocol):
 
 
 class Authentication(Protocol):
-    def fetch_oauth2_token(self, provider_name: str, code: str) -> str | None: ...
+    def fetch_oauth2_token(self, provider_name: str, code: str) -> Optional[str]: ...
 
     def fetch_user_email_from_login_provider(
         self, provider_name: str, oauth2_token: str
-    ) -> str | list[str] | None: ...
+    ) -> Union[str, list[str], None]: ...
 
     def get_logout_url(self, provider_name: str) -> str: ...
 
-    def make_login_url(self, provider_name: str, state_token: str) -> str | None: ...
+    def make_login_url(
+        self,
+        provider_name: str,
+        state_token: str,
+        acr_values: Optional[str] = None,
+        nonce: Optional[str] = None
+    ) -> Optional[str]: ...
 
-    def make_logout_url(self, provider_name: str) -> str | None: ...
+    def make_logout_url(self, provider_name: str) -> Optional[str]: ...
 
     def user_email_address_has_permitted_domain(
-        self, email: str | list[str]
+        self, email: Union[str, list[str]]
     ) -> bool: ...
 
 
