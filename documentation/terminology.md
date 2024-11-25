@@ -1,4 +1,4 @@
-# NAD Collaboration Hub Terminology
+# National Address Database Hub Terminology
 
 ## Acronyms
 

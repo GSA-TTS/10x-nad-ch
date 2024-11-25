@@ -1,4 +1,4 @@
-# 10x National Address Database Collaboration Hub (NAD-CH)
+# 10x National Address Database Hub (NAD-CH)
 
 ## Local Development
 
