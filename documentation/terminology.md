@@ -1,4 +1,4 @@
-# National Address Database Hub Terminology
+# National Address Database Submission Tool Terminology
 
 ## Acronyms
 

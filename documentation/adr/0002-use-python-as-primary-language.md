@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-Development of the 10x National Address Database Hub is starting up, and we need to determine a programming language to use.
+Development of the 10x National Address Database Submission Tool is starting up, and we need to determine a programming language to use.
 
 ## Decision
 
