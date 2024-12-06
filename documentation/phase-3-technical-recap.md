@@ -1,14 +1,14 @@
-# 10x NAD Collaboration Hub Technical Recap
+# 10x NAD Submission Tool Technical Recap
 
 ## Intent
 
-This document provides a high-level overview of the 10x NAD Collaboration Hub Phase 3 to
+This document provides a high-level overview of the 10x National Address Database Submission Tool Phase 3 to
 help developers joining the team for Phase 4, as well as other stakeholders,
 understand the history of the effort.
 
 In addition to providing context, this document summarizes:
 
-- The technical decisions that were made during Phase 3 of 10x NAD Collaboration Hub
+- The technical decisions that were made during Phase 3 of 10x National Address Database Submission Tool
   development
 - The state of the codebase at the conclusion of Phase 3
 - The next steps for Phase 4 in terms of tasks and decision making
@@ -29,7 +29,7 @@ According to the [10x website](https://10x.gsa.gov/about/what-we-do/):
 > require more funding and resources so they move on to the next phase of work,
 > Phase 4, Scale.
 
-10x NAD Collaboration Hub is one of those cases where additional development effort is
+10x National Address Database Submission Tool is one of those cases where additional development effort is
 necessary. The codebase is more a proof of concept than a minimum viable
 product as there is a good deal of work needed to get the application up and
 running for real-world users.

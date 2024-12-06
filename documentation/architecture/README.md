@@ -1,8 +1,8 @@
-# NAD Collaboration Hub Architecture
+# National Address Database Submission Tool Architecture
 
 ### Entry Points
 
-Users can work with the NAD Collaboration Hub by way of:
+Users can work with the National Address Database Submission Tool by way of:
 
 - **Flask Web Server**: Primary interface for web-based interactions for Data
   Producers and NAD Administrator.

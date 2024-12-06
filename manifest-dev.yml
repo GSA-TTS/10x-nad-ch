@@ -1,6 +1,6 @@
 ---
 applications:
-  - name: 10x-nad-ch-dev
+  - name: 10x-nad-st-dev
     buildpacks:
       - python_buildpack
     services:
@@ -19,4 +19,4 @@ applications:
       LOCAL_ALLOWED_DOMAIN: test.org
       LANDING_ZONE: /data/landing_zone
     routes:
-      - route: 10x-nad-ch-dev.app.cloud.gov
+      - route: 10x-nad-st-dev.app.cloud.gov

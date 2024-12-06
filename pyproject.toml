@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "nad_ch"
 version = "0.1.0"
-description = "10x National Address Database Collaboration Hub (NAD-CH)"
+description = "10x National Address Database Submission Tool (NAD-ST)"
 authors = []
 
 [tool.poetry.dependencies]

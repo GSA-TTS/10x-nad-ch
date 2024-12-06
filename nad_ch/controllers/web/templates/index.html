@@ -1,6 +1,6 @@
 {% extends "_layouts/base.html" %} {% block title %}Home Page{% endblock %} {%
 from "components/page-header.html" import page_header %} {% block content %} {{
-page_header("NAD Collaboration Hub") }} {% if current_user.is_authenticated %}
+page_header("National Address Database Submission Tool") }} {% if current_user.is_authenticated %}
 <p>Hi, {{ current_user.email }}!</p>
 <p>Thanks for logging in with {{ current_user.login_provider }}.</p>
 {% else %}

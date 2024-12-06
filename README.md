@@ -1,4 +1,4 @@
-# 10x National Address Database Collaboration Hub (NAD-CH)
+# 10x National Address Database Submission Tool (NAD-ST)
 
 ## Local Development
 
@@ -11,7 +11,7 @@ run tests and scripts locally.
 Clone the repostiory:
 
 ```bash
-git clone https://github.com/GSA-TTS/10x-nad-ch/
+git clone https://github.com/GSA-TTS/10x-nad-st/
 ```
 
 In order to set up a local development environment, you will need to download

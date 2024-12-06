@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-Development of the 10x National Address Database Collaboration Hub (NAD-CH) is starting up, and we need to determine a programming language to use.
+Development of the 10x National Address Database Submission Tool (NAD-ST) is starting up, and we need to determine a programming language to use.
 
 ## Decision
 
