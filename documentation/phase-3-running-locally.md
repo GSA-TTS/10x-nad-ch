@@ -2,7 +2,7 @@
 
 Prerequisites:
 
-- Python 3.11.9
+- Python 3.11.10
 - Node.js 18.17.1
 - Docker
 - `CLOUDGOV_CLIENT_ID` and `CLOUDGOV_CLIENT_SECRET` keys in `.env` populated
