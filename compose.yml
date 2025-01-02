@@ -1,4 +1,3 @@
----
 version: "3.8"
 services:
   web:
@@ -10,6 +9,7 @@ services:
       - postgres
       - redis
       - storage
+      - flower
     build: .
     volumes:
       - .:/app
@@ -45,3 +45,11 @@ services:
     env_file:
       - .env
     command: server /storage --console-address :9001
+
+  flower:
+    container_name: flower
+    image: mher/flower
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
